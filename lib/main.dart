@@ -64,10 +64,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'ubuntu',
         brightness: Brightness.light,
         inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(color: colors.greyText),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: colors.boxBorder, width: 1),
             borderRadius: BorderRadius.circular(10),
           ),
+          hintStyle: TextStyle(color: colors.greyText),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: colors.boxBorder, width: 1),
             borderRadius: BorderRadius.circular(10),

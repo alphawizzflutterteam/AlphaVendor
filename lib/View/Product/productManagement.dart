@@ -1,5 +1,6 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/Product/activeProduct.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:flutter/material.dart';
@@ -60,32 +61,40 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                     ],
                   ),
                 ),
-                Container(
-                  height: height * .1,
-                  width: width * .29,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Active",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: colors.greyText,
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    PageTransition(
+                        child: ActiveProductScreen(),
+                        type: PageTransitionType.rightToLeft),
+                  ),
+                  child: Container(
+                    height: height * .1,
+                    width: width * .29,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Active",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: colors.greyText,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "500",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
+                        Text(
+                          "500",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Container(

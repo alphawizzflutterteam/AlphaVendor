@@ -145,4 +145,5 @@ class Images {
   static const alpha_icon = "assets/icons/alpha_icon.png";
   static const driver_profile = "assets/images/driver_profile.png";
   static const hamburgerMenuIcon = "assets/icons/hamburger_menu_icon.png";
+  static const selectImage = "assets/icons/image.png";
 }
