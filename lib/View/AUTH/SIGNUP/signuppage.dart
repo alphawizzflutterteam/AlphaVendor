@@ -195,38 +195,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 40,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              activeStep += 1;
-                            });
-                          },
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              // width: MediaQuery.of(context).size.width - 100,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF0A9494),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "VERIFY",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -274,7 +242,39 @@ class _SignUpPageState extends State<SignUpPage> {
                               ],
                             )
                           ],
-                        )
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              activeStep += 1;
+                            });
+                          },
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              // width: MediaQuery.of(context).size.width - 100,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0A9494),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "VERIFY",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

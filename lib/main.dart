@@ -1,3 +1,4 @@
+import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -17,6 +18,9 @@ import 'ViewModel/languageViewModel.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<ProductManagementViewModel>(
+      create: (context) => ProductManagementViewModel(),
+    ),
     ChangeNotifierProvider<LanguageViewModel>(
         create: (context) => LanguageViewModel()),
     ChangeNotifierProvider<CurrencyViewModel>(
@@ -47,6 +51,14 @@ class MyApp extends StatelessWidget {
       ],
 
       theme: ThemeData(
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colors.buttonColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: colors.primary_app,
         ).copyWith(
@@ -61,10 +73,11 @@ class MyApp extends StatelessWidget {
             ),
         primarySwatch: colors.primary_app,
         primaryColor: Theme.of(context).colorScheme.lightWhite,
-        fontFamily: 'ubuntu',
+        fontFamily: 'FuturaPT',
         brightness: Brightness.light,
         inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: colors.greyText),
+          labelStyle:
+              TextStyle(color: colors.greyText, fontWeight: FontWeight.w400),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: colors.boxBorder, width: 1),
             borderRadius: BorderRadius.circular(10),

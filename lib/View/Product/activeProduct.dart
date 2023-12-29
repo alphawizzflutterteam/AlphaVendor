@@ -1,17 +1,33 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Product/productDetail.dart';
+import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
-class ActiveProductScreen extends StatelessWidget {
+class ActiveProductScreen extends StatefulWidget {
   const ActiveProductScreen({super.key});
+
+  @override
+  State<ActiveProductScreen> createState() => _ActiveProductScreenState();
+}
+
+class _ActiveProductScreenState extends State<ActiveProductScreen> {
+  late ProductManagementViewModel productstatusP;
+  @override
+  void initState() {
+    productstatusP = Provider.of(context, listen: false);
+    productstatusP.getActiveProducts(Type: '1');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    productstatusP = Provider.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommanAppbar(appbarTitle: "Active Products"),

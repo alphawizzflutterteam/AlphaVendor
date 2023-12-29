@@ -1,5 +1,6 @@
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
+import 'package:alpha_work/View/Profile/profile.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -72,7 +73,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
           child: ListView(
             padding: const EdgeInsets.all(0),
             children: [
-              const DrawerHeader(
+              DrawerHeader(
                   decoration: BoxDecoration(
                       // color: Colors.green,
                       image: DecorationImage(
@@ -87,11 +88,18 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                       "Hritik",
                       style: TextStyle(color: Colors.white),
                     ),
-                    subtitle: Text(
-                      "View Profile",
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 127, 213, 233),
-                          decoration: TextDecoration.underline),
+                    subtitle: GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          PageTransition(
+                              child: ProfileScreen(),
+                              type: PageTransitionType.rightToLeft)),
+                      child: Text(
+                        "View Profile",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 127, 213, 233),
+                            decoration: TextDecoration.underline),
+                      ),
                     ),
                   ) //UserAccountDrawerHeader
                   ),

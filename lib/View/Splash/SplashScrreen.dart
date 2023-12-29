@@ -1,3 +1,4 @@
+import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
 import 'package:flutter/material.dart';
 
 import '../language/launguageSelection.dart';
@@ -21,7 +22,7 @@ class _SpalashScreenState extends State<SpalashScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: ((context) => const launguageSelection())),
+          MaterialPageRoute(builder: ((context) => const LoginPage())),
           (route) => false);
     });
   }

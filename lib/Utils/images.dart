@@ -146,4 +146,10 @@ class Images {
   static const driver_profile = "assets/images/driver_profile.png";
   static const hamburgerMenuIcon = "assets/icons/hamburger_menu_icon.png";
   static const selectImage = "assets/icons/image.png";
+  static const profile_bg_circle = "assets/images/profile_bg_circle.png";
+  static const edit_button = "assets/icons/edit_btn.png";
+  static const refer_coin = "assets/icons/refer_coin.png";
+  static const speaker = "assets/icons/speaker.png";
+  static const advert_image = "assets/images/temporaryImages/advert_image.png";
+  static const error_image = "assets/images/error_image.png";
 }

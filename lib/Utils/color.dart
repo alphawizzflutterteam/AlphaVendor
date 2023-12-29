@@ -38,7 +38,7 @@ extension colors on ColorScheme {
   static const Color subscribeYellow = Color(0xFF987808);
   static const Color bodyBackgroundDark = Color(0xFF1D2429);
   static const Color lightBorder = Color(0xFFC3C5DD);
-  static const Color lightGrey = Color(0xFFE3E1EC);
+  static const Color lightGrey = Color(0xFFE2E0EB);
 
   //home
   static const Color homeBG = Color(0xFFFFDC98);

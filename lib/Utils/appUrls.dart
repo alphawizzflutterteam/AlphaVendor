@@ -1,10 +1,9 @@
 // ignore_for_file: file_names
 class AppUrl {
-  static const baseURL =
-      "https://test-alpha-ecom.developmentalphawizz.com/api/v1/";
+  static const baseURL = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
   static const baseURL1 = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
 
-  static const apitoken = 'kRqVkZToRSVNOEXuWpgswfMGwaFgw9KqB6k3JrEYYnOn7sXqsx';
+  static const apitoken = 'xwD6JZXHCGtfZWEH3tpZ3nCzKdDPFbzTQcSZuvNMFzeFOBD6HB';
 
   static String sendLoginOtp = "${baseURL}auth/send-login-otp";
   static String sendRegisterOtp = "${baseURL}auth/send-otp";
@@ -56,6 +55,7 @@ class AppUrl {
   static String orderList = "${baseURL}customer/order/list";
 
   static String contactForm = "${baseURL}contact/store";
-
-  static String productDetail = "${baseURL}products/details/";
+//Vendor
+  static String productMgmt = "${baseURL}seller/product-management";
+  static String productList = "${baseURL}seller/products/list";
 }

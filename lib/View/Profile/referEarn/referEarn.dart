@@ -1,0 +1,302 @@
+import 'package:alpha_work/Utils/color.dart';
+import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/material.dart';
+
+class ReferAndEarnScreen extends StatelessWidget {
+  const ReferAndEarnScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: CommanAppbar(appbarTitle: "Refer and Earn"),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? colors.boxBorder
+                  : const Color(0xFFCEEAEA).withOpacity(0.8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    Images.refer,
+                    height: 100,
+                    width: 100,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          Images.refer_coin,
+                          height: 28,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "2562",
+                          style: TextStyle(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "Referral Points",
+                    style: TextStyle(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
+                        height: 1.5),
+                    textAlign: TextAlign.center,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: DottedBorder(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : const Color(0xFF0A9494),
+                        strokeWidth: 1,
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 15, bottom: 15),
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? const Color(0xA6064848)
+                                    : Colors.white,
+                            borderRadius: BorderRadius.circular(
+                                10), // Adjust the radius as needed
+                            // border: Border.all(
+                            //   color: Colors.white,
+                            //   width: 1, // Border width
+                            // ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Column(
+                                  children: [
+                                    Text(
+                                      "You referral code",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : colors.greyText,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      // user.data[0].referralCode,
+                                      "ABCDG123",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  height: 35,
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    // await Clipboard.setData(ClipboardData(
+                                    //     text: user.data[0].referralCode));
+                                    // Utils.showFlushBarWithMessage("Alert",
+                                    //     "Referral Code Copied.", context);
+                                  },
+                                  child: Text(
+                                    "Copy\nCode",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      height: 1.5,
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // share(context, user.data[0].referralCode);
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.ios_share_outlined,
+                          color: Colors.orange,
+                          size: 18,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "Share Code",
+                          style: TextStyle(color: Colors.orange, fontSize: 16),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                "Referall Member & Amount",
+                style: TextStyle(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 18),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .5,
+              child: ListView.separated(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: 10,
+                separatorBuilder: (context, index) => Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+                  color: Colors.grey.withOpacity(0.7),
+                  height: .5,
+                ),
+                itemBuilder: (context, i) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width:
+                                      40, // Set the width and height to create a circular shape
+                                  height: 40,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape
+                                        .circle, // Make the container circular
+                                    color: Color(
+                                        0x6B969696), // Set the background color
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "AS",
+                                      style: TextStyle(
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors
+                                                .black, // Set the text color
+                                        fontSize: 14, // Set the text size
+                                        fontWeight: FontWeight
+                                            .bold, // Set the text weight
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 15),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      // profileProvider
+                                      //     .referralList[i].description
+                                      //     .toString(),
+                                      "Anshul Sharma",
+                                      style: TextStyle(
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 14),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                        // profileProvider
+                                        //     .referralList[i].createdAt
+                                        //     .toString(),
+                                        "02 oct 2022",
+                                        style: TextStyle(
+                                            color: colors.lightTextColor,
+                                            fontSize: 12))
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Text(
+                              // profileProvider.referralList[i].balance
+                              //     .toString(),
+                              "200",
+                              style: TextStyle(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
