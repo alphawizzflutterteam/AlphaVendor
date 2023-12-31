@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         Locale('en', 'US'),
         Locale('hi', 'IN'),
       ],
-
+      themeMode: ThemeMode.light,
       theme: ThemeData(
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -76,8 +76,9 @@ class MyApp extends StatelessWidget {
         fontFamily: 'FuturaPT',
         brightness: Brightness.light,
         inputDecorationTheme: InputDecorationTheme(
+          contentPadding: EdgeInsets.only(right: 10, left: 10),
           labelStyle:
-              TextStyle(color: colors.greyText, fontWeight: FontWeight.w400),
+              TextStyle(color: colors.greyText, fontWeight: FontWeight.normal),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: colors.boxBorder, width: 1),
             borderRadius: BorderRadius.circular(10),
@@ -90,9 +91,6 @@ class MyApp extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: colors.boxBorder, width: 1),
             borderRadius: BorderRadius.circular(10),
-          ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 10,
           ),
         ),
         textTheme: TextTheme(

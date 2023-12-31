@@ -7,8 +7,8 @@ import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileSettingScreen extends StatelessWidget {
+  const ProfileSettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

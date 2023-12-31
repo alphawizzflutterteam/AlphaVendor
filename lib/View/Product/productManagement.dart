@@ -51,41 +51,55 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        height: height * .1,
-                        width: width * .29,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Total Product",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: colors.greyText,
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          PageTransition(
+                              child: ActiveProductScreen(
+                                appBartitle: "All Products",
+                                type: 'all',
                               ),
-                            ),
-                            Text(
-                              productMgmtProvider
-                                  .productManagementData.totalProduct
-                                  .toString(),
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                              type: PageTransitionType.rightToLeft),
+                        ),
+                        child: Container(
+                          height: height * .1,
+                          width: width * .29,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Total Product",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: colors.greyText,
+                                ),
                               ),
-                            )
-                          ],
+                              Text(
+                                productMgmtProvider
+                                    .productManagementData.totalProduct
+                                    .toString(),
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () => Navigator.push(
                           context,
                           PageTransition(
-                              child: ActiveProductScreen(),
+                              child: ActiveProductScreen(
+                                appBartitle: "Active Products",
+                                type: '1',
+                              ),
                               type: PageTransitionType.rightToLeft),
                         ),
                         child: Container(
@@ -119,34 +133,45 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        height: height * .1,
-                        width: width * .29,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Inactive",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: colors.greyText,
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          PageTransition(
+                              child: ActiveProductScreen(
+                                appBartitle: "Inactive Products",
+                                type: '0',
                               ),
-                            ),
-                            Text(
-                              productMgmtProvider
-                                  .productManagementData.activeProduct
-                                  .toString(),
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                              type: PageTransitionType.rightToLeft),
+                        ),
+                        child: Container(
+                          height: height * .1,
+                          width: width * .29,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Inactive",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: colors.greyText,
+                                ),
                               ),
-                            )
-                          ],
+                              Text(
+                                productMgmtProvider
+                                    .productManagementData.activeProduct
+                                    .toString(),
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ],

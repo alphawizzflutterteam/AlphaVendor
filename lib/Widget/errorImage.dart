@@ -2,7 +2,7 @@ import 'package:alpha_work/Utils/images.dart';
 import 'package:flutter/material.dart';
 
 class ErrorImageWidget extends StatelessWidget {
-  final double height;
+  final double? height;
 
   const ErrorImageWidget({super.key, required this.height});
 

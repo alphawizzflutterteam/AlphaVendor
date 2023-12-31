@@ -1,6 +1,7 @@
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
-import 'package:alpha_work/View/Profile/profile.dart';
+import 'package:alpha_work/View/Profile/profile/Profile.dart';
+import 'package:alpha_work/View/Profile/settings/settings.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -33,15 +34,15 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
   }
 
   getSellerDetails() {
-    final service = dashboardserive();
-    service.getDashboardSellerDetails().then((value) {
-      // print("object");
-      print(value);
-      setState(() {
-        _sellerdata.add(value['data']);
-        print(_sellerdata);
-      });
-    });
+    // final service = dashboardserive();
+    // service.getDashboardSellerDetails().then((value) {
+    //   // print("object");
+    //   print(value);
+    //   setState(() {
+    //     _sellerdata.add(value['data']);
+    //     print(_sellerdata);
+    //   });
+    // });
   }
 
   late TooltipBehavior _tooltipBehavior;
@@ -91,9 +92,9 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                     subtitle: GestureDetector(
                       onTap: () => Navigator.push(
                           context,
-                          PageTransition(
-                              child: ProfileScreen(),
-                              type: PageTransitionType.rightToLeft)),
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          )),
                       child: Text(
                         "View Profile",
                         style: TextStyle(
@@ -170,7 +171,11 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                 leading: const Icon(Icons.settings),
                 title: const DrawerText(text: 'Settings', ''),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: const ProfileSettingScreen()));
                 },
               ),
               ListTile(
@@ -200,7 +205,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
         //   title: const Text("Seller Dashboard"),
         // ),
         backgroundColor: Colors.blue[50],
-        body: _sellerdata.isEmpty
+        body: _sellerdata.isNotEmpty
             ? const Center(child: CircularProgressIndicator.adaptive())
             : Container(
                 child: SingleChildScrollView(
