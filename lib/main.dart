@@ -1,3 +1,4 @@
+import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,6 +21,9 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ProductManagementViewModel>(
       create: (context) => ProductManagementViewModel(),
+    ),
+    ChangeNotifierProvider<AuthViewModel>(
+      create: (context) => AuthViewModel(),
     ),
     ChangeNotifierProvider<LanguageViewModel>(
         create: (context) => LanguageViewModel()),

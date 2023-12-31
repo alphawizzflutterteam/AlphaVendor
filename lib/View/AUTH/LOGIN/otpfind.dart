@@ -1,16 +1,69 @@
+import 'package:alpha_work/Utils/appUrls.dart';
+import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Dashboard/Dashboad.dart';
 
 class OtpCheckPage extends StatefulWidget {
-  const OtpCheckPage({super.key});
-
   @override
   State<OtpCheckPage> createState() => _OtpCheckPageState();
 }
 
 class _OtpCheckPageState extends State<OtpCheckPage> {
+  TextEditingController pinCtrl = TextEditingController();
+  var savedotp;
+  void getOtp() async {
+    savedotp = SharedPref.shared.pref!.getString(PrefKeys.jwtToken)!;
+    print(savedotp);
+
+    setState(() {
+      pinCtrl.text = savedotp;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getOtp();
+
+    super.initState();
+  }
+
+  final defaultPinTheme = PinTheme(
+    width: 50,
+    height: 50,
+    margin: const EdgeInsets.symmetric(horizontal: 15),
+    textStyle: TextStyle(
+        fontSize: 20,
+        color: Color.fromRGBO(30, 60, 87, 1),
+        fontWeight: FontWeight.w600),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: const Color.fromARGB(255, 19, 88, 130),
+      ),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+  final focusedPinTheme = PinTheme(
+    width: 50,
+    height: 50,
+    textStyle: TextStyle(
+        fontSize: 20,
+        color: Color.fromRGBO(30, 60, 87, 1),
+        fontWeight: FontWeight.w600),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: const Color.fromARGB(255, 19, 88, 130),
+      ),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,33 +92,17 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                 "Enter Verification Code",
                 style: TextStyle(fontSize: 22),
               ),
-              const Text("Enter the otp sent to +916266"),
-              const SizedBox(
-                height: 10,
+              // const Text("Enter the otp sent to +916266"),
+              Divider(
+                color: Colors.transparent,
+                height: 30,
               ),
-              SizedBox(
-                child: OtpTextField(
-                  autoFocus: true,
-                  fieldWidth: 50,
-                  numberOfFields: 4,
-                  borderColor: const Color.fromARGB(255, 19, 88, 130),
-                  //set to true to show as box or false to show as dash
-                  showFieldAsBox: true,
-                  //runs when a code is typed in
-                  onCodeChanged: (String code) {
-                    //handle validation or checks here
-                  },
-                  //runs when every textfield is filled
-                  onSubmit: (String verificationCode) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text("Verification Code"),
-                            content: Text('Code entered is $verificationCode'),
-                          );
-                        });
-                  }, // end onSubmit
+              Center(
+                child: Pinput(
+                  defaultPinTheme: defaultPinTheme,
+                  focusedPinTheme: focusedPinTheme,
+                  length: 4,
+                  controller: pinCtrl,
                 ),
               ),
               const SizedBox(
@@ -73,10 +110,14 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
+                  if (pinCtrl.text == savedotp) {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => const DashboardScreen1())));
+                        builder: (context) => const DashboardScreen1(),
+                      ),
+                    );
+                  }
                 },
                 child: Align(
                   alignment: Alignment.center,
@@ -133,3 +174,30 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
     );
   }
 }
+
+
+// OtpTextField(
+//                   autoFocus: true,
+//                   fieldWidth: 50,
+//                   numberOfFields: 4,
+//                   borderColor: const Color.fromARGB(255, 19, 88, 130),
+//                   //set to true to show as box or false to show as dash
+//                   showFieldAsBox: true,
+
+//                   //runs when a code is typed in
+//                   onCodeChanged: (String code) {
+//                     code = otp;
+//                   },
+//                   //runs when every textfield is filled
+//                   onSubmit: (String verificationCode) {
+//                     showDialog(
+//                         context: context,
+//                         builder: (context) {
+//                           return AlertDialog(
+//                             title: const Text("Verification Code"),
+//                             content: Text('Code entered is $verificationCode'),
+//                           );
+//                         });
+//                   }, // end onSubmit
+//                 ),
+            

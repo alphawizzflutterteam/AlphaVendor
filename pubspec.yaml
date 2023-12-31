@@ -58,6 +58,7 @@ dependencies:
   fluttertoast: ^8.2.4
   image_picker: ^1.0.5
   awesome_dialog: ^3.1.0
+  pinput: ^3.0.1
   
   
   # intl: ^0.18.0

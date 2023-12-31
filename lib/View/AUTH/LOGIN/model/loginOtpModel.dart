@@ -1,5 +1,5 @@
-class LoginOtpResponseModel {
-  LoginOtpResponseModel({
+class LoginOtpModel {
+  LoginOtpModel({
     required this.status,
     required this.message,
     required this.token,
@@ -15,8 +15,8 @@ class LoginOtpResponseModel {
   final List<dynamic> data;
   final String? otp;
 
-  factory LoginOtpResponseModel.fromJson(Map<String, dynamic> json) {
-    return LoginOtpResponseModel(
+  factory LoginOtpModel.fromJson(Map<String, dynamic> json) {
+    return LoginOtpModel(
       status: json["status"],
       message: json["message"],
       token: json["token"],

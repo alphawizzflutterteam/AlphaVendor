@@ -1,18 +1,28 @@
 import 'dart:convert';
-
-import 'package:alpha_work/ViewModel/loginOtpResponseModel.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/model/loginOtpModel.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository {
-  Future<LoginOtpResponseModel> loginApiReqzuest(
-      String api, dynamic data) async {
-    final url = Uri.parse(api);
+  Future<LoginOtpModel> loginOtpPostRequest(
+      {required String api, required String phone}) async {
+    var request = http.MultipartRequest('POST', Uri.parse(api));
+    request.fields.addAll({'phone': phone});
 
-    final http.Response res;
-    res = await http.post(url, body: data);
-    var ans = jsonDecode(res.body);
-
-    return LoginOtpResponseModel.fromJson(ans);
+    http.StreamedResponse response = await request.send();
+    var ans = jsonDecode(await response.stream.bytesToString());
+    if (response.statusCode == 200) {
+      print(ans);
+      return LoginOtpModel.fromJson(ans);
+    } else {
+      print(response.reasonPhrase);
+      return LoginOtpModel(
+          status: false,
+          message: null,
+          token: null,
+          errors: [],
+          data: [],
+          otp: "");
+    }
   }
 
   // Future<ResetPasswordModel> restPasswordAPI(

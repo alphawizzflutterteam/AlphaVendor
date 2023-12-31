@@ -3,7 +3,7 @@ class AppUrl {
   static const baseURL = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
   static const baseURL1 = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
 
-  static const apitoken = 'UOZyVLQybl6wPbBPXjkpzHSk30SfKr19uv14iuLI6Pg6v1NY4p';
+  static const apitoken = '';
 
   static String sendLoginOtp = "${baseURL}auth/send-login-otp";
   static String sendRegisterOtp = "${baseURL}auth/send-otp";

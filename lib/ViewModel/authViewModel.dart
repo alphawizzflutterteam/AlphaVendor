@@ -6,14 +6,14 @@ import 'dart:math';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
-import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
 import 'package:alpha_work/View/AUTH/LOGIN/otpfind.dart';
-import 'package:alpha_work/View/AUTH/SIGNUP/signuppage.dart';
+
 import 'package:alpha_work/View/Dashboard/Dashboad.dart';
 import 'package:alpha_work/repository/authRepository.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthViewModel with ChangeNotifier {
   final _myRepo = AuthRepository();
@@ -102,78 +102,94 @@ class AuthViewModel with ChangeNotifier {
         ),
       );
 
-  Future<void> loginFn(GlobalKey<FormState> formKey, BuildContext context,
-      String phone, dynamic data) async {
-    setLoading(true);
-
-    if (formKey.currentState!.validate()) {
-      if (isLoggingViaPhone) {
-        _myRepo.loginApiReqzuest(AppUrl.sendLoginOtp, data).then((value) {
-          setLoading(false);
-
-          if (value.message == "OTP sent success") {
-            Utils.showFlushBarWithMessage(
-                "Alert", "OTP sent successfully.", context);
-            SharedPref.shared.pref?.setString(PrefKeys.mobile, phone);
-            SharedPref.shared.pref
-                ?.setString(PrefKeys.jwtToken, value.token.toString());
-
-            Utils.showFlushBarWithMessage(
-                "Alert", "OTP sent successfully.", context);
-            SharedPref.shared.pref?.setString(PrefKeys.otp, value.data[0].otp);
-
-            Utils.showFlushBarWithMessage("OTP", value.data[0].otp, context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: ((context) => const OtpCheckPage())));
-          } else {
-            value.errors.isEmpty
-                ? Utils.showFlushBarWithMessage(
-                    "Alert", value.message.toString(), context)
-                : Utils.showFlushBarWithMessage(
-                    "Alert", value.errors[0].message, context);
-          }
-        }).onError((error, stackTrace) {
-          setLoading(false);
-          print(error.toString());
-          print(stackTrace.toString());
-          Utils.showFlushBarWithMessage(
-              "Alert", stackTrace.toString(), context);
-        });
-      } else {
-        _myRepo
-            .loginApiReqzuest(AppUrl.loginWithEmailPassword, data)
-            .then((value) {
-          setLoading(false);
-
-          if (value.message == "User logged in success") {
-            Utils.showFlushBarWithMessage(
-                "Alert", "Logged in successfully", context);
-
-            SharedPref.shared.pref
-                ?.setString(PrefKeys.jwtToken, value.token.toString());
-            SharedPref.shared.pref?.setString(PrefKeys.mobile, phone);
-            SharedPref.shared.pref?.setString(PrefKeys.isLoggedIn, "1");
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: ((context) => const DashboardScreen1())));
-          } else {
-            value.errors.isEmpty
-                ? Utils.showFlushBarWithMessage(
-                    "Alert", value.message.toString(), context)
-                : Utils.showFlushBarWithMessage(
-                    "Alert", value.errors[0].message, context);
-          }
-        }).onError((error, stackTrace) {
-          setLoading(false);
-        });
-      }
-    } else {
+  Future<void> loginwithPhone({
+    required String phone,
+    required BuildContext context,
+  }) async {
+    await _myRepo
+        .loginOtpPostRequest(api: AppUrl.loginOtp, phone: phone)
+        .then((value) async {
       setLoading(false);
-    }
+      print(value.token);
+      print(value.otp);
+
+      if (value.message == "OTP sent success") {
+        // final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        // await prefs.setString(PrefKeys.mobile, phone);
+        // await prefs.setString(PrefKeys.jwtToken, value.token.toString());
+        // await prefs.setString(PrefKeys.otp, value.otp.toString());
+        SharedPref.shared.pref?.setString(PrefKeys.mobile, phone);
+        SharedPref.shared.pref
+            ?.setString(PrefKeys.jwtToken, value.token.toString());
+        SharedPref.shared.pref
+            ?.setString(PrefKeys.jwtToken, value.otp.toString());
+
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => OtpCheckPage(),
+        ));
+      }
+    });
+    // _myRepo
+    //           .loginOtpPostRequest(api: AppUrl.loginOtp, phone: phone)
+    //           .then((value) {
+    //         setLoading(false);
+
+    //       }));
   }
+
+  // Future<void> loginFn(GlobalKey<FormState> formKey, BuildContext context,
+  //     String phone, String data) async {
+  //   setLoading(true);
+
+  //   if (formKey.currentState!.validate()) {
+  //     if (isLoggingViaPhone) {
+
+  //         } else {
+  //           value.errors.isEmpty
+  //               ? Utils.showFlushBarWithMessage(
+  //                   "Alert", value.message.toString(), context)
+  //               : Utils.showFlushBarWithMessage(
+  //                   "Alert", value.errors[0].message, context);
+  //         }
+  //       }).onError((error, stackTrace) {
+  //         setLoading(false);
+  //         print(error.toString());
+  //         print(stackTrace.toString());
+  //         Utils.showFlushBarWithMessage(
+  //             "Alert", stackTrace.toString(), context);
+  //       });
+  //     } else {
+  //       _myRepo.loginOtpPostRequest(api: "", phone: "").then((value) {
+  //         setLoading(false);
+
+  //         if (value.message == "User logged in success") {
+  //           Utils.showFlushBarWithMessage(
+  //               "Alert", "Logged in successfully", context);
+
+  //           SharedPref.shared.pref
+  //               ?.setString(PrefKeys.jwtToken, value.token.toString());
+  //           SharedPref.shared.pref?.setString(PrefKeys.mobile, phone);
+  //           SharedPref.shared.pref?.setString(PrefKeys.isLoggedIn, "1");
+  //           Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                   builder: ((context) => const DashboardScreen1())));
+  //         } else {
+  //           value.errors.isEmpty
+  //               ? Utils.showFlushBarWithMessage(
+  //                   "Alert", value.message.toString(), context)
+  //               : Utils.showFlushBarWithMessage(
+  //                   "Alert", value.errors[0].message, context);
+  //         }
+  //       }).onError((error, stackTrace) {
+  //         setLoading(false);
+  //       });
+  //     }
+  //   } else {
+  //     setLoading(false);
+  //   }
+  // }
 
 //   Future<void> resendOTP(dynamic data, BuildContext context) async {
 //     setLoading(true);

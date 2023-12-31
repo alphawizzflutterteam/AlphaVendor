@@ -22,6 +22,13 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController mobilenumbercontroller = TextEditingController();
   TextEditingController emailcontroler = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
+  late AuthViewModel auth;
+  @override
+  void initState() {
+    auth = Provider.of<AuthViewModel>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,10 +165,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const OtpCheckPage())));
+                print(mobilenumbercontroller.text);
+                auth.loginwithPhone(
+                    phone: mobilenumbercontroller.text, context: context);
               },
               child: Container(
                 height: 50,
