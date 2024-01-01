@@ -152,4 +152,11 @@ class Images {
   static const speaker = "assets/icons/speaker.png";
   static const advert_image = "assets/images/temporaryImages/advert_image.png";
   static const error_image = "assets/images/error_image.png";
+  static const sale_image = "assets/icons/dashsale.png";
+  static const order_image = "assets/icons/dashorder.png";
+  static const stock_image = "assets/icons/dashstock.png";
+  static const customer_image = "assets/icons/dashcustomer.png";
+  static const delivery_image = "assets/icons/dashdelivery.png";
+  static const rating_image = "assets/icons/dashrating.png";
+  static const noOrder = "assets/images/orderPlaceholder.png";
 }

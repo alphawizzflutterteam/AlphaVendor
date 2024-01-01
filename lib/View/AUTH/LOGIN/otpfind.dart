@@ -16,9 +16,9 @@ class OtpCheckPage extends StatefulWidget {
 
 class _OtpCheckPageState extends State<OtpCheckPage> {
   TextEditingController pinCtrl = TextEditingController();
-  var savedotp;
+  late String savedotp;
   void getOtp() async {
-    savedotp = SharedPref.shared.pref!.getString(PrefKeys.jwtToken)!;
+    savedotp = PreferenceUtils.getString(PrefKeys.otp);
     print(savedotp);
 
     setState(() {

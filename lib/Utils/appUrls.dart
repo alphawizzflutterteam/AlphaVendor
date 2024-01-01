@@ -52,8 +52,6 @@ class AppUrl {
   static String updateAddressList = "${baseURL}customer/address/update";
   static String deleteAddress = "${baseURL}customer/address?address_id=";
 
-  static String orderList = "${baseURL}customer/order/list";
-
   static String contactForm = "${baseURL}contact/store";
 //Vendor
   static const String loginOtp = "${baseURL}seller/login-otp";
@@ -63,4 +61,6 @@ class AppUrl {
   static const String brandList = "${baseURL}seller/brands";
   static const String imageUpload = "${baseURL}seller/products/upload-images";
   static const String addProduct = "${baseURL}seller/products/add";
+  static const String dashboardData = "${baseURL}seller/dashboard";
+  static const String orderList = "${baseURL}seller/orders/list";
 }

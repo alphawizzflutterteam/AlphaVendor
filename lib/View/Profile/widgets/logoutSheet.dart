@@ -130,9 +130,9 @@ class LogoutBottomSheet extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    SharedPref.shared.pref?.setString(PrefKeys.mobile, "");
-                    SharedPref.shared.pref?.setString(PrefKeys.isLoggedIn, "0");
-                    SharedPref.shared.pref?.setString(PrefKeys.jwtToken, "");
+                    PreferenceUtils.setString(PrefKeys.mobile, "");
+                    PreferenceUtils.setString(PrefKeys.isLoggedIn, "0");
+                    PreferenceUtils.setString(PrefKeys.jwtToken, "");
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(

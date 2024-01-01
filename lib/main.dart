@@ -1,27 +1,29 @@
+import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
+import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
+import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'Utils/color.dart';
-import 'View/AUTH/LOGIN/loginpage.dart';
-import 'View/AUTH/LOGIN/otpfind.dart';
-import 'View/AUTH/SIGNUP/signuppage.dart';
-import 'View/Dashboard/Dashboad.dart';
-import 'View/Dashboard/dashboarsservice.dart';
 import 'View/Splash/SplashScrreen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
 import 'ViewModel/currencyViewModel.dart';
 import 'ViewModel/languageViewModel.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await PreferenceUtils.init();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ProductManagementViewModel>(
       create: (context) => ProductManagementViewModel(),
     ),
+    ChangeNotifierProvider<OrderManagementViewModel>(
+      create: (context) => OrderManagementViewModel(),
+    ),
+    ChangeNotifierProvider<DashboardViewModel>(
+        create: (context) => DashboardViewModel()),
     ChangeNotifierProvider<AuthViewModel>(
       create: (context) => AuthViewModel(),
     ),

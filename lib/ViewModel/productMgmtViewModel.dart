@@ -1,5 +1,6 @@
 import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
+import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/Product/model/brandModel.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
 import 'package:alpha_work/View/Product/model/productListModel.dart';
@@ -43,8 +44,9 @@ class ProductManagementViewModel extends ChangeNotifier {
 
 //Function to get productmgmt list
   Future<void> getProductManagement() async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo.ProductMgmtDataRequest(
-            api: AppUrl.productMgmt, bearerToken: AppUrl.apitoken)
+            api: AppUrl.productMgmt, bearerToken: token)
         .then((value) {
       productManagementData = value.data!;
       print(productManagementData.categories.length);
@@ -56,10 +58,11 @@ class ProductManagementViewModel extends ChangeNotifier {
 
 //Function to get Product list based on status (Active,Inactive,All)
   Future<void> getProductsListWithStatus({required String Type}) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     print(Type);
     setLoading(true);
     await _myRepo.ProductListRequest(
-            api: AppUrl.productList, bearerToken: AppUrl.apitoken, type: Type)
+            api: AppUrl.productList, bearerToken: token, type: Type)
         .then((value) {
       productList = value.data!;
       setLoading(false);
@@ -68,11 +71,12 @@ class ProductManagementViewModel extends ChangeNotifier {
 
 //Function to get category with id
   Future<void> getCategory({required String id}) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     setLoading(true);
     subsubcategories.clear();
     await _myRepo
         .categoryListRequest(
-            api: AppUrl.categoriesList, bearerToken: AppUrl.apitoken, id: id)
+            api: AppUrl.categoriesList, bearerToken: token, id: id)
         .then((value) {
       categories = value.data;
       print("here");
@@ -83,11 +87,12 @@ class ProductManagementViewModel extends ChangeNotifier {
 
   //Function to get category with id
   Future<void> getsubCategory({required String id}) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     subcategories.clear();
     setLoading(true);
     await _myRepo
         .categoryListRequest(
-            api: AppUrl.categoriesList, bearerToken: AppUrl.apitoken, id: id)
+            api: AppUrl.categoriesList, bearerToken: token, id: id)
         .then((value) {
       subcategories = value.data;
 
@@ -112,10 +117,11 @@ class ProductManagementViewModel extends ChangeNotifier {
 
 //Funcation to get brand data
   Future<void> getBrandList() async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo
         .brandListRequest(
       api: AppUrl.brandList,
-      bearerToken: AppUrl.apitoken,
+      bearerToken: token,
     )
         .then((value) {
       brandList = value.data;
@@ -127,9 +133,9 @@ class ProductManagementViewModel extends ChangeNotifier {
 
 //Function to upload Image
   Future<void> getImageUrl({required String path}) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo
-        .uploadImage(
-            path: path, api: AppUrl.imageUpload, token: AppUrl.apitoken)
+        .uploadImage(path: path, api: AppUrl.imageUpload, token: token)
         .then((value) {
       thumbnail = value;
     });
@@ -157,9 +163,10 @@ class ProductManagementViewModel extends ChangeNotifier {
     required String purchase_price,
   }) async {
     bool status = false;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo
         .addProductPostRequest(
-          token: AppUrl.apitoken,
+          token: token,
           api: AppUrl.addProduct,
           name: name,
           category_id: category_id,

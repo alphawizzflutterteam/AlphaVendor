@@ -1,27 +1,52 @@
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'dart:convert';
+
+// class SharedPref {
+//   static final shared = SharedPref.getPref();
+//   static SharedPreferences? pref;
+
+//   static getPref() async {
+//     pref = await SharedPreferences.getInstance();
+//   }
+
+//   read(String key) async {
+//     final prefs = await SharedPreferences.getInstance();
+//     return json.decode(prefs.getString(key)!);
+//   }
+
+//   save(String key, value) async {
+//     print(value.toString() + "_______________________");
+//     final prefs = await SharedPreferences.getInstance();
+//     prefs.setString(key, json.encode(value));
+//   }
+
+//   remove(String key) async {
+//     final prefs = await SharedPreferences.getInstance();
+//     prefs.remove(key);
+//   }
+// }
+
+import 'dart:async' show Future;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
-class SharedPref {
-  static final shared = SharedPref();
-  SharedPreferences? pref;
+class PreferenceUtils {
+  static Future<SharedPreferences> get _instance async =>
+      _prefsInstance ??= await SharedPreferences.getInstance();
+  static SharedPreferences? _prefsInstance;
 
-  getPref() async {
-    pref = await SharedPreferences.getInstance();
+  // call this method from iniState() function of mainApp().
+  static Future<SharedPreferences?> init() async {
+    _prefsInstance = await _instance;
+    return _prefsInstance;
   }
 
-  read(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return json.decode(prefs.getString(key)!);
+  static String getString(String key, [String? defValue]) {
+    return _prefsInstance!.getString(key) ?? defValue ?? "";
   }
 
-  save(String key, value) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, json.encode(value));
-  }
-
-  remove(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove(key);
+  static Future<bool> setString(String key, String value) async {
+    var prefs = await _instance;
+    return prefs?.setString(key, value) ?? Future.value(false);
   }
 }
 

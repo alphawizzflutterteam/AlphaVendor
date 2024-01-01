@@ -59,10 +59,7 @@ List<ProfileList> profileItem = [
       profileIcon: Images.changeLanguage,
       profileText: 'Change Language',
       navigationScreen: ""),
-  ProfileList(
-      profileIcon: Images.changeTheme,
-      profileText: 'Change Theme',
-      navigationScreen: const ReferAndEarnScreen()),
+
   ProfileList(
       profileIcon: Images.logOut, profileText: 'Logout', navigationScreen: ""),
 ];

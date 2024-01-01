@@ -1,17 +1,19 @@
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/Product/addProduct.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
 import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/settings/settings.dart';
+import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
+import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../Router/router.dart';
 import '../../Utils/color.dart';
 import '../../Widget/CommonTextWidget/commontext.dart';
-import '../ORDER/ordermanagement.dart';
-import 'dashboarsservice.dart';
 
 class DashboardScreen1 extends StatefulWidget {
   const DashboardScreen1({super.key});
@@ -21,28 +23,16 @@ class DashboardScreen1 extends StatefulWidget {
 }
 
 class _DashboardScreen1State extends State<DashboardScreen1> {
+  late DashboardViewModel dashProvider;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    dashProvider = Provider.of(context, listen: false);
+    dashProvider.getDashboardData();
     _tooltipBehavior = TooltipBehavior(enable: true);
     _tooltipBehavior1 = TooltipBehavior(enable: true);
-
-    getSellerDetails();
     //  _tabController =  TabController(length: 2, vsync: true);
-  }
-
-  getSellerDetails() {
-    // final service = dashboardserive();
-    // service.getDashboardSellerDetails().then((value) {
-    //   // print("object");
-    //   print(value);
-    //   setState(() {
-    //     _sellerdata.add(value['data']);
-    //     print(_sellerdata);
-    //   });
-    // });
   }
 
   late TooltipBehavior _tooltipBehavior;
@@ -50,12 +40,42 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
   // late TabController _tabController;
 
   List items = [
-    {'id': 1, 'name': 'Total Sale', 'value': '234'},
-    {'id': 2, 'name': 'Total Order', 'value': '123'},
-    {'id': 3, 'name': 'Stock Management', 'value': '300'},
-    {'id': 4, 'name': 'Customer', 'value': '500'},
-    {'id': 5, 'name': 'Total Deleviry', 'value': '100'},
-    {'id': 6, 'name': 'Reating Review', 'value': '4.5'},
+    {
+      'id': 0,
+      'name': 'Total Sale',
+      'image': Images.sale_image,
+      'color': Color(0xFFE17A1A).withOpacity(0.3),
+    },
+    {
+      'id': 1,
+      'name': 'Total Order',
+      'image': Images.order_image,
+      'color': Color(0xFFE92068).withOpacity(0.3),
+    },
+    {
+      'id': 2,
+      'name': 'Stock Management',
+      'image': Images.stock_image,
+      'color': Color(0xFFCB43D7).withOpacity(0.3),
+    },
+    {
+      'id': 3,
+      'name': 'Customer',
+      'image': Images.customer_image,
+      'color': Color(0xFF00C2ED).withOpacity(0.3),
+    },
+    {
+      'id': 4,
+      'name': 'Total Deleviry',
+      'image': Images.delivery_image,
+      'color': Color(0xFF0C77C8).withOpacity(0.3),
+    },
+    {
+      'id': 5,
+      'name': 'Reating Review',
+      'image': Images.rating_image,
+      'color': Color(0xFFEDB900).withOpacity(0.3),
+    },
   ];
   final List<ChartData> chartData = [
     ChartData('David', 25),
@@ -66,372 +86,383 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
 
   final navigator = NavigateToRouter();
   final _sellerdata = [];
+  String getCardVal(int index) {
+    switch (index) {
+      case 0:
+        return dashProvider.dashData.totalSale.toString();
+      case 1:
+        return dashProvider.dashData.totalOrders.toString();
+      case 2:
+        return dashProvider.dashData.stockManagement.toString();
+      case 3:
+        return dashProvider.dashData.totalCustomers.toString();
+      case 4:
+        return dashProvider.dashData.totalDelivery.toString();
+      case 5:
+        return dashProvider.dashData.ratingsNdReviews.toString();
+      default:
+        return " ";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    dashProvider = Provider.of(context);
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: const EdgeInsets.all(0),
-            children: [
-              DrawerHeader(
-                  decoration: BoxDecoration(
-                      // color: Colors.green,
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/success.png"),
-                          fit: BoxFit.cover)),
-                  //BoxDecoration
-                  child: ListTile(
-                    leading: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(Images.driver_profile)),
-                    title: Text(
-                      "Hritik",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    subtitle: GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(),
-                          )),
-                      child: Text(
-                        "View Profile",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 127, 213, 233),
-                            decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  ) //UserAccountDrawerHeader
+      drawer: Drawer(
+        child: ListView(
+          padding: const EdgeInsets.all(0),
+          children: [
+            DrawerHeader(
+                decoration: BoxDecoration(
+                    // color: Colors.green,
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/success.png"),
+                        fit: BoxFit.cover)),
+                //BoxDecoration
+                child: ListTile(
+                  leading: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: AssetImage(Images.driver_profile)),
+                  title: Text(
+                    "Hritik",
+                    style: TextStyle(color: Colors.white),
                   ),
-
-              //DrawerHeader
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "OverView",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  subtitle: GestureDetector(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        )),
+                    child: Text(
+                      "View Profile",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 127, 213, 233),
+                          decoration: TextDecoration.underline),
+                    ),
+                  ),
+                ) //UserAccountDrawerHeader
                 ),
-              ),
-              ListTile(
-                selected: true,
-                selectedColor: colors.homeBGGradient1,
-                leading: const Icon(Icons.dashboard_sharp),
-                title: const Text(' Dashboard '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.shopping_bag_rounded),
-                title: const DrawerText(text: 'Order Managemnt', ''),
-                onTap: () {
-                  navigator.navigatetonextScreen(context);
 
-                  // Navigator.push(
-                  //     context,
-                  //     PageTransition(
-                  //         type: PageTransitionType.rightToLeft,
-                  //         child: OrderManagement()));
-                },
+            //DrawerHeader
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "OverView",
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              ListTile(
-                leading: const Icon(Icons.workspace_premium),
-                title: const DrawerText(text: 'Product Management', ''),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: const ProductManagementScreen()));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.person_outline_outlined),
-                title: const DrawerText(text: 'Customer', ''),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.analytics_outlined),
-                title: const DrawerText(text: 'Analytics and Reports', ''),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.wallet_sharp),
-                title: const DrawerText(text: 'Wallet', ''),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const DrawerText(text: 'Settings', ''),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: const ProfileSettingScreen()));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.payment),
-                title: const DrawerText(text: 'Payment', ''),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.storefront_outlined),
-                title: const DrawerText(text: 'Store Setting', ''),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+            ),
+            ListTile(
+              selected: true,
+              selectedColor: colors.homeBGGradient1,
+              leading: const Icon(Icons.dashboard_sharp),
+              title: const Text(' Dashboard '),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_bag_rounded),
+              title: const DrawerText(text: 'Order Managemnt', ''),
+              onTap: () {
+                navigator.navigatetonextScreen(context);
+
+                // Navigator.push(
+                //     context,
+                //     PageTransition(
+                //         type: PageTransitionType.rightToLeft,
+                //         child: OrderManagement()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.workspace_premium),
+              title: const DrawerText(text: 'Product Management', ''),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: const ProductManagementScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person_outline_outlined),
+              title: const DrawerText(text: 'Customer', ''),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.analytics_outlined),
+              title: const DrawerText(text: 'Analytics and Reports', ''),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.wallet_sharp),
+              title: const DrawerText(text: 'Wallet', ''),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const DrawerText(text: 'Settings', ''),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: const ProfileSettingScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.payment),
+              title: const DrawerText(text: 'Payment', ''),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.storefront_outlined),
+              title: const DrawerText(text: 'Store Setting', ''),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
-        // appBar: AppBar(
-        //   flexibleSpace: Container(
-        //     decoration: const BoxDecoration(
-        //         image: DecorationImage(
-        //             image: AssetImage('assets/images/success.png'),
-        //             fit: BoxFit.fill)),
-        //   ),
-        //   title: const Text("Seller Dashboard"),
-        // ),
-        backgroundColor: Colors.blue[50],
-        body: _sellerdata.isNotEmpty
-            ? const Center(child: CircularProgressIndicator.adaptive())
-            : Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 300,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
+      ),
+      backgroundColor: Colors.blue[50],
+      body: dashProvider.isLoading
+          ? appLoader()
+          : Column(
+              children: [
+                Container(
+                  height: height * .3,
+                  decoration: BoxDecoration(
+                      color: colors.buttonColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      )),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Image.asset(
+                          Images.profile_bg_circle,
+                          height: height * .2,
+                        ),
+                      ),
+                      AppBar(
+                        backgroundColor: Colors.transparent,
+                        centerTitle: true,
+                        title: const Text(
+                          "Seller Dashboard",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        leading: Builder(builder: (context) {
+                          return IconButton(
+                            icon: Image.asset(
+                              Images.hamburgerMenuIcon,
+                              color: Colors.white,
+                              height: 25,
                             ),
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/success.png"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              AppBar(
-                                centerTitle: true,
-                                leading: Builder(
-                                  builder: (BuildContext context) {
-                                    return IconButton(
-                                      icon: Image.asset(
-                                          Images.hamburgerMenuIcon,
-                                          height: 25),
-                                      onPressed: () {
-                                        Scaffold.of(context).openDrawer();
-                                      },
-                                      tooltip: MaterialLocalizations.of(context)
-                                          .openAppDrawerTooltip,
-                                    );
-                                  },
+                            onPressed: () => Scaffold.of(context).openDrawer(),
+                          );
+                        }),
+                      ),
+                      Positioned(
+                        top: height * .11,
+                        child: SizedBox(
+                          width: width,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Total Sale",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                          color: colors.lightGrey),
+                                    ),
+                                    Spacer(),
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    VerticalDivider(width: 5),
+                                    Text(
+                                      dashProvider.dashData.ratingsNdReviews
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ],
                                 ),
-                                backgroundColor: Colors.transparent,
-                                // flexibleSpace: Container(
-                                //   decoration: const BoxDecoration(
-                                //       image: DecorationImage(
-                                //           image: AssetImage('assets/images/success.png'),
-                                //           fit: BoxFit.fill)),
-                                // ),
-                                title: const Text(
-                                  "Seller Dashboard",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: const Column(
-                                    children: [
-                                      ListTile(
-                                        title: Text("Total Sale"),
-                                        subtitle: Text('100'),
-                                        trailing: Text("4.5"),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      IntrinsicHeight(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                // Text("Sold Out"),
-                                                Text16(
-                                                  text: 'Sold out',
-                                                ),
-                                                Text("452")
-                                              ],
-                                            ),
-                                            VerticalDivider(
-                                              color: Colors.grey,
-                                              thickness: 1,
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text16(
-                                                  text: 'Total Product',
-                                                ),
-                                                Text("123")
-                                              ],
-                                            ),
-                                            VerticalDivider(
-                                              color: Colors.grey,
-                                              thickness: 1,
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text16(
-                                                  text: 'Total Order',
-                                                ),
-                                                Text("987")
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
+                                Text(
+                                  dashProvider.dashData.totalSale.toString(),
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // number of items in each row
-                              mainAxisSpacing: 8.0, // spacing between rows
-                              crossAxisSpacing: 6.0, // spacing between columns
-                            ),
-                            padding: const EdgeInsets.all(
-                                2.0), // padding around the grid
-                            itemCount: items.length, // total number of items
-                            itemBuilder: (context, index) {
-                              return Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ), // color of grid items
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                Divider(color: Colors.transparent),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
                                       children: [
-                                        Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                              color: index == 0
-                                                  ? const Color.fromARGB(
-                                                      255, 255, 248, 236)
-                                                  : index == 1
-                                                      ? const Color.fromARGB(
-                                                          255, 231, 190, 222)
-                                                      : index == 2
-                                                          ? const Color.fromARGB(
-                                                              255, 222, 191, 228)
-                                                          : index == 3
-                                                              ? const Color.fromARGB(
-                                                                  255,
-                                                                  181,
-                                                                  216,
-                                                                  244)
-                                                              : index == 4
-                                                                  ? const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      191,
-                                                                      224,
-                                                                      252)
-                                                                  : index == 5
-                                                                      ? const Color
-                                                                          .fromARGB(
-                                                                          255,
-                                                                          254,
-                                                                          251,
-                                                                          228)
-                                                                      : Colors
-                                                                          .white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Center(
-                                              child: Icon(
-                                            Icons.shopify_rounded,
-                                            color: index == 0
-                                                ? const Color.fromARGB(
-                                                    255, 187, 134, 42)
-                                                : index == 1
-                                                    ? const Color.fromARGB(
-                                                        255, 147, 47, 165)
-                                                    : index == 2
-                                                        ? Colors.purple
-                                                        : index == 3
-                                                            ? Colors.blue
-                                                            : index == 4
-                                                                ? const Color
-                                                                    .fromARGB(
-                                                                    255,
-                                                                    12,
-                                                                    80,
-                                                                    135)
-                                                                : index == 5
-                                                                    ? Colors
-                                                                        .yellow
-                                                                    : Colors
-                                                                        .white,
-                                            size: 50,
-                                          )),
-                                        ),
-                                        const SizedBox(
-                                          height: 7,
-                                        ),
-                                        Text('${items[index]['name']}'),
-                                        const SizedBox(
-                                          height: 5,
+                                        Text(
+                                          "Sold Out",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                              color: colors.lightGrey),
                                         ),
                                         Text(
-                                          '${items[index]['value']}',
-                                          style: const TextStyle(fontSize: 20),
-                                        )
+                                          dashProvider.dashData.soldOut
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.white),
+                                        ),
                                       ],
                                     ),
-                                  ));
-                            },
+                                    SizedBox(
+                                      height: height * .04,
+                                      child: VerticalDivider(
+                                        color: colors.lightTextColor,
+                                        thickness: 2,
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "Total Products",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                              color: colors.lightGrey),
+                                        ),
+                                        Text(
+                                          dashProvider.dashData.totalProduct
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: height * .04,
+                                      child: VerticalDivider(
+                                        color: colors.lightTextColor,
+                                        thickness: 2,
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "Total Order",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                              color: colors.lightGrey),
+                                        ),
+                                        Text(
+                                          dashProvider.dashData.totalOrders
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 15,
+                                    crossAxisSpacing: 15),
+                            itemCount: items.length,
+                            itemBuilder: (context, index) => Container(
+                              height: height * .1,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: height * .08,
+                                    width: height * .08,
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: items[index]['color'],
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Image.asset(items[index]['image']),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    items[index]['name'],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                      color: colors.greyText,
+                                    ),
+                                  ),
+                                  Text(
+                                    getCardVal(index),
+                                    style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
+                        const Divider(color: Colors.transparent),
                         Container(
                           color: Colors.white,
                           height: 300,
@@ -466,11 +497,9 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                             onChange: (index) {},
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        const Divider(color: Colors.transparent),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -508,9 +537,26 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                             ],
                           ),
                         ),
-                      ]),
+                      ],
+                    ),
+                  ),
                 ),
-              ));
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        onPressed: () => Navigator.push(
+            context,
+            PageTransition(
+                child: AddProdutScreen(),
+                type: PageTransitionType.rightToLeft)),
+        backgroundColor: colors.buttonColor,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 
   Widget _Views() {

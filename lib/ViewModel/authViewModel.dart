@@ -119,11 +119,9 @@ class AuthViewModel with ChangeNotifier {
         // await prefs.setString(PrefKeys.mobile, phone);
         // await prefs.setString(PrefKeys.jwtToken, value.token.toString());
         // await prefs.setString(PrefKeys.otp, value.otp.toString());
-        SharedPref.shared.pref?.setString(PrefKeys.mobile, phone);
-        SharedPref.shared.pref
-            ?.setString(PrefKeys.jwtToken, value.token.toString());
-        SharedPref.shared.pref
-            ?.setString(PrefKeys.jwtToken, value.otp.toString());
+        PreferenceUtils.setString(PrefKeys.mobile, phone);
+        PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
+        PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
 
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => OtpCheckPage(),
