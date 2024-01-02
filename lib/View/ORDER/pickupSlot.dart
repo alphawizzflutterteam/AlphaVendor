@@ -34,7 +34,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             child: SizedBox(
               height: 40,
               child: TextField(
@@ -66,7 +66,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
           Expanded(
             child: Container(
               child: ListView.builder(
-                  itemCount: 200,
+                  itemCount: 20,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () => Navigator.of(context).push(
@@ -75,13 +75,14 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                         ),
                       ),
                       child: Container(
-                        margin: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(
+                            bottom: 10, left: 10, right: 10),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 12),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: const Color(0xFFE9E9E9)),
-                        height: MediaQuery.of(context).size.height * .16,
+                        height: MediaQuery.of(context).size.height * .17,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

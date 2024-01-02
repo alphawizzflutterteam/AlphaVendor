@@ -27,7 +27,7 @@ class OrderManagementViewModel with ChangeNotifier {
   //Function to fetch orders based on status
   Future<void> getOrderList({required String status}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-    print(status);
+
     await _myRepo
         .orderListGetRequest(
             api: AppUrl.orderList, token: token, status: status)
@@ -36,10 +36,10 @@ class OrderManagementViewModel with ChangeNotifier {
       print(value.data.length);
       if (orderStatus.isEmpty) {
         orderStatus = value.orderStatus;
-        getOrderList(status: orderStatus.first.title.toString());
         print(orderStatus.length);
       }
       orderList = value.data;
+      print(orderList.first.detail!.name);
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

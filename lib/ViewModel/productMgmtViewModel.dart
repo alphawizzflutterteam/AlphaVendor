@@ -72,7 +72,6 @@ class ProductManagementViewModel extends ChangeNotifier {
 //Function to get category with id
   Future<void> getCategory({required String id}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-    setLoading(true);
     subsubcategories.clear();
     await _myRepo
         .categoryListRequest(

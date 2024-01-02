@@ -111,6 +111,7 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
               GestureDetector(
                 onTap: () {
                   if (pinCtrl.text == savedotp) {
+                    PreferenceUtils.setString(PrefKeys.isLoggedIn, "true");
                     Navigator.push(
                       context,
                       MaterialPageRoute(

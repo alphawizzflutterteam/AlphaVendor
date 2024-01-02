@@ -17,7 +17,7 @@ class LogoutBottomSheet extends StatelessWidget {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      height: MediaQuery.of(context).size.height * .3,
+      height: MediaQuery.of(context).size.height * .35,
       padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,6 +98,7 @@ class LogoutBottomSheet extends StatelessWidget {
                         width: 1)),
                   ),
                   onPressed: () {
+                    PreferenceUtils.setString(PrefKeys.isLoggedIn, 'false');
                     Navigator.pop(context);
                   },
                   child: Text(

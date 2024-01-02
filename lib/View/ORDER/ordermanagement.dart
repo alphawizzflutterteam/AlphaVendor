@@ -26,17 +26,22 @@ class _OrderManagementState extends State<OrderManagement> {
   late OrderManagementViewModel orderProvider;
   @override
   void initState() {
-    orderProvider = Provider.of(context, listen: false);
-    orderProvider.getOrderList(status: 'pending');
+    orderProvider =
+        Provider.of<OrderManagementViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      orderProvider.getOrderList(status: '').then((value) => orderProvider
+          .getOrderList(status: orderProvider.orderStatus[0].value.toString()));
+    });
+
     pageCount = orderProvider.orderStatus.length.toInt();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // orderProvider = Provider.of(context);
     var height = MediaQuery.of(context).size.height;
     var widht = MediaQuery.of(context).size.width;
+    orderProvider = Provider.of<OrderManagementViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: orderProvider.isLoading
@@ -79,7 +84,7 @@ class _OrderManagementState extends State<OrderManagement> {
                     children: [
                       SizedBox(
                         height: 45,
-                        width: MediaQuery.of(context).size.width * .83,
+                        width: MediaQuery.of(context).size.width * .8,
                         child: TextFormField(
                           // controller: searchcontroller,
                           onChanged: (String? value) {
@@ -126,48 +131,54 @@ class _OrderManagementState extends State<OrderManagement> {
                       itemBuilder: (context, index) {
                         return Consumer<OrderManagementViewModel>(
                             builder: (context, order, _) {
-                          return order.orderList.isEmpty
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Image.asset(Images.noOrder,
-                                          height: height * .5,
-                                          width: widht,
-                                          fit: BoxFit.fitWidth),
-                                    ),
-                                    Text(
-                                      "No Order Data Found",
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w600,
-                                        color: colors.lightGrey,
-                                      ),
+                          return order.isLoading
+                              ? appLoader()
+                              : order.orderList.isEmpty
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Image.asset(Images.noOrder,
+                                              height: height * .35,
+                                              width: height * .35,
+                                              fit: BoxFit.fitWidth),
+                                        ),
+                                        Text(
+                                          "No Order Data Found",
+                                          style: TextStyle(
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.w600,
+                                            color: colors.buttonColor,
+                                          ),
+                                        )
+                                      ],
                                     )
-                                  ],
-                                )
-                              : Container(
-                                  child: ListView.builder(
-                                      itemCount: order.orderList.length,
-                                      itemBuilder: (context, indx) {
-                                        return OrderListTile(
-                                          title: order
-                                              .orderList[indx].detail!.name
-                                              .toString(),
-                                          id: order.orderList[indx].orderId
-                                              .toString(),
-                                          date: order.orderList[indx].orderDate
-                                              .toString(),
-                                          price: order
-                                              .orderList[indx].orderAmount
-                                              .toString(),
-                                          isAlpha: order
-                                              .orderList[indx].isAlphaDelivery!,
-                                        );
-                                      }),
-                                );
+                                  : Container(
+                                      child: ListView.builder(
+                                          itemCount: order.orderList.length,
+                                          itemBuilder: (context, indx) {
+                                            return OrderListTile(
+                                              title: order
+                                                  .orderList[indx].detail!.name
+                                                  .toString(),
+                                              id: order.orderList[indx].orderId
+                                                  .toString(),
+                                              date: order
+                                                  .orderList[indx].orderDate
+                                                  .toString(),
+                                              price: order
+                                                  .orderList[indx].orderAmount
+                                                  .toString(),
+                                              isAlpha: order.orderList[indx]
+                                                  .isAlphaDelivery!,
+                                            );
+                                          }),
+                                    );
                         });
                       }),
                 )
@@ -181,34 +192,27 @@ class _OrderManagementState extends State<OrderManagement> {
       required int index,
       required String tabTitle}) {
     return TabBarItem(
-        index: index,
-        transform: ScaleTransform(
-            maxScale: 1.2,
-            transform: ColorsTransform(
-              normalColor: Colors.grey,
-              highlightColor: Colors.black,
-              builder: (context, color) {
-                return Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                  alignment: Alignment.center,
-                  constraints: const BoxConstraints(minWidth: 70),
-                  child: Text(
-                    tabTitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: color,
-                    ),
-                  ),
-                );
-              },
-            )));
-  }
-
-  Widget ListDetails() {
-    return Container(
-      child: const Column(
-        children: [Text("")],
+      index: index,
+      transform: ScaleTransform(
+        maxScale: 1.2,
+        transform: ColorsTransform(
+          normalColor: Colors.grey,
+          highlightColor: Colors.black,
+          builder: (context, color) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              alignment: Alignment.center,
+              constraints: const BoxConstraints(minWidth: 70),
+              child: Text(
+                tabTitle,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: color,
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -244,13 +248,15 @@ class OrderListTile extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color(0xFFE9E9E9)),
-        height: MediaQuery.of(context).size.height * .16,
+        height: MediaQuery.of(context).size.height * .18,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              "Oats Fitness",
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black,
@@ -260,30 +266,32 @@ class OrderListTile extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "Id - OID52466246325",
+                  "Id - $id",
                   style: TextStyle(
                     fontSize: 14,
                     color: colors.greyText,
                   ),
                 ),
                 Spacer(),
-                Container(
-                  height: 30,
-                  width: 30,
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Image.asset(
-                    Images.alpha_icon,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                isAlpha
+                    ? Container(
+                        height: 30,
+                        width: 30,
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Image.asset(
+                          Images.alpha_icon,
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    : Container(),
               ],
             ),
             Text(
-              "03-Feb-2023",
+              date,
               style: TextStyle(
                 fontSize: 14,
                 color: colors.greyText,
@@ -292,9 +300,12 @@ class OrderListTile extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "\$ 120",
+                  price,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 24,
+                    fontFamily: 'Liber',
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),

@@ -28,5 +28,5 @@ class CommanAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(70);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

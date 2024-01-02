@@ -17,7 +17,9 @@ class _CurrencyBottomSheetState extends State<CurrencyBottomSheet> {
     return Container(
       padding: const EdgeInsets.only(top: 15, left: 12, right: 12),
       width: width,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       child: Column(
         children: [
           Text(
@@ -38,7 +40,7 @@ class _CurrencyBottomSheetState extends State<CurrencyBottomSheet> {
           ),
           Divider(color: Colors.transparent),
           SizedBox(
-            height: height * .42,
+            height: height * .4,
             child: ListView.builder(
               itemCount: 10,
               itemBuilder: (context, index) => GestureDetector(

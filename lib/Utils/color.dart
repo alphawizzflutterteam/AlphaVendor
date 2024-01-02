@@ -27,7 +27,7 @@ extension colors on ColorScheme {
   static const Color labelColor = Color(0xFFA8AAC1);
   static const Color textFieldColor = Color(0xff5B5B5B);
   static const Color textFieldBG = Color(0xff040D12);
-  static const Color greyText = Color(0xFFA3A3A3);
+  static const Color greyText = Color(0xFF767680);
   static const Color boxGradient1 = Color(0xFF4E5255);
   static const Color boxBorder = Color(0xFF363D41);
   static const Color midBorder = Color(0xFF444647);
@@ -38,7 +38,7 @@ extension colors on ColorScheme {
   static const Color subscribeYellow = Color(0xFF987808);
   static const Color bodyBackgroundDark = Color(0xFF1D2429);
   static const Color lightBorder = Color(0xFFC3C5DD);
-  static const Color lightGrey = Color(0xFFE2E0EB);
+  static const Color lightGrey = Color(0xFFE9E9E9);
 
   //home
   static const Color homeBG = Color(0xFFFFDC98);

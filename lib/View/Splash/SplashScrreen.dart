@@ -1,4 +1,6 @@
+import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
+import 'package:alpha_work/View/Dashboard/Dashboad.dart';
 import 'package:flutter/material.dart';
 
 import '../language/launguageSelection.dart';
@@ -20,10 +22,18 @@ class _SpalashScreenState extends State<SpalashScreen> {
 
   NavigatetonextScreen() {
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: ((context) => const LoginPage())),
-          (route) => false);
+      String login = PreferenceUtils.getString(PrefKeys.isLoggedIn);
+      if (login == 'true') {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: ((context) => const DashboardScreen1())),
+            (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: ((context) => const LoginPage())),
+            (route) => false);
+      }
     });
   }
 

@@ -17,22 +17,21 @@ class ReferAndEarnScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: double.infinity,
               color: Theme.of(context).brightness == Brightness.dark
                   ? colors.boxBorder
                   : const Color(0xFFCEEAEA).withOpacity(0.8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    Images.refer,
-                    height: 100,
-                    width: 100,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      Images.refer,
+                      height: 100,
+                      width: 100,
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
@@ -54,132 +53,136 @@ class ReferAndEarnScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                  ),
-                  Text(
-                    "Referral Points",
-                    style: TextStyle(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
-                        height: 1.5),
-                    textAlign: TextAlign.center,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 20),
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: DottedBorder(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : const Color(0xFF0A9494),
-                        strokeWidth: 1,
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 15, bottom: 15),
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? const Color(0xA6064848)
-                                    : Colors.white,
-                            borderRadius: BorderRadius.circular(
-                                10), // Adjust the radius as needed
-                            // border: Border.all(
-                            //   color: Colors.white,
-                            //   width: 1, // Border width
-                            // ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Column(
-                                  children: [
-                                    Text(
-                                      "You referral code",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : colors.greyText,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      // user.data[0].referralCode,
-                                      "ABCDG123",
-                                      style: TextStyle(
-                                          fontSize: 20,
+                    Text(
+                      "Referral Points",
+                      style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black,
+                          height: 1.5),
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: DottedBorder(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : const Color(0xFF0A9494),
+                          strokeWidth: 1,
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 15, bottom: 15),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? const Color(0xA6064848)
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(
+                                  10), // Adjust the radius as needed
+                              // border: Border.all(
+                              //   color: Colors.white,
+                              //   width: 1, // Border width
+                              // ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "Your referral code",
+                                        style: TextStyle(
+                                          fontSize: 12,
                                           color: Theme.of(context).brightness ==
                                                   Brightness.dark
                                               ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  height: 35,
-                                  width: 1,
-                                  color: Colors.grey,
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    // await Clipboard.setData(ClipboardData(
-                                    //     text: user.data[0].referralCode));
-                                    // Utils.showFlushBarWithMessage("Alert",
-                                    //     "Referral Code Copied.", context);
-                                  },
-                                  child: Text(
-                                    "Copy\nCode",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      height: 1.5,
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
+                                              : colors.greyText,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        // user.data[0].referralCode,
+                                        "ABCDG123",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
                                   ),
-                                )
-                              ],
+                                  Container(
+                                    height: 35,
+                                    width: 1,
+                                    color: Colors.grey,
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      // await Clipboard.setData(ClipboardData(
+                                      //     text: user.data[0].referralCode));
+                                      // Utils.showFlushBarWithMessage("Alert",
+                                      //     "Referral Code Copied.", context);
+                                    },
+                                    child: Text(
+                                      "Copy\nCode",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        height: 1.5,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // share(context, user.data[0].referralCode);
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.ios_share_outlined,
-                          color: Colors.orange,
-                          size: 18,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Share Code",
-                          style: TextStyle(color: Colors.orange, fontSize: 16),
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        // share(context, user.data[0].referralCode);
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.ios_share_outlined,
+                            color: Colors.orange,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Share Code",
+                            style:
+                                TextStyle(color: Colors.orange, fontSize: 16),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(

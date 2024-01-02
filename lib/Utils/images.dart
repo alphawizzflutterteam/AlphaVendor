@@ -13,7 +13,7 @@ class Images {
   static const linkedlin = "assets/images/linkedin.png";
   static const youtube = "assets/images/youTube.png";
   static const visa = 'assets/images/visa.png';
-  static const phonePay = 'assets/images/phonePay.png';
+  static const phonePay = 'assets/images/phonepay.png';
   static const upi = "assets/images/upi.png";
   static const delete = 'assets/images/delete.png';
   static const logout = 'assets/images/logout.png';
@@ -159,4 +159,10 @@ class Images {
   static const delivery_image = "assets/icons/dashdelivery.png";
   static const rating_image = "assets/icons/dashrating.png";
   static const noOrder = "assets/images/orderPlaceholder.png";
+  static const walletImage = "assets/images/wallet_vendor.png";
+  static const walletMoney = "assets/images/wallet_money.png";
+  static const paymentWallet = "assets/images/payment_wallet.png";
+  static const document = "assets/icons/Document.png";
+  static const paper = "assets/icons/Paper.png";
+  static const locaction = "assets/icons/Location.png";
 }

@@ -12,7 +12,9 @@ class OrderManagementRepository {
       required String token,
       required String status}) async {
     try {
-      final url = Uri.parse(api);
+      final url = Uri.parse(api).replace(queryParameters: {'status': status});
+      print(status);
+      print(url);
       final http.Response res = await http.get(url, headers: {
         'Authorization': 'Bearer $token',
       });

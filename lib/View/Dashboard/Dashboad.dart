@@ -1,8 +1,15 @@
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/Customer/customer.dart';
+import 'package:alpha_work/View/Dashboard/notification.dart';
+import 'package:alpha_work/View/ORDER/ordermanagement.dart';
+import 'package:alpha_work/View/Payment/payment.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
 import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/settings/settings.dart';
+import 'package:alpha_work/View/Profile/widgets/logoutSheet.dart';
+import 'package:alpha_work/View/Store/store.dart';
+import 'package:alpha_work/View/Wallet/wallet.dart';
 import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
@@ -112,35 +119,47 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       drawer: Drawer(
-        child: ListView(
-          padding: const EdgeInsets.all(0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             DrawerHeader(
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     // color: Colors.green,
                     image: DecorationImage(
-                        image: AssetImage("assets/images/success.png"),
+                        image: AssetImage(
+                          "assets/images/success.png",
+                        ),
                         fit: BoxFit.cover)),
                 //BoxDecoration
-                child: ListTile(
-                  leading: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage(Images.driver_profile)),
-                  title: Text(
-                    "Hritik",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  subtitle: GestureDetector(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(),
-                        )),
-                    child: Text(
-                      "View Profile",
+                child: Center(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(Images.driver_profile)),
+                    title: Text(
+                      "Jane Cooper",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 127, 213, 233),
-                          decoration: TextDecoration.underline),
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          )),
+                      child: Text(
+                        "View Profile",
+                        style: TextStyle(
+                            color: colors.lightTextColor,
+                            fontSize: 12,
+                            decorationColor: colors.lightTextColor,
+                            decoration: TextDecoration.underline),
+                      ),
                     ),
                   ),
                 ) //UserAccountDrawerHeader
@@ -154,84 +173,134 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-            ListTile(
-              selected: true,
-              selectedColor: colors.homeBGGradient1,
-              leading: const Icon(Icons.dashboard_sharp),
-              title: const Text(' Dashboard '),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.shopping_bag_rounded),
-              title: const DrawerText(text: 'Order Managemnt', ''),
-              onTap: () {
-                navigator.navigatetonextScreen(context);
-
-                // Navigator.push(
-                //     context,
-                //     PageTransition(
-                //         type: PageTransitionType.rightToLeft,
-                //         child: OrderManagement()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.workspace_premium),
-              title: const DrawerText(text: 'Product Management', ''),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const ProductManagementScreen()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.person_outline_outlined),
-              title: const DrawerText(text: 'Customer', ''),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.analytics_outlined),
-              title: const DrawerText(text: 'Analytics and Reports', ''),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.wallet_sharp),
-              title: const DrawerText(text: 'Wallet', ''),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const DrawerText(text: 'Settings', ''),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const ProfileSettingScreen()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.payment),
-              title: const DrawerText(text: 'Payment', ''),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.storefront_outlined),
-              title: const DrawerText(text: 'Store Setting', ''),
-              onTap: () {
-                Navigator.pop(context);
-              },
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListTile(
+                      selected: true,
+                      selectedColor: colors.homeBGGradient1,
+                      leading: const Icon(Icons.dashboard_sharp),
+                      title: const Text(' Dashboard '),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.shopping_bag_rounded),
+                      title: const DrawerText(text: 'Order Managemnt', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: OrderManagement()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.workspace_premium),
+                      title: const DrawerText(text: 'Product Management', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const ProductManagementScreen()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.person_outline_outlined),
+                      title: const DrawerText(text: 'Customer', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const CustomerScreen()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.analytics_outlined),
+                      title:
+                          const DrawerText(text: 'Analytics and Reports', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.wallet_sharp),
+                      title: const DrawerText(text: 'Wallet', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const WalletScreen()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.settings),
+                      title: const DrawerText(text: 'Settings', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const ProfileSettingScreen()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.payment),
+                      title: const DrawerText(text: 'Payment', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const PaymentScreen()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.storefront_outlined),
+                      title: const DrawerText(text: 'Store Setting', ''),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: EditStoreDetailScreen()));
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.logout_rounded,
+                        color: Colors.red,
+                      ),
+                      title: Text(
+                        "Logout",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => LogoutBottomSheet(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -242,7 +311,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
           : Column(
               children: [
                 Container(
-                  height: height * .3,
+                  height: height * .35,
                   decoration: BoxDecoration(
                       color: colors.buttonColor,
                       borderRadius: BorderRadius.only(
@@ -251,8 +320,9 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                       )),
                   child: Stack(
                     children: [
-                      Align(
-                        alignment: Alignment.topRight,
+                      Positioned(
+                        right: 0,
+                        top: 0,
                         child: Image.asset(
                           Images.profile_bg_circle,
                           height: height * .2,
@@ -275,9 +345,23 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                             onPressed: () => Scaffold.of(context).openDrawer(),
                           );
                         }),
+                        actions: [
+                          IconButton(
+                            icon: Image.asset(
+                              Images.notification,
+                              color: Colors.white,
+                              height: 25,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: NotificationScreen(),
+                                    type: PageTransitionType.rightToLeft)),
+                          ),
+                        ],
                       ),
                       Positioned(
-                        top: height * .11,
+                        bottom: 10,
                         child: SizedBox(
                           width: width,
                           child: Padding(
@@ -314,7 +398,8 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   dashProvider.dashData.totalSale.toString(),
                                   style: TextStyle(
                                     fontSize: 28,
-                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Liber',
+                                    fontWeight: FontWeight.w700,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -443,6 +528,8 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   Spacer(),
                                   Text(
                                     items[index]['name'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal,
@@ -453,6 +540,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                     getCardVal(index),
                                     style: TextStyle(
                                       fontSize: 28,
+                                      fontFamily: 'Liber',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                     ),

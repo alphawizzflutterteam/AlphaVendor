@@ -1,7 +1,6 @@
 import 'package:alpha_work/Model/profileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
-import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/widgets/currencySheet.dart';
 import 'package:alpha_work/View/Profile/widgets/logoutSheet.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class ProfileSettingScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: height * .32,
+            height: height * .3,
             decoration: BoxDecoration(
                 color: colors.buttonColor,
                 borderRadius: BorderRadius.only(
@@ -41,7 +40,7 @@ class ProfileSettingScreen extends StatelessWidget {
                         Navigator.pop(context);
                       },
                       child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
+                        Icons.arrow_back_ios,
                         size: 25,
                         color: Colors.white,
                       ),
@@ -130,13 +129,9 @@ class ProfileSettingScreen extends StatelessWidget {
                 ),
                 Positioned(
                     right: 30,
-                    top: height * .15,
+                    top: height * .12,
                     child: GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          PageTransition(
-                              child: ProfileScreen(),
-                              type: PageTransitionType.rightToLeft)),
+                      onTap: () {},
                       child: Image.asset(
                         Images.edit_button,
                         height: 20,

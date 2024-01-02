@@ -17,7 +17,7 @@ class ProfileHeader extends StatelessWidget {
                 color: Theme.of(context).brightness == Brightness.dark
                     ? null
                     : Colors.white54,
-                width: MediaQuery.of(context).size.width * .8,
+                // width: MediaQuery.of(context).size.width * .8,
               ),
             ),
             Theme.of(context).brightness == Brightness.dark
@@ -54,7 +54,7 @@ class InternalDetailPageHeader extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: const Icon(
-                  Icons.arrow_back_ios,
+                  Icons.arrow_back_ios_new_rounded,
                   size: 25,
                   color: Colors.white,
                 ),

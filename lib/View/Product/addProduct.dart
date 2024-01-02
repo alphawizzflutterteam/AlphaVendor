@@ -909,151 +909,148 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                           ],
                         ),
                       )
-                    : SizedBox(
-                        height: height * .7,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFormField(
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              decoration: (const InputDecoration())
+                                  .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                  .copyWith(labelText: "Brand Name"),
+                            ),
+                            const Divider(color: Colors.transparent),
+                            TextFormField(
+                              decoration: (const InputDecoration())
+                                  .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                  .copyWith(labelText: "Category Name"),
+                            ),
+                            const Divider(color: Colors.transparent),
+                            TextFormField(
+                              decoration: (const InputDecoration())
+                                  .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                  .copyWith(labelText: "Sub Category Name"),
+                            ),
+                            const Divider(color: Colors.transparent),
+                            SizedBox(
+                              height: height * .15,
+                              child: TextFormField(
+                                maxLines: 5,
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Brand Name"),
+                                    .copyWith(
+                                      labelText: "Short Description",
+                                    ),
                               ),
-                              const Divider(color: Colors.transparent),
-                              TextFormField(
-                                decoration: (const InputDecoration())
-                                    .applyDefaults(
-                                        Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Category Name"),
-                              ),
-                              const Divider(color: Colors.transparent),
-                              TextFormField(
-                                decoration: (const InputDecoration())
-                                    .applyDefaults(
-                                        Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Sub Category Name"),
-                              ),
-                              const Divider(color: Colors.transparent),
-                              SizedBox(
-                                height: height * .15,
-                                child: TextFormField(
-                                  maxLines: 5,
-                                  decoration: (const InputDecoration())
-                                      .applyDefaults(Theme.of(context)
-                                          .inputDecorationTheme)
-                                      .copyWith(
-                                        labelText: "Short Description",
-                                      ),
-                                ),
-                              ),
-                              const Divider(color: Colors.transparent),
-                              TextFormField(
-                                decoration: (const InputDecoration())
-                                    .applyDefaults(
-                                        Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Meta Tag"),
-                              ),
-                              const Divider(color: Colors.transparent),
-                              Row(
-                                children: [
-                                  DottedBorder(
-                                    color: colors.buttonColor,
-                                    strokeWidth: 1,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 15),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFD5F6F6),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              Images.selectImage,
-                                              height: 30,
-                                              width: 30,
-                                              fit: BoxFit.fitHeight,
+                            ),
+                            const Divider(color: Colors.transparent),
+                            TextFormField(
+                              decoration: (const InputDecoration())
+                                  .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                  .copyWith(labelText: "Meta Tag"),
+                            ),
+                            const Divider(color: Colors.transparent),
+                            Row(
+                              children: [
+                                DottedBorder(
+                                  color: colors.buttonColor,
+                                  strokeWidth: 1,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 15),
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFD5F6F6),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            Images.selectImage,
+                                            height: 30,
+                                            width: 30,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                          Text(
+                                            "Thumbnail\nImage",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: colors.buttonColor,
+                                              fontSize: 12,
                                             ),
-                                            Text(
-                                              "Thumbnail\nImage",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: colors.buttonColor,
-                                                fontSize: 12,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ),
-                                  VerticalDivider(color: Colors.transparent),
-                                  Container(
-                                    height: height * .1,
-                                    width: width * .25,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: colors.lightGrey,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Text(
-                                      "Image\nContainer",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Divider(color: Colors.transparent),
-                              Text(
-                                "Attributes and Filters",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
                                 ),
+                                VerticalDivider(color: Colors.transparent),
+                                Container(
+                                  height: height * .1,
+                                  width: width * .25,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: colors.lightGrey,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Text(
+                                    "Image\nContainer",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(color: Colors.transparent),
+                            Text(
+                              "Attributes and Filters",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
-                              const Divider(color: Colors.transparent),
-                              DropdownButtonFormField2(
-                                decoration: const InputDecoration()
-                                    .applyDefaults(
-                                        Theme.of(context).inputDecorationTheme)
-                                    .copyWith(
-                                        contentPadding:
-                                            EdgeInsets.only(right: 10)),
-                                hint: Text("Size",
-                                    style: TextStyle(color: colors.greyText)),
-                                value: selectedValue,
-                                onChanged: (value) => setState(() {
-                                  selectedValue = value ?? "";
-                                }),
-                                items: Taxitems,
-                              ),
-                              const Divider(color: Colors.transparent),
-                              DropdownButtonFormField2(
-                                decoration: const InputDecoration()
-                                    .applyDefaults(
-                                        Theme.of(context).inputDecorationTheme)
-                                    .copyWith(
-                                        contentPadding:
-                                            EdgeInsets.only(right: 10)),
-                                hint: Text("Color",
-                                    style: TextStyle(color: colors.greyText)),
-                                value: selectedValue,
-                                onChanged: (value) => setState(() {
-                                  selectedValue = value ?? "";
-                                }),
-                                items: Taxitems,
-                              ),
-                              const Divider(color: Colors.transparent),
-                            ],
-                          ),
+                            ),
+                            const Divider(color: Colors.transparent),
+                            DropdownButtonFormField2(
+                              decoration: const InputDecoration()
+                                  .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                  .copyWith(
+                                      contentPadding:
+                                          EdgeInsets.only(right: 10)),
+                              hint: Text("Size",
+                                  style: TextStyle(color: colors.greyText)),
+                              value: selectedValue,
+                              onChanged: (value) => setState(() {
+                                selectedValue = value ?? "";
+                              }),
+                              items: Taxitems,
+                            ),
+                            const Divider(color: Colors.transparent),
+                            DropdownButtonFormField2(
+                              decoration: const InputDecoration()
+                                  .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                  .copyWith(
+                                      contentPadding:
+                                          EdgeInsets.only(right: 10)),
+                              hint: Text("Color",
+                                  style: TextStyle(color: colors.greyText)),
+                              value: selectedValue,
+                              onChanged: (value) => setState(() {
+                                selectedValue = value ?? "";
+                              }),
+                              items: Taxitems,
+                            ),
+                            const Divider(color: Colors.transparent),
+                          ],
                         ),
                       ),
               ),
@@ -1157,6 +1154,7 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       )),
+              Divider(color: Colors.transparent),
             ],
           ),
         ),

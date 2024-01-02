@@ -56,9 +56,9 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                               color: Colors.black,
                             )),
                   ),
-                  Divider(color: Colors.transparent),
+                  const Divider(color: Colors.transparent),
                   SizedBox(
-                    height: height * .78,
+                    height: height * .75,
                     child: ListView.builder(
                       itemCount: productstatusP.productList.length,
                       itemBuilder: (context, index) => GestureDetector(
@@ -80,7 +80,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                             children: [
                               Container(
                                 height: height * .1,
-                                width: width * .22,
+                                width: height * .1,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -91,7 +91,8 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                       ErrorImageWidget(height: null),
                                 ),
                               ),
-                              VerticalDivider(color: Colors.transparent),
+                              VerticalDivider(
+                                  color: Colors.transparent, width: 7),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
@@ -147,7 +148,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                               color: colors.greyText,
                                               fontSize: 14,
                                             )),
-                                        TextSpan(text: "  "),
+                                        TextSpan(text: " "),
                                         TextSpan(
                                             text: productstatusP
                                                 .productList[index].slug
@@ -155,7 +156,6 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 14,
-                                              fontWeight: FontWeight.bold,
                                             )),
                                       ]),
                                     ),
