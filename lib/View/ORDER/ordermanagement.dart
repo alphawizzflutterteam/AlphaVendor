@@ -6,6 +6,7 @@ import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/comman_header.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'package:flutter_custom_tab_bar/library.dart';
@@ -24,14 +25,17 @@ class _OrderManagementState extends State<OrderManagement> {
   final CustomTabBarController _tabBarController = CustomTabBarController();
 
   late OrderManagementViewModel orderProvider;
+  getData() async {
+    await orderProvider.getOrderList(status: '');
+    await orderProvider.getOrderList(
+        status: orderProvider.orderStatus[0].value.toString());
+  }
+
   @override
   void initState() {
     orderProvider =
         Provider.of<OrderManagementViewModel>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      orderProvider.getOrderList(status: '').then((value) => orderProvider
-          .getOrderList(status: orderProvider.orderStatus[0].value.toString()));
-    });
+    getData();
 
     pageCount = orderProvider.orderStatus.length.toInt();
     super.initState();

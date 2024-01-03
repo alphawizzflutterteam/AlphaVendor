@@ -59,6 +59,7 @@ dependencies:
   image_picker: ^1.0.5
   awesome_dialog: ^3.1.0
   pinput: ^3.0.1
+  chat_bubbles: ^1.5.0
   
   
   # intl: ^0.18.0
@@ -108,17 +109,17 @@ flutter:
   fonts:
     - family: FuturaPT
       fonts:
-        - asset: assets/font/FuturaPT-Light.ttf
-        - asset: assets/font/FuturaPT-Bold.ttf
-        - asset: assets/font/FuturaPT-Medium.ttf
-        - asset: assets/font/FuturaPT-Demi.ttf
-        - asset: assets/font/FuturaPT-ExtraBold.ttf
-    - family: Liber
+        - asset: assets/font/FuturaPT/FuturaPT-Light.ttf
+        - asset: assets/font/FuturaPT/FuturaPT-Bold.ttf
+        - asset: assets/font/FuturaPT/FuturaPT-Medium.ttf
+        - asset: assets/font/FuturaPT/FuturaPT-Demi.ttf
+        - asset: assets/font/FuturaPT/FuturaPT-ExtraBold.ttf
+    - family: Montreal
       fonts:
-        - asset: assets/font/Liber/LiberGrotesqueFamily-Bold.ttf
-        - asset: assets/font/Liber/LiberGrotesqueFamily-Light.ttf
-        - asset: assets/font/Liber/LiberGrotesqueFamily-SemiBold.ttf
-        - asset: assets/font/Liber/LiberGrotesqueFamily-Regular.ttf
+        - asset: assets/font/Montreal/MontrealSerial-Bold.ttf
+        - asset: assets/font/Montreal/MontrealSerial-ExtraBold.ttf
+        - asset: assets/font/Montreal/MontrealSerial-Light.ttf
+        - asset: assets/font/Montreal/MontrealSerial-Medium.ttf
         
   #
   # For details regarding fonts from package dependencies,

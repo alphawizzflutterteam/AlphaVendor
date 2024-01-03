@@ -63,4 +63,6 @@ class AppUrl {
   static const String addProduct = "${baseURL}seller/products/add";
   static const String dashboardData = "${baseURL}seller/dashboard";
   static const String orderList = "${baseURL}seller/orders/list";
+  static const String productDetailAndedit = "${baseURL}seller/products/edit/";
+  static const String statusUpdate = "${baseURL}seller/products/status-update";
 }

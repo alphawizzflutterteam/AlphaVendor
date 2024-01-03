@@ -18,6 +18,7 @@ class DashboardViewModel with ChangeNotifier {
   //Function to fetch dashboard data
   Future<void> getDashboardData() async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print(token);
     await _myRepo
         .getDashboardDataRequest(api: AppUrl.dashboardData, token: token)
         .then((value) {

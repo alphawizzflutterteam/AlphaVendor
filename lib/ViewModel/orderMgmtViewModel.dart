@@ -27,7 +27,7 @@ class OrderManagementViewModel with ChangeNotifier {
   //Function to fetch orders based on status
   Future<void> getOrderList({required String status}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-
+    isLoading = true;
     await _myRepo
         .orderListGetRequest(
             api: AppUrl.orderList, token: token, status: status)

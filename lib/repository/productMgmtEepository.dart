@@ -5,7 +5,9 @@ import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/View/Product/model/brandModel.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
+import 'package:alpha_work/View/Product/model/productDetailModel.dart';
 import 'package:alpha_work/View/Product/model/productListModel.dart';
+import 'package:alpha_work/Widget/commanTost.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -45,7 +47,6 @@ class ProductManagementRepository {
       print(url);
       if (res.statusCode == 200) {
         var jsonData = jsonDecode(res.body);
-        print('Decoded Model: ${ProductListModel.fromJson(jsonData)}');
         return ProductListModel.fromJson(jsonData);
       } else {
         Fluttertoast.showToast(
@@ -117,14 +118,7 @@ class ProductManagementRepository {
         var jsonData = jsonDecode(res.body);
         return BrandModel.fromJson(jsonData);
       } else {
-        Fluttertoast.showToast(
-            msg: "Something went wrong!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: colors.buttonColor,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showTost();
         return BrandModel(status: null, message: null, data: []);
       }
     } catch (e) {
@@ -216,6 +210,58 @@ class ProductManagementRepository {
     } else {
       print(response.reasonPhrase);
       return false;
+    }
+  }
+
+//Function to fetch product details
+  Future<ProductDetailModel> productDetailGetRequest(
+      {required String api,
+      required String bearerToken,
+      required String id}) async {
+    try {
+      final url = Uri.parse("$api$id");
+      print(url);
+      final http.Response res;
+      res = await http.get(url, headers: {
+        'Authorization': 'Bearer $bearerToken',
+      });
+      if (res.statusCode == 200) {
+        var ans = jsonDecode(res.body);
+        return ProductDetailModel.fromJson(ans);
+      } else {
+        showTost();
+        return ProductDetailModel(status: null, message: null, product: []);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to update product status
+  Future<bool> productStatusUpdateGetRequest(
+      {required String api,
+      required String bearerToken,
+      required String status,
+      required String id}) async {
+    try {
+      final url = Uri.parse(api).replace(queryParameters: {
+        'id': id,
+        'status': status,
+      });
+      print(url);
+      final http.Response res;
+      res = await http.get(url, headers: {
+        'Authorization': 'Bearer $bearerToken',
+      });
+      if (res.statusCode == 200) {
+        var ans = jsonDecode(res.body);
+        return true;
+      } else {
+        showTost();
+        return false;
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

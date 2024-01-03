@@ -307,9 +307,10 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                       setState(() {
                                     print(value?.id);
                                     productProvider.setCategory(value);
+
                                     // selectedValue = value;
                                     // print(selectedValue);
-
+                                    productProvider.subCategoryclear();
                                     productProvider.getsubCategory(
                                         id: (value?.id.toString()).toString());
                                   }),

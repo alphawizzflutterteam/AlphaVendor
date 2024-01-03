@@ -398,7 +398,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   dashProvider.dashData.totalSale.toString(),
                                   style: TextStyle(
                                     fontSize: 28,
-                                    fontFamily: 'Liber',
+                                    fontFamily: 'Montreal',
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
                                   ),
@@ -516,8 +516,8 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                 children: [
                                   Container(
                                     alignment: Alignment.center,
-                                    height: height * .08,
-                                    width: height * .08,
+                                    height: height * .07,
+                                    width: height * .07,
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
                                       color: items[index]['color'],
@@ -540,7 +540,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                     getCardVal(index),
                                     style: TextStyle(
                                       fontSize: 28,
-                                      fontFamily: 'Liber',
+                                      fontFamily: 'Montreal',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                     ),

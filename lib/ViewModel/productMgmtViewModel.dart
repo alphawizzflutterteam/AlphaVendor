@@ -3,6 +3,7 @@ import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/Product/model/brandModel.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
+import 'package:alpha_work/View/Product/model/productDetailModel.dart';
 import 'package:alpha_work/View/Product/model/productListModel.dart';
 import 'package:alpha_work/repository/productMgmtEepository.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class ProductManagementViewModel extends ChangeNotifier {
   List<CategoryData> subcategories = [];
   List<CategoryData> subsubcategories = [];
   List<BrandData> brandList = [];
+  List<Product> productDetail = [];
   bool isLoading = true;
   CategoryData? selectedCat;
   CategoryData? selectedSubCat;
@@ -29,6 +31,12 @@ class ProductManagementViewModel extends ChangeNotifier {
 
   setCategory(var value) {
     selectedCat = value;
+    notifyListeners();
+  }
+
+  subCategoryclear() {
+    subcategories.clear();
+    selectedSubCat = null;
     notifyListeners();
   }
 
@@ -60,11 +68,12 @@ class ProductManagementViewModel extends ChangeNotifier {
   Future<void> getProductsListWithStatus({required String Type}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     print(Type);
-    setLoading(true);
+    isLoading = true;
     await _myRepo.ProductListRequest(
             api: AppUrl.productList, bearerToken: token, type: Type)
         .then((value) {
       productList = value.data!;
+      print("Product list length ${productList.length}");
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }
@@ -188,5 +197,33 @@ class ProductManagementViewModel extends ChangeNotifier {
         )
         .then((value) => status = value);
     return status;
+  }
+
+//Funtion to get product details
+  Future<void> getProductDetail({required String id}) async {
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .productDetailGetRequest(
+            api: AppUrl.productDetailAndedit, bearerToken: token, id: id)
+        .then((value) {
+      print(value.product.first.name);
+      productDetail = value.product;
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to update product status
+  Future<void> updateProductStatus(
+      {required String id, required String status}) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .productStatusUpdateGetRequest(
+            api: AppUrl.statusUpdate,
+            bearerToken: token,
+            status: status,
+            id: id)
+        .then((value) => print(value))
+        .then((value) => setLoading(false));
   }
 }

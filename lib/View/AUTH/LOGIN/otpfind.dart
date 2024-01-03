@@ -3,6 +3,7 @@ import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,12 +113,12 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                 onTap: () {
                   if (pinCtrl.text == savedotp) {
                     PreferenceUtils.setString(PrefKeys.isLoggedIn, "true");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DashboardScreen1(),
-                      ),
-                    );
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        PageTransition(
+                            child: const DashboardScreen1(),
+                            type: PageTransitionType.rightToLeft),
+                        (route) => false);
                   }
                 },
                 child: Align(

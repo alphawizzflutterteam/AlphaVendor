@@ -1,6 +1,7 @@
 import 'package:alpha_work/Model/profileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/Profile/Chat/chat.dart';
 import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/widgets/currencySheet.dart';
 import 'package:alpha_work/View/Profile/widgets/logoutSheet.dart';
@@ -154,7 +155,7 @@ class ProfileSettingScreen extends StatelessWidget {
               separatorBuilder: (context, index) => Divider(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Color(0xFF4A5054)
-                    : Colors.grey,
+                    : colors.lightGrey,
                 height: 1,
               ),
               padding: EdgeInsets.zero,
@@ -227,6 +228,15 @@ class ProfileSettingScreen extends StatelessWidget {
             ),
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(
+            context,
+            PageTransition(
+                child: ChatScreen(), type: PageTransitionType.rightToLeft)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        child: ImageIcon(AssetImage(Images.chat), size: 30),
+        backgroundColor: colors.buttonColor,
       ),
     );
   }

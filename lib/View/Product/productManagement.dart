@@ -1,6 +1,6 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
-import 'package:alpha_work/View/Product/activeProduct.dart';
+import 'package:alpha_work/View/Product/productStatusList.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
@@ -164,7 +164,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                 ),
                                 Text(
                                   productMgmtProvider
-                                      .productManagementData.activeProduct
+                                      .productManagementData.inactiveProduct
                                       .toString(),
                                   style: TextStyle(
                                     fontSize: 30,
