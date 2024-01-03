@@ -255,9 +255,36 @@ class ProductManagementRepository {
       });
       if (res.statusCode == 200) {
         var ans = jsonDecode(res.body);
+        print(ans);
         return true;
       } else {
         showTost();
+        return false;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  //Function to delete product
+  Future<bool> deleteProductPostRequest(
+      {required String api,
+      required String bearerToken,
+      required String id}) async {
+    try {
+      var headers = {'Authorization': 'Bearer $bearerToken'};
+      var request = http.Request('DELETE', Uri.parse('$api$id'));
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        var ans = jsonDecode(await response.stream.bytesToString());
+        print(ans);
+        return true;
+      } else {
+        showTost();
+        print(response.stream.bytesToString());
         return false;
       }
     } catch (e) {

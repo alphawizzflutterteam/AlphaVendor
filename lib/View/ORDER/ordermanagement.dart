@@ -135,9 +135,10 @@ class _OrderManagementState extends State<OrderManagement> {
                       itemBuilder: (context, index) {
                         return Consumer<OrderManagementViewModel>(
                             builder: (context, order, _) {
+                          print("Order list${order.orderList.length}");
                           return order.isLoading
                               ? appLoader()
-                              : order.orderList.isEmpty
+                              : order.orderList.length == 0
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,

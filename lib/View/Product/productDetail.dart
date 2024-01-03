@@ -5,7 +5,9 @@ import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +21,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  bool switchVal = true;
+  late bool switchVal;
   late ProductManagementViewModel productP;
 
   @override
@@ -27,7 +29,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     print(widget.id);
     productP = Provider.of<ProductManagementViewModel>(context, listen: false);
     productP.getProductDetail(id: widget.id);
-
+    switchVal =
+        productP.productDetail.first.status.toString() == "1" ? true : false;
     super.initState();
   }
 
@@ -36,9 +39,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    productP = Provider.of(context);
-    switchVal =
-        productP.productDetail.first.status.toString() == "1" ? true : false;
+    productP = Provider.of<ProductManagementViewModel>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommanAppbar(appbarTitle: "Product Detail"),
@@ -170,14 +172,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 inactiveThumbColor: colors.greyText,
                                 inactiveTrackColor: colors.lightGrey,
                                 onChanged: (value) {
-                                  productP.updateProductStatus(
-                                      id: productP.productDetail.first.id
-                                          .toString(),
-                                      status: value ? "1" : "0");
-                                  switchVal =
-                                      productP.productDetail.first.status == "1"
-                                          ? true
-                                          : false;
+                                  setState(() {
+                                    productP
+                                        .updateProductStatus(
+                                            id: productP.productDetail.first.id
+                                                .toString(),
+                                            status: value ? "1" : "0")
+                                        .then((_) {
+                                      switchVal = value;
+                                      Fluttertoast.showToast(
+                                          msg: "Updated successfully!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.TOP,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: colors.buttonColor,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    });
+                                  });
                                 }),
                             const VerticalDivider(width: 5),
                             Text(
@@ -230,7 +242,56 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             Spacer(),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () => showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    title: const Text('Delete This Product'),
+                                    content: const Text(
+                                        'Do you want to delete this product.'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('No'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      ElevatedButton(
+                                        child: const Text(
+                                          'Yes',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onPressed: () async {
+                                          await productP
+                                              .deleteProduct(
+                                                  id: productP
+                                                      .productDetail.first.id
+                                                      .toString())
+                                              .then((value) => AwesomeDialog(
+                                                    context: context,
+                                                    dialogType:
+                                                        DialogType.success,
+                                                    animType: AnimType.scale,
+                                                    autoDismiss: false,
+                                                    onDismissCallback:
+                                                        (type) {},
+                                                    title:
+                                                        "Product Deleted Successfully",
+                                                    btnOkOnPress: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )..show());
+                                          Navigator.pop(context, true);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ).then((value) => Navigator.pop(context)),
                               child: Row(
                                 children: [
                                   ImageIcon(
@@ -352,9 +413,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   productP.productDetail.first.purchasePrice
                                       .toString(),
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                  ),
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontFamily: "Montreal"),
                                 ),
                               ],
                             ),

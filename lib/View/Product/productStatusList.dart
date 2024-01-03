@@ -90,12 +90,14 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                           itemCount: productstatusP.productList.length,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () => Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: ProductDetailScreen(
-                                        id: productstatusP.productList[index].id
-                                            .toString()),
-                                    type: PageTransitionType.rightToLeft)),
+                                    context,
+                                    PageTransition(
+                                        child: ProductDetailScreen(
+                                            id: productstatusP
+                                                .productList[index].id
+                                                .toString()),
+                                        type: PageTransitionType.rightToLeft))
+                                .then((value) => initState()),
                             child: Container(
                               height: height * .12,
                               margin: const EdgeInsets.only(bottom: 10),

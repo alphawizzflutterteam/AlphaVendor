@@ -53,13 +53,12 @@ class ProductManagementViewModel extends ChangeNotifier {
 //Function to get productmgmt list
   Future<void> getProductManagement() async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    setLoading(true);
     await _myRepo.ProductMgmtDataRequest(
             api: AppUrl.productMgmt, bearerToken: token)
         .then((value) {
       productManagementData = value.data!;
-      print(productManagementData.categories.length);
 
-      print("here");
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }
@@ -213,16 +212,27 @@ class ProductManagementViewModel extends ChangeNotifier {
     }).onError((error, stackTrace) => setLoading(false));
   }
 
-//Function to update product status
+//Function to update product status (Active,Inactive)
   Future<void> updateProductStatus(
       {required String id, required String status}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    // setLoading(true);
     await _myRepo
         .productStatusUpdateGetRequest(
             api: AppUrl.statusUpdate,
             bearerToken: token,
             status: status,
             id: id)
+        .then((value) => print(value))
+        .then((value) => setLoading(false));
+  }
+
+//Function to update product status (Active,Inactive)
+  Future<void> deleteProduct({required String id}) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .deleteProductPostRequest(
+            api: AppUrl.deleteProduct, bearerToken: token, id: id)
         .then((value) => print(value))
         .then((value) => setLoading(false));
   }

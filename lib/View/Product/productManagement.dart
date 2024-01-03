@@ -62,7 +62,8 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                   type: 'all',
                                 ),
                                 type: PageTransitionType.rightToLeft),
-                          ),
+                          ).then((value) =>
+                              productMgmtProvider.getProductManagement()),
                           child: Container(
                             height: height * .115,
                             width: width * .29,
@@ -103,7 +104,8 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                   type: '1',
                                 ),
                                 type: PageTransitionType.rightToLeft),
-                          ),
+                          ).then((value) =>
+                              productMgmtProvider.getProductManagement()),
                           child: Container(
                             height: height * .115,
                             width: width * .29,
@@ -144,7 +146,8 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                   type: '0',
                                 ),
                                 type: PageTransitionType.rightToLeft),
-                          ),
+                          ).then((value) =>
+                              productMgmtProvider.getProductManagement()),
                           child: Container(
                             height: height * .115,
                             width: width * .29,
