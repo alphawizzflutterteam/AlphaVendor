@@ -29,6 +29,7 @@ class _OrderManagementState extends State<OrderManagement> {
     await orderProvider.getOrderList(status: '');
     await orderProvider.getOrderList(
         status: orderProvider.orderStatus[0].value.toString());
+    pageCount = orderProvider.orderStatus.length.toInt();
   }
 
   @override
@@ -37,7 +38,6 @@ class _OrderManagementState extends State<OrderManagement> {
         Provider.of<OrderManagementViewModel>(context, listen: false);
     getData();
 
-    pageCount = orderProvider.orderStatus.length.toInt();
     super.initState();
   }
 
@@ -136,9 +136,10 @@ class _OrderManagementState extends State<OrderManagement> {
                         return Consumer<OrderManagementViewModel>(
                             builder: (context, order, _) {
                           print("Order list${order.orderList.length}");
+
                           return order.isLoading
                               ? appLoader()
-                              : order.orderList.length == 0
+                              : order.orderList.isEmpty
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,

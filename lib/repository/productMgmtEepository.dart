@@ -33,12 +33,21 @@ class ProductManagementRepository {
   Future<ProductListModel> ProductListRequest(
       {required String api,
       required String bearerToken,
-      required String type}) async {
+      required String type,
+      required String? cat,
+      required String? subcat,
+      required bool isCat}) async {
     final queryParameters = {
       'status': type,
     };
+    final queryParameterscat = {
+      'status': type,
+      'category_id': cat,
+      'sub_category_id': subcat,
+    };
     try {
-      final url = Uri.parse(api).replace(queryParameters: queryParameters);
+      final url = Uri.parse(api).replace(
+          queryParameters: isCat ? queryParameterscat : queryParameters);
 
       final http.Response res = await http.get(url, headers: {
         'Authorization': 'Bearer $bearerToken',
@@ -58,7 +67,7 @@ class ProductManagementRepository {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-      return ProductListModel();
+      return ProductListModel(data: [], message: null, status: null);
     } catch (e) {
       // Handle any exceptions that occur
       print('Error: $e');
@@ -285,6 +294,71 @@ class ProductManagementRepository {
       } else {
         showTost();
         print(response.stream.bytesToString());
+        return false;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  //Function to add product
+  Future<bool> updateProductPostRequest({
+    required String token,
+    required String api,
+    required String name,
+    required String category_id,
+    required String sub_category_id,
+    required String product_type,
+    required String unit,
+    required String thumbnail,
+    required String discount_type,
+    required String discount,
+    required String tax,
+    required String tax_type,
+    required String unit_price,
+    required String shipping_cost,
+    required String skuId,
+    required String minimum_order_qty,
+    required String brand_id,
+    required String quantity,
+    required String description,
+    required String purchase_price,
+  }) async {
+    try {
+      var headers = {'Authorization': 'Bearer $token'};
+      var url = Uri.parse(api);
+      print(api);
+      print(token);
+      var body = {
+        'name[]': name,
+        'category_id': category_id,
+        'sub_category_id': sub_category_id,
+        'product_type': product_type,
+        'unit': unit,
+        'images[]': '',
+        'thumbnail': thumbnail,
+        'discount_type': discount_type,
+        'tax_type': tax_type,
+        'tax': tax,
+        'unit_price': unit_price,
+        'discount': discount,
+        'shipping_cost': shipping_cost,
+        'code': skuId,
+        'minimum_order_qty': minimum_order_qty,
+        'brand_id': brand_id,
+        'quantity': quantity,
+        'description[]': description,
+        'lang[]': 'en',
+        'purchase_price': purchase_price,
+      };
+      final http.Response response;
+      response = await http.put(url, headers: headers, body: body);
+      var ans = jsonDecode(response.body);
+      print(ans);
+      print(response.statusCode);
+      if (response.statusCode == 200 && ans['status'] == true) {
+        return true;
+      } else {
         return false;
       }
     } catch (e) {

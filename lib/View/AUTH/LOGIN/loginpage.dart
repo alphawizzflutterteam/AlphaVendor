@@ -1,3 +1,5 @@
+import 'package:alpha_work/Utils/color.dart';
+import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
@@ -20,8 +22,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var tabstatus = 0;
   TextEditingController mobilenumbercontroller = TextEditingController();
-  TextEditingController emailcontroler = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
+
   late AuthViewModel auth;
   @override
   void initState() {
@@ -29,146 +30,188 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  int indx = 0;
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        // decoration: const BoxDecoration(
-        //     image: DecorationImage(
-        //         image: AssetImage("assets/images/success.png"))),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 150,
-                ),
-                Align(
-                    // logo_with_greenTop
-                    alignment: Alignment.topLeft,
-                    child: Image.asset(
-                        width: 60, "assets/images/logo_with_greenTop.png")),
-                Text(
-                  AppLocalizations.of(context)!.signInToYourAccount,
-                  style: const TextStyle(fontSize: 22),
-                ),
-                const Text("lorem inspire is most beautifu part of my life"),
-                const SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  height: 400,
-                  width: MediaQuery.of(context).size.width,
-                  child: ContainedTabBarView(
-                    tabs: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child:
-                            Text(AppLocalizations.of(context)!.loginViaPhone),
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Container(
+          height: height,
+          child: Stack(
+            children: [
+              Container(
+                height: height * .35,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(Images.onboardingBg_light))),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  height: height,
+                  width: width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Spacer(),
+                      Image.asset(Images.alphalogo_light,
+                          height: (height / width) * 35,
+                          width: (height / width) * 35),
+                      Text(
+                        AppLocalizations.of(context)!.signInToYourAccount,
+                        style: const TextStyle(fontSize: 28),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child:
-                            Text(AppLocalizations.of(context)!.loginviaEmail),
-                      ),
-                    ],
-                    tabBarProperties: TabBarProperties(
-                        width: MediaQuery.of(context).size.width,
-                        background: Container(
-                            decoration: const BoxDecoration(
-                          color: Colors.transparent,
-                          boxShadow: [
-                            // BoxShadow(
-                            //   blurRadius: 5.0, // shadow blur
-                            //   color: Colors.white, // shadow color
-                            //   offset: Offset(
-                            //       1.0, 1.0), // how much shadow will be shown
-                            // ),
-                          ],
-                        )),
-                        padding: const EdgeInsets.symmetric(
-                            // horizontal: 32.0,
-                            // vertical: 8.0,
-                            ),
-                        indicator: ContainerTabIndicator(
-                          width: 180,
-                          height: 45,
-                          radius: BorderRadius.circular(4.0),
-                          color: const Color(0xFF0A9494).withOpacity(.2),
+                      SizedBox(
+                        width: width * .7,
+                        child: Text(
+                          "Effortless Access to Orders, Insights, and Customized Solutions",
+                          style:
+                              TextStyle(color: colors.greyText, fontSize: 14),
                         ),
-                        labelColor: const Color.fromARGB(255, 29, 104, 136),
-                        unselectedLabelColor: Colors.black),
-                    views: [
-                      _Views(),
-                      _Views1(),
+                      ),
+                      Divider(color: Colors.transparent),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () => setState(() {
+                              indx = 0;
+                            }),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: indx == 0
+                                    ? colors.buttonColor.withOpacity(0.3)
+                                    : Colors.white,
+                              ),
+                              child: Text(
+                                "Login via Phone",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: indx == 0
+                                      ? colors.buttonColor
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => setState(() {
+                              indx = 1;
+                            }),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: indx == 1
+                                    ? colors.buttonColor.withOpacity(0.3)
+                                    : Colors.white,
+                              ),
+                              child: Text(
+                                "Login via Email",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: indx == 1
+                                      ? colors.buttonColor
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      indx == 0 ? PhoneLogin(auth: auth) : EmailView(),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const SignUpPage())));
+                        },
+                        child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Don`t have an account?"),
+                                SizedBox(
+                                  width: 6,
+                                ),
+                                Text(
+                                  "Signup",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 29, 104, 136),
+                                      decoration: TextDecoration.underline),
+                                )
+                              ],
+                            )),
+                      ),
+                      Divider(color: Colors.white),
                     ],
-                    onChange: (index) {
-                      setState(() {
-                        tabstatus = index;
-                      });
-                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
-      bottomNavigationBar: GestureDetector(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: ((context) => const SignUpPage())));
-        },
-        child: const SizedBox(
-            height: 50,
-            child: Align(
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Don`t have an account?"),
-                    SizedBox(
-                      width: 6,
-                    ),
-                    Text(
-                      "Signup",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 29, 104, 136),
-                          decoration: TextDecoration.underline),
-                    )
-                  ],
-                ))),
-      ),
     );
   }
+}
 
-  Widget _Views() {
+class PhoneLogin extends StatelessWidget {
+  final AuthViewModel auth;
+  final TextEditingController mobile = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  PhoneLogin({super.key, required this.auth});
+  @override
+  Widget build(BuildContext context) {
     return Container(
       child: Form(
+        key: _formKey,
         child: Column(
           children: [
-            const SizedBox(
-              height: 30,
+            const Divider(color: Colors.transparent),
+            TextFormField(
+              controller: mobile,
+              decoration: InputDecoration()
+                  .applyDefaults(Theme.of(context).inputDecorationTheme)
+                  .copyWith(
+                    label: Text("Mobile No."),
+                  ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Enter a valid number";
+                }
+                return null;
+              },
+              keyboardType: TextInputType.number,
+              maxLength: 10,
+              onChanged: (value) {
+                if (value.length == 10) {
+                  FocusScope.of(context).unfocus();
+                }
+              },
             ),
-            CommonTextForm(
-              controllername: mobilenumbercontroller,
-              labelname: 'Mobile No',
-              
-            ),
-            const SizedBox(
-              height: 30,
+            const Divider(
+              color: Colors.transparent,
             ),
             GestureDetector(
               onTap: () {
-                print(mobilenumbercontroller.text);
-                auth.loginwithPhone(
-                    phone: mobilenumbercontroller.text, context: context);
+                if (_formKey.currentState!.validate()) {
+                  print(mobile.text);
+                  auth.loginwithPhone(phone: mobile.text, context: context);
+                }
               },
               child: Container(
                 height: 50,
@@ -211,55 +254,101 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
 
-  Widget _Views1() {
+class EmailView extends StatefulWidget {
+  const EmailView({super.key});
+
+  @override
+  State<EmailView> createState() => _EmailViewState();
+}
+
+class _EmailViewState extends State<EmailView> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController pass = TextEditingController();
+  FocusNode passFocus = new FocusNode();
+  bool visibility = false;
+  @override
+  Widget build(BuildContext context) {
     return Container(
       child: Form(
+        key: _formKey,
         child: Column(
           children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Column(
-              children: [
-                CommonTextForm(
-                  controllername: emailcontroler,
-                  labelname: 'Email Id',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CommonTextForm(
-                  controllername: passwordcontroller,
-                  labelname: 'Password',
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xFF0A9494),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "LOGIN",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+            const Divider(color: Colors.transparent),
+            TextFormField(
+              controller: email,
+              decoration: InputDecoration()
+                  .applyDefaults(Theme.of(context).inputDecorationTheme)
+                  .copyWith(
+                    label: Text("Email ID"),
                   ),
-                  SizedBox(
-                    width: 6,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_rounded,
-                    color: Colors.white,
-                  )
-                ],
+              keyboardType: TextInputType.emailAddress,
+              onChanged: (value) {
+                if (value.length == 10) {
+                  FocusScope.of(context).unfocus();
+                }
+              },
+              onFieldSubmitted: (value) =>
+                  FocusScope.of(context).requestFocus(passFocus),
+            ),
+            const Divider(
+              color: Colors.transparent,
+            ),
+            TextFormField(
+              controller: pass,
+              focusNode: passFocus,
+              decoration: InputDecoration()
+                  .applyDefaults(Theme.of(context).inputDecorationTheme)
+                  .copyWith(
+                      label: Text("Password"),
+                      suffixIcon: GestureDetector(
+                        onTap: () => setState(() {
+                          visibility = !visibility;
+                          print("object");
+                        }),
+                        child: Icon(
+                          visibility ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.black,
+                        ),
+                      )),
+              keyboardType: TextInputType.emailAddress,
+              obscureText: visibility,
+              onChanged: (value) {
+                if (value.length == 10) {
+                  FocusScope.of(context).unfocus();
+                }
+              },
+            ),
+            const Divider(
+              color: Colors.transparent,
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0A9494),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "LOGIN",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
               ),
             ),
             const SizedBox(

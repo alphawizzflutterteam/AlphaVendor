@@ -7,7 +7,18 @@ import 'package:flutter/material.dart';
 class DashboardViewModel with ChangeNotifier {
   final _myRepo = DashboardRepository();
   bool isLoading = true;
-  late DashData dashData;
+  DashData dashData = DashData(
+    totalSale: '',
+    soldOut: '',
+    totalProduct: '',
+    totalOrders: '',
+    totalCustomers: '',
+    stockManagement: '',
+    totalDelivery: '',
+    ratingsNdReviews: '',
+    graphData: null,
+    categoryProduct: [],
+  );
 
   bool get loading => isLoading;
   setLoading(bool value) {

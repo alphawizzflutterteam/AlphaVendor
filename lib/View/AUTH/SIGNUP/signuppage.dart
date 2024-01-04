@@ -147,13 +147,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   currentStep: activeStep,
                   size: 3,
                   padding: 0,
-                  selectedColor: const Color.fromARGB(255, 6, 71, 125),
+                  selectedColor: Colors.black,
                   unselectedColor: Colors.grey,
                   roundedEdges: const Radius.circular(10),
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                Divider(color: Colors.transparent, height: 30),
                 if (activeStep == 0)
                   Container(
                     child: Column(
@@ -161,45 +159,48 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         const Text(
                           "Create your account",
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 28),
                         ),
                         const SizedBox(
                           height: 6,
                         ),
                         const Text(
-                            "Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a 1st-century BC text by the Roman statesman "),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(border: Border.all()),
-                          child: TextFormField(
-                            onChanged: (value) {
-                              if (value.length == 10) {
-                                FocusScope.of(context).unfocus();
-                              }
-                            },
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(10),
-                            ],
-                            keyboardType: TextInputType.number,
-                            controller: mobilecontroller,
-                            decoration: const InputDecoration(
-                                prefixIcon: Icon(Icons.mobile_friendly),
-                                hintText: '+91..',
-                                border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(width: 1, color: Colors.black),
-                                ),
-                                label: Text(" Enter Mobile Number")),
+                          "Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a 1st-century BC text by the Roman statesman ",
+                          style: TextStyle(
+                            color: colors.greyText,
                           ),
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
+                        TextFormField(
+                          controller: mobilecontroller,
+                          decoration: InputDecoration()
+                              .applyDefaults(
+                                  Theme.of(context).inputDecorationTheme)
+                              .copyWith(
+                                label: Text("Mobile No."),
+                              ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Enter a valid number";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.number,
+                          maxLength: 10,
+                          onChanged: (value) {
+                            if (value.length == 10) {
+                              FocusScope.of(context).unfocus();
+                            }
+                          },
+                        ),
+                        Divider(color: Colors.transparent),
                         Row(
                           children: [
                             Checkbox(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3)),
                               value: isChecked,
                               onChanged: (bool? value) {
                                 setState(() {
@@ -231,7 +232,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       width: 3,
                                     ),
                                     Text(
-                                      "Privecy Policy",
+                                      "Privacy Policy",
                                       style: TextStyle(
                                           color:
                                               Color.fromARGB(255, 16, 89, 132),
@@ -243,9 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             )
                           ],
                         ),
-                        const SizedBox(
-                          height: 40,
-                        ),
+                        Divider(color: Colors.transparent),
                         GestureDetector(
                           onTap: () {
                             setState(() {

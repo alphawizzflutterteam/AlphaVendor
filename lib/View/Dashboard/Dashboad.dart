@@ -114,537 +114,564 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
 
   @override
   Widget build(BuildContext context) {
-    dashProvider = Provider.of(context);
+    dashProvider = Provider.of<DashboardViewModel>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      drawer: Drawer(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DrawerHeader(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    // color: Colors.green,
-                    image: DecorationImage(
-                        image: AssetImage(
-                          "assets/images/success.png",
+    return dashProvider.isLoading
+        ? appLoader()
+        : Scaffold(
+            drawer: Drawer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DrawerHeader(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          // color: Colors.green,
+                          image: DecorationImage(
+                              image: AssetImage(
+                                "assets/images/success.png",
+                              ),
+                              fit: BoxFit.cover)),
+                      //BoxDecoration
+                      child: Center(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                              radius: 30,
+                              backgroundImage:
+                                  AssetImage(Images.driver_profile)),
+                          title: Text(
+                            "Jane Cooper",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(),
+                                )),
+                            child: Text(
+                              "View Profile",
+                              style: TextStyle(
+                                  color: colors.lightTextColor,
+                                  fontSize: 12,
+                                  decorationColor: colors.lightTextColor,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
                         ),
-                        fit: BoxFit.cover)),
-                //BoxDecoration
-                child: Center(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(Images.driver_profile)),
-                    title: Text(
-                      "Jane Cooper",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      ) //UserAccountDrawerHeader
                       ),
-                    ),
-                    subtitle: GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(),
-                          )),
-                      child: Text(
-                        "View Profile",
-                        style: TextStyle(
-                            color: colors.lightTextColor,
-                            fontSize: 12,
-                            decorationColor: colors.lightTextColor,
-                            decoration: TextDecoration.underline),
-                      ),
+
+                  //DrawerHeader
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "OverView",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                ) //UserAccountDrawerHeader
-                ),
-
-            //DrawerHeader
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "OverView",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListTile(
-                      selected: true,
-                      selectedColor: colors.homeBGGradient1,
-                      leading: const Icon(Icons.dashboard_sharp),
-                      title: const Text(' Dashboard '),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.shopping_bag_rounded),
-                      title: const DrawerText(text: 'Order Managemnt', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: OrderManagement()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.workspace_premium),
-                      title: const DrawerText(text: 'Product Management', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const ProductManagementScreen()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.person_outline_outlined),
-                      title: const DrawerText(text: 'Customer', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const CustomerScreen()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.analytics_outlined),
-                      title:
-                          const DrawerText(text: 'Analytics and Reports', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.wallet_sharp),
-                      title: const DrawerText(text: 'Wallet', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const WalletScreen()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.settings),
-                      title: const DrawerText(text: 'Settings', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const ProfileSettingScreen()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.payment),
-                      title: const DrawerText(text: 'Payment', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const PaymentScreen()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.storefront_outlined),
-                      title: const DrawerText(text: 'Store Setting', ''),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: EditStoreDetailScreen()));
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.logout_rounded,
-                        color: Colors.red,
-                      ),
-                      title: Text(
-                        "Logout",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.red,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => LogoutBottomSheet(),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      backgroundColor: Colors.blue[50],
-      body: dashProvider.isLoading
-          ? appLoader()
-          : Column(
-              children: [
-                Container(
-                  height: height * .35,
-                  decoration: BoxDecoration(
-                      color: colors.buttonColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
-                      )),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Image.asset(
-                          Images.profile_bg_circle,
-                          height: height * .2,
-                        ),
-                      ),
-                      AppBar(
-                        backgroundColor: Colors.transparent,
-                        centerTitle: true,
-                        title: const Text(
-                          "Seller Dashboard",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        leading: Builder(builder: (context) {
-                          return IconButton(
-                            icon: Image.asset(
-                              Images.hamburgerMenuIcon,
-                              color: Colors.white,
-                              height: 25,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListTile(
+                            selected: true,
+                            selectedColor: colors.homeBGGradient1,
+                            leading: const Icon(Icons.dashboard_sharp),
+                            title: const Text(' Dashboard '),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.shopping_bag_rounded),
+                            title:
+                                const DrawerText(text: 'Order Managemnt', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: OrderManagement()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.workspace_premium),
+                            title: const DrawerText(
+                                text: 'Product Management', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const ProductManagementScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.person_outline_outlined),
+                            title: const DrawerText(text: 'Customer', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const CustomerScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.analytics_outlined),
+                            title: const DrawerText(
+                                text: 'Analytics and Reports', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.wallet_sharp),
+                            title: const DrawerText(text: 'Wallet', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const WalletScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.settings),
+                            title: const DrawerText(text: 'Settings', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const ProfileSettingScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.payment),
+                            title: const DrawerText(text: 'Payment', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const PaymentScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.storefront_outlined),
+                            title: const DrawerText(text: 'Store Setting', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: EditStoreDetailScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(
+                              Icons.logout_rounded,
+                              color: Colors.red,
                             ),
-                            onPressed: () => Scaffold.of(context).openDrawer(),
-                          );
-                        }),
-                        actions: [
-                          IconButton(
-                            icon: Image.asset(
-                              Images.notification,
-                              color: Colors.white,
-                              height: 25,
+                            title: Text(
+                              "Logout",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.red,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
-                            onPressed: () => Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: NotificationScreen(),
-                                    type: PageTransitionType.rightToLeft)),
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => LogoutBottomSheet(),
+                              );
+                            },
                           ),
                         ],
                       ),
-                      Positioned(
-                        bottom: 10,
-                        child: SizedBox(
-                          width: width,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Total Sale",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal,
-                                          color: colors.lightGrey),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    VerticalDivider(width: 5),
-                                    Text(
-                                      dashProvider.dashData.ratingsNdReviews
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  dashProvider.dashData.totalSale.toString(),
-                                  style: TextStyle(
-                                    fontSize: 28,
-                                    fontFamily: 'Montreal',
-                                    fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: Colors.blue[50],
+            body: dashProvider.isLoading
+                ? appLoader()
+                : Column(
+                    children: [
+                      Container(
+                        height: height * .35,
+                        decoration: BoxDecoration(
+                            color: colors.buttonColor,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                            )),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Image.asset(
+                                Images.profile_bg_circle,
+                                height: height * .2,
+                              ),
+                            ),
+                            AppBar(
+                              backgroundColor: Colors.transparent,
+                              centerTitle: true,
+                              title: const Text(
+                                "Seller Dashboard",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              leading: Builder(builder: (context) {
+                                return IconButton(
+                                  icon: Image.asset(
+                                    Images.hamburgerMenuIcon,
                                     color: Colors.white,
+                                    height: 25,
                                   ),
-                                ),
-                                Divider(color: Colors.transparent),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "Sold Out",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                              color: colors.lightGrey),
-                                        ),
-                                        Text(
-                                          dashProvider.dashData.soldOut
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: height * .04,
-                                      child: VerticalDivider(
-                                        color: colors.lightTextColor,
-                                        thickness: 2,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "Total Products",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                              color: colors.lightGrey),
-                                        ),
-                                        Text(
-                                          dashProvider.dashData.totalProduct
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: height * .04,
-                                      child: VerticalDivider(
-                                        color: colors.lightTextColor,
-                                        thickness: 2,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "Total Order",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                              color: colors.lightGrey),
-                                        ),
-                                        Text(
-                                          dashProvider.dashData.totalOrders
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  onPressed: () =>
+                                      Scaffold.of(context).openDrawer(),
+                                );
+                              }),
+                              actions: [
+                                IconButton(
+                                  icon: Image.asset(
+                                    Images.notification,
+                                    color: Colors.white,
+                                    height: 25,
+                                  ),
+                                  onPressed: () => Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          child: NotificationScreen(),
+                                          type:
+                                              PageTransitionType.rightToLeft)),
                                 ),
                               ],
                             ),
+                            Positioned(
+                              bottom: 10,
+                              child: SizedBox(
+                                width: width,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Total Sale",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
+                                                color: colors.lightGrey),
+                                          ),
+                                          Spacer(),
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          VerticalDivider(width: 5),
+                                          Text(
+                                            dashProvider
+                                                .dashData.ratingsNdReviews
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        dashProvider.dashData.totalSale
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 28,
+                                          fontFamily: 'Montreal',
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Divider(color: Colors.transparent),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                "Sold Out",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: colors.lightGrey),
+                                              ),
+                                              Text(
+                                                dashProvider.dashData.soldOut
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 28,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: height * .04,
+                                            child: VerticalDivider(
+                                              color: colors.lightTextColor,
+                                              thickness: 2,
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                "Total Products",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: colors.lightGrey),
+                                              ),
+                                              Text(
+                                                dashProvider
+                                                    .dashData.totalProduct
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 28,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: height * .04,
+                                            child: VerticalDivider(
+                                              color: colors.lightTextColor,
+                                              thickness: 2,
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                "Total Order",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: colors.lightGrey),
+                                              ),
+                                              Text(
+                                                dashProvider
+                                                    .dashData.totalOrders
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 28,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: 15,
+                                          crossAxisSpacing: 15),
+                                  itemCount: items.length,
+                                  itemBuilder: (context, index) => Container(
+                                    height: height * .1,
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: height * .07,
+                                          width: height * .07,
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: items[index]['color'],
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Image.asset(
+                                              items[index]['image']),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          items[index]['name'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color: colors.greyText,
+                                          ),
+                                        ),
+                                        Text(
+                                          getCardVal(index),
+                                          style: TextStyle(
+                                            fontSize: 28,
+                                            fontFamily: 'Montreal',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Divider(color: Colors.transparent),
+                              Container(
+                                color: Colors.white,
+                                height: 300,
+                                child: ContainedTabBarView(
+                                  tabs: const [
+                                    Text('Daily'),
+                                    Text('Weakly'),
+                                    Text('Montly'),
+                                  ],
+                                  tabBarProperties: TabBarProperties(
+                                    background: Container(
+                                        decoration: const BoxDecoration(
+                                      boxShadow: [],
+                                    )),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 32.0,
+                                      vertical: 15.0,
+                                    ),
+                                    indicator: ContainerTabIndicator(
+                                      width: 100,
+                                      radius: BorderRadius.circular(4.0),
+                                      color: const Color.fromARGB(
+                                          255, 71, 168, 177),
+                                    ),
+                                    labelColor: Colors.white,
+                                    unselectedLabelColor: Colors.grey[400],
+                                  ),
+                                  views: [
+                                    _Views(),
+                                    _Views(),
+                                    _Views(),
+                                  ],
+                                  onChange: (index) {},
+                                ),
+                              ),
+                              const Divider(color: Colors.transparent),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Categories Wise Product Count',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Container(
+                                        child: SfCircularChart(
+                                            legend: const Legend(
+                                                iconWidth: 20,
+                                                width: '100',
+                                                isVisible: true),
+                                            tooltipBehavior: _tooltipBehavior1,
+                                            series: <CircularSeries>[
+                                          // Render pie chart
+
+                                          PieSeries<ChartData, String>(
+                                              dataSource: [
+                                                // Bind data source
+                                                ChartData('Product1', 35),
+                                                ChartData('Product2', 28),
+                                                ChartData('Product3', 34),
+                                                ChartData('Product4', 32),
+                                                ChartData('Product5', 40)
+                                              ],
+                                              xValueMapper:
+                                                  (ChartData data, _) => data.x,
+                                              yValueMapper:
+                                                  (ChartData data, _) => data.y,
+                                              dataLabelSettings:
+                                                  const DataLabelSettings(
+                                                      isVisible: true)),
+                                        ])),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 15,
-                                    crossAxisSpacing: 15),
-                            itemCount: items.length,
-                            itemBuilder: (context, index) => Container(
-                              height: height * .1,
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: height * .07,
-                                    width: height * .07,
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: items[index]['color'],
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Image.asset(items[index]['image']),
-                                  ),
-                                  Spacer(),
-                                  Text(
-                                    items[index]['name'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal,
-                                      color: colors.greyText,
-                                    ),
-                                  ),
-                                  Text(
-                                    getCardVal(index),
-                                    style: TextStyle(
-                                      fontSize: 28,
-                                      fontFamily: 'Montreal',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Divider(color: Colors.transparent),
-                        Container(
-                          color: Colors.white,
-                          height: 300,
-                          child: ContainedTabBarView(
-                            tabs: const [
-                              Text('Daily'),
-                              Text('Weakly'),
-                              Text('Montly'),
-                            ],
-                            tabBarProperties: TabBarProperties(
-                              background: Container(
-                                  decoration: const BoxDecoration(
-                                boxShadow: [],
-                              )),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 32.0,
-                                vertical: 15.0,
-                              ),
-                              indicator: ContainerTabIndicator(
-                                width: 100,
-                                radius: BorderRadius.circular(4.0),
-                                color: const Color.fromARGB(255, 71, 168, 177),
-                              ),
-                              labelColor: Colors.white,
-                              unselectedLabelColor: Colors.grey[400],
-                            ),
-                            views: [
-                              _Views(),
-                              _Views(),
-                              _Views(),
-                            ],
-                            onChange: (index) {},
-                          ),
-                        ),
-                        const Divider(color: Colors.transparent),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Categories Wise Product Count',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Container(
-                                  child: SfCircularChart(
-                                      legend: const Legend(
-                                          iconWidth: 20,
-                                          width: '100',
-                                          isVisible: true),
-                                      tooltipBehavior: _tooltipBehavior1,
-                                      series: <CircularSeries>[
-                                    // Render pie chart
-
-                                    PieSeries<ChartData, String>(
-                                        dataSource: [
-                                          // Bind data source
-                                          ChartData('Product1', 35),
-                                          ChartData('Product2', 28),
-                                          ChartData('Product3', 34),
-                                          ChartData('Product4', 32),
-                                          ChartData('Product5', 40)
-                                        ],
-                                        xValueMapper: (ChartData data, _) =>
-                                            data.x,
-                                        yValueMapper: (ChartData data, _) =>
-                                            data.y,
-                                        dataLabelSettings:
-                                            const DataLabelSettings(
-                                                isVisible: true)),
-                                  ])),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            floatingActionButton: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              onPressed: () => Navigator.push(
+                  context,
+                  PageTransition(
+                      child: AddProdutScreen(),
+                      type: PageTransitionType.rightToLeft)),
+              backgroundColor: colors.buttonColor,
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        onPressed: () => Navigator.push(
-            context,
-            PageTransition(
-                child: AddProdutScreen(),
-                type: PageTransitionType.rightToLeft)),
-        backgroundColor: colors.buttonColor,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
-    );
+          );
   }
 
   Widget _Views() {

@@ -23,14 +23,17 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late bool switchVal;
   late ProductManagementViewModel productP;
+  getData() async {
+    productP = Provider.of<ProductManagementViewModel>(context, listen: false);
+    await productP.getProductDetail(id: widget.id);
+    switchVal =
+        productP.productDetail.first.status.toString() == "1" ? true : false;
+  }
 
   @override
   void initState() {
     print(widget.id);
-    productP = Provider.of<ProductManagementViewModel>(context, listen: false);
-    productP.getProductDetail(id: widget.id);
-    switchVal =
-        productP.productDetail.first.status.toString() == "1" ? true : false;
+    getData();
     super.initState();
   }
 
@@ -209,12 +212,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             Spacer(),
                             GestureDetector(
                               onTap: () => Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      child: EditProdutScreen(
-                                          productDetail:
-                                              productP.productDetail.first),
-                                      type: PageTransitionType.rightToLeft)),
+                                      context,
+                                      PageTransition(
+                                          child: EditProdutScreen(
+                                              productDetail:
+                                                  productP.productDetail.first),
+                                          type: PageTransitionType.rightToLeft))
+                                  .then((value) => getData()),
                               child: Row(
                                 children: [
                                   ImageIcon(

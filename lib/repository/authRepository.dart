@@ -5,23 +5,26 @@ import 'package:http/http.dart' as http;
 class AuthRepository {
   Future<LoginOtpModel> loginOtpPostRequest(
       {required String api, required String phone}) async {
-    var request = http.MultipartRequest('POST', Uri.parse(api));
-    request.fields.addAll({'phone': phone});
-
-    http.StreamedResponse response = await request.send();
-    var ans = jsonDecode(await response.stream.bytesToString());
-    if (response.statusCode == 200) {
-      print(ans);
-      return LoginOtpModel.fromJson(ans);
-    } else {
-      print(response.reasonPhrase);
-      return LoginOtpModel(
-          status: false,
-          message: null,
-          token: null,
-          errors: [],
-          data: [],
-          otp: "");
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(api));
+      request.fields.addAll({'phone': phone});
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200 || response.statusCode == 401) {
+        print(ans);
+        return LoginOtpModel.fromJson(ans);
+      } else {
+        print(response.reasonPhrase);
+        return LoginOtpModel(
+            status: false,
+            message: "Something went wrong",
+            token: null,
+            errors: [],
+            data: [],
+            otp: "");
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 

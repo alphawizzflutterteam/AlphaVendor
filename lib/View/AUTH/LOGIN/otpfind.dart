@@ -1,4 +1,5 @@
 import 'package:alpha_work/Utils/appUrls.dart';
+import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
@@ -67,111 +68,117 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading:
-            IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back)),
-        title: const Text("Verify Number"),
-        centerTitle: true,
-      ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 60,
-              ),
-              Align(
-                  // logo_with_greenTop
-                  alignment: Alignment.topLeft,
-                  child: Image.asset(
-                      width: 60, "assets/images/logo_with_greenTop.png")),
-              const Text(
-                "Enter Verification Code",
-                style: TextStyle(fontSize: 22),
-              ),
-              // const Text("Enter the otp sent to +916266"),
-              Divider(
-                color: Colors.transparent,
-                height: 30,
-              ),
-              Center(
-                child: Pinput(
-                  defaultPinTheme: defaultPinTheme,
-                  focusedPinTheme: focusedPinTheme,
-                  length: 4,
-                  controller: pinCtrl,
+      body: Stack(
+        children: [
+          Image.asset(Images.onboardingBg_light),
+          AppBar(
+            toolbarHeight: kToolbarHeight,
+            backgroundColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios_new_rounded),
+            ),
+            title: Text("Verify Number"),
+            centerTitle: true,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Spacer(),
+                Image.asset(width: 60, Images.alphalogo_light),
+                const Text(
+                  "Enter Verification Code",
+                  style: TextStyle(fontSize: 22),
                 ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (pinCtrl.text == savedotp) {
-                    PreferenceUtils.setString(PrefKeys.isLoggedIn, "true");
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                            child: const DashboardScreen1(),
-                            type: PageTransitionType.rightToLeft),
-                        (route) => false);
-                  }
-                },
-                child: Align(
+                // const Text("Enter the otp sent to +916266"),
+                Divider(
+                  color: Colors.transparent,
+                  height: 30,
+                ),
+                Center(
+                  child: Pinput(
+                    defaultPinTheme: defaultPinTheme,
+                    focusedPinTheme: focusedPinTheme,
+                    length: 4,
+                    controller: pinCtrl,
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (pinCtrl.text == savedotp) {
+                      PreferenceUtils.setString(PrefKeys.isLoggedIn, "true");
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          PageTransition(
+                              child: const DashboardScreen1(),
+                              type: PageTransitionType.rightToLeft),
+                          (route) => false);
+                    }
+                  },
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 100,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0A9494),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "VERIFY",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Align(
                   alignment: Alignment.center,
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width - 100,
                     height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0A9494),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "VERIFY",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          "Didn`t receaved Otp? ",
+                          style: TextStyle(color: Colors.grey),
                         ),
+                        Text(
+                          "Resend OTP",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 29, 104, 136),
+                          ),
+                        )
                       ],
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 100,
-                  height: 50,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Didn`t receaved Otp? ",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Text(
-                        "Resend OTP",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 29, 104, 136),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
+                Spacer(),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

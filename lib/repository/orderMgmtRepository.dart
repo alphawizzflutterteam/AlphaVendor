@@ -20,18 +20,13 @@ class OrderManagementRepository {
       });
       print(res.statusCode);
       print(url);
+
       if (res.statusCode == 200) {
+        print(res.body);
         var jsonData = jsonDecode(res.body);
         return OrderModel.fromJson(jsonData);
       } else {
-        Fluttertoast.showToast(
-            msg: "Something went wrong!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: colors.buttonColor,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        print(res.body);
         return OrderModel(
             status: null, message: null, data: [], orderStatus: []);
       }

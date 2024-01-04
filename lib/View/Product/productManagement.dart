@@ -1,5 +1,7 @@
+import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/Product/categoryProductList.dart';
 import 'package:alpha_work/View/Product/productStatusList.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
@@ -245,37 +247,61 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                   .categories[slectedIndex]
                                   .childes
                                   .length,
-                              itemBuilder: (context, indx) => Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Image.network(
-                                    productMgmtProvider
-                                        .productManagementData
-                                        .categories[slectedIndex]
-                                        .childes[indx]
-                                        .icon
-                                        .toString(),
-                                    height: height * .1,
-                                    fit: BoxFit.fitHeight,
-                                    errorBuilder: (context, error,
-                                            stackTrace) =>
-                                        ErrorImageWidget(height: height * .1),
-                                  ),
-                                  Text(
-                                    productMgmtProvider
-                                        .productManagementData
-                                        .categories[slectedIndex]
-                                        .childes[indx]
-                                        .name
-                                        .toString(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                              itemBuilder: (context, indx) => GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        child: categoryProductScreen(
+                                            appBartitle: productMgmtProvider
+                                                .productManagementData
+                                                .categories[slectedIndex]
+                                                .name
+                                                .toString(),
+                                            subCatID: productMgmtProvider
+                                                .productManagementData
+                                                .categories[slectedIndex]
+                                                .childes[indx]
+                                                .id
+                                                .toString(),
+                                            catId: productMgmtProvider
+                                                .productManagementData
+                                                .categories[slectedIndex]
+                                                .id
+                                                .toString(),
+                                            type: 'all'),
+                                        type: PageTransitionType.rightToLeft)),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.network(
+                                      productMgmtProvider
+                                          .productManagementData
+                                          .categories[slectedIndex]
+                                          .childes[indx]
+                                          .icon
+                                          .toString(),
+                                      height: height * .1,
+                                      fit: BoxFit.fitHeight,
+                                      errorBuilder: (context, error,
+                                              stackTrace) =>
+                                          ErrorImageWidget(height: height * .1),
+                                    ),
+                                    Text(
+                                      productMgmtProvider
+                                          .productManagementData
+                                          .categories[slectedIndex]
+                                          .childes[indx]
+                                          .name
+                                          .toString(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),

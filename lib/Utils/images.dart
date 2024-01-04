@@ -167,4 +167,7 @@ class Images {
   static const locaction = "assets/icons/Location.png";
   static const edit = "assets/icons/Edit Square.png";
   static const delete_icon = "assets/icons/Delete.png";
+  static const noInternet = "assets/images/nointernet.png";
+  static const onboardingBg_light = "assets/images/onboarding_bg-light.png";
+  static const alphalogo_light = "assets/images/alpha_logo-light.png";
 }

@@ -9,24 +9,31 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-class ActiveProductScreen extends StatefulWidget {
+class categoryProductScreen extends StatefulWidget {
   final String appBartitle;
   final String type;
+  final String catId;
+  final String subCatID;
 
-  const ActiveProductScreen(
-      {super.key, required this.appBartitle, required this.type});
+  const categoryProductScreen(
+      {super.key,
+      required this.appBartitle,
+      required this.type,
+      required this.catId,
+      required this.subCatID});
 
   @override
-  State<ActiveProductScreen> createState() => _ActiveProductScreenState();
+  State<categoryProductScreen> createState() => _categoryProductScreenState();
 }
 
-class _ActiveProductScreenState extends State<ActiveProductScreen> {
+class _categoryProductScreenState extends State<categoryProductScreen> {
   late ProductManagementViewModel productstatusP;
   @override
   void initState() {
     productstatusP =
         Provider.of<ProductManagementViewModel>(context, listen: false);
-    productstatusP.getProductsListWithStatus(Type: widget.type);
+    productstatusP.getProductsListWithCategory(
+        Type: widget.type, catId: widget.catId, subcatId: widget.subCatID);
     super.initState();
   }
 
@@ -207,47 +214,27 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                                     )),
                                               ]),
                                             ),
-                                            widget.appBartitle == "All Products"
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                        color: productstatusP
-                                                                    .productList[
-                                                                        index]
-                                                                    .status ==
-                                                                1
-                                                            ? Colors.green
-                                                                .withOpacity(
-                                                                    0.3)
-                                                            : Colors.red
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 5,
-                                                            vertical: 3),
-                                                    child: Text(
-                                                      productstatusP
-                                                                  .productList[
-                                                                      index]
-                                                                  .status ==
-                                                              1
-                                                          ? "Active"
-                                                          : "Inactive",
-                                                      style: TextStyle(
-                                                          color: productstatusP
-                                                                      .productList[
-                                                                          index]
-                                                                      .status ==
-                                                                  1
-                                                              ? Colors.green
-                                                              : Colors
-                                                                  .redAccent),
-                                                    ),
+                                            productstatusP.productList[index]
+                                                        .currentStock
+                                                        .toInt() ==
+                                                    0
+                                                ? Text(
+                                                    "Sold Out",
+                                                    style: TextStyle(
+                                                        color: Colors.red),
                                                   )
-                                                : Container(),
+                                                : productstatusP
+                                                            .productList[index]
+                                                            .currentStock
+                                                            .toInt() <=
+                                                        5
+                                                    ? Text(
+                                                        "Low in stock",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.orange),
+                                                      )
+                                                    : Container(),
                                           ],
                                         ),
                                       ),

@@ -51,7 +51,7 @@ class InternalDetailPageHeader extends StatelessWidget {
               InkWell(
                 onTap: () {
                   // Routes.navigateToPreviousScreen(context);
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 },
                 child: const Icon(
                   Icons.arrow_back_ios_new_rounded,

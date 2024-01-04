@@ -53,7 +53,7 @@ class ProductManagementViewModel extends ChangeNotifier {
 //Function to get productmgmt list
   Future<void> getProductManagement() async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-    setLoading(true);
+    isLoading = true;
     await _myRepo.ProductMgmtDataRequest(
             api: AppUrl.productMgmt, bearerToken: token)
         .then((value) {
@@ -69,9 +69,37 @@ class ProductManagementViewModel extends ChangeNotifier {
     print(Type);
     isLoading = true;
     await _myRepo.ProductListRequest(
-            api: AppUrl.productList, bearerToken: token, type: Type)
+            api: AppUrl.productList,
+            bearerToken: token,
+            type: Type,
+            cat: null,
+            subcat: null,
+            isCat: false)
         .then((value) {
       productList = value.data!;
+      print("Product list length ${productList.length}");
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get Product list based on cat and subcat id
+  Future<void> getProductsListWithCategory({
+    required String Type,
+    required String catId,
+    required String subcatId,
+  }) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print(Type);
+    isLoading = true;
+    await _myRepo.ProductListRequest(
+            api: AppUrl.productList,
+            bearerToken: token,
+            cat: catId,
+            subcat: subcatId,
+            type: Type,
+            isCat: true)
+        .then((value) {
+      productList = value.data;
       print("Product list length ${productList.length}");
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
@@ -227,7 +255,7 @@ class ProductManagementViewModel extends ChangeNotifier {
         .then((value) => setLoading(false));
   }
 
-//Function to update product status (Active,Inactive)
+//Function to delete Product
   Future<void> deleteProduct({required String id}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo
@@ -235,5 +263,57 @@ class ProductManagementViewModel extends ChangeNotifier {
             api: AppUrl.deleteProduct, bearerToken: token, id: id)
         .then((value) => print(value))
         .then((value) => setLoading(false));
+  }
+
+//Function to add product
+  Future<bool> updateProduct({
+    required String productId,
+    required String name,
+    required String category_id,
+    required String sub_category_id,
+    required String product_type,
+    required String unit,
+    required String thumbnail,
+    required String discount_type,
+    required String discount,
+    required String tax,
+    required String tax_type,
+    required String unit_price,
+    required String shipping_cost,
+    required String skuId,
+    required String minimum_order_qty,
+    required String brand_id,
+    required String quantity,
+    required String description,
+    required String purchase_price,
+  }) async {
+    bool status = false;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print('${productId}------');
+    await _myRepo
+        .updateProductPostRequest(
+          token: token,
+          api: '${AppUrl.updateProduct}/$productId',
+          name: name,
+          category_id: category_id,
+          sub_category_id: sub_category_id,
+          product_type: product_type,
+          unit: unit,
+          thumbnail: thumbnail,
+          discount_type: discount_type,
+          discount: discount,
+          tax: tax,
+          tax_type: tax_type,
+          unit_price: unit_price,
+          shipping_cost: shipping_cost,
+          skuId: skuId,
+          minimum_order_qty: minimum_order_qty,
+          brand_id: brand_id,
+          quantity: quantity,
+          description: description,
+          purchase_price: purchase_price,
+        )
+        .then((value) => status = value);
+    return status;
   }
 }

@@ -60,6 +60,8 @@ dependencies:
   awesome_dialog: ^3.1.0
   pinput: ^3.0.1
   chat_bubbles: ^1.5.0
+  flutter_no_internet_widget: ^1.0.0+18-dev.1
+  
   
   
   # intl: ^0.18.0
