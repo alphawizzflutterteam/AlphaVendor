@@ -170,4 +170,6 @@ class Images {
   static const noInternet = "assets/images/nointernet.png";
   static const onboardingBg_light = "assets/images/onboarding_bg-light.png";
   static const alphalogo_light = "assets/images/alpha_logo-light.png";
+  static const success_bg = "assets/images/success_bg.png";
+  static const success_check = "assets/images/success_check.png";
 }

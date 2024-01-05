@@ -11,6 +11,7 @@ import 'package:alpha_work/View/Profile/widgets/logoutSheet.dart';
 import 'package:alpha_work/View/Store/store.dart';
 import 'package:alpha_work/View/Wallet/wallet.dart';
 import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
+import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +32,16 @@ class DashboardScreen1 extends StatefulWidget {
 
 class _DashboardScreen1State extends State<DashboardScreen1> {
   late DashboardViewModel dashProvider;
+  late ProfileViewModel vendorProvider;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    dashProvider = Provider.of(context, listen: false);
+    dashProvider = Provider.of<DashboardViewModel>(context, listen: false);
+    vendorProvider = Provider.of<ProfileViewModel>(context, listen: false);
     dashProvider.getDashboardData();
+    vendorProvider.getvendorProfileData();
+    ProfileViewModel().getvendorProfileData();
     _tooltipBehavior = TooltipBehavior(enable: true);
     _tooltipBehavior1 = TooltipBehavior(enable: true);
     //  _tabController =  TabController(length: 2, vsync: true);
@@ -153,7 +158,8 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                             onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(),
+                                  builder: (context) => ProfileScreen(
+                                      vendorData: vendorProvider.vendorData),
                                 )),
                             child: Text(
                               "View Profile",
@@ -316,7 +322,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                 : Column(
                     children: [
                       Container(
-                        height: height * .35,
+                        height: height * .33,
                         decoration: BoxDecoration(
                             color: colors.buttonColor,
                             borderRadius: BorderRadius.only(

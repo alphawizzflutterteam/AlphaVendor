@@ -89,7 +89,7 @@ class GraphData {
   });
 
   final List<String> sellerLabel;
-  final List<int> sellerEarn;
+  final List<dynamic> sellerEarn;
 
   factory GraphData.fromJson(Map<String, dynamic> json) {
     return GraphData(
@@ -98,7 +98,7 @@ class GraphData {
           : List<String>.from(json["seller_label"]!.map((x) => x)),
       sellerEarn: json["seller_earn"] == null
           ? []
-          : List<int>.from(json["seller_earn"]!.map((x) => x)),
+          : List<dynamic>.from(json["seller_earn"]!.map((x) => x)),
     );
   }
 

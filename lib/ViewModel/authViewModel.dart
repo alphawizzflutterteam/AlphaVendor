@@ -105,6 +105,7 @@ class AuthViewModel with ChangeNotifier {
         ),
       );
 
+//Function to login with phone
   Future<void> loginwithPhone({
     required String phone,
     required BuildContext context,
@@ -118,7 +119,7 @@ class AuthViewModel with ChangeNotifier {
       Fluttertoast.showToast(
           msg: value.message.toString(),
           toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
+          gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: colors.buttonColor,
           textColor: Colors.white,
@@ -132,5 +133,101 @@ class AuthViewModel with ChangeNotifier {
         ));
       }
     });
+  }
+
+//Function to login with phone
+  Future<bool> getRegistrarionOtp({
+    required String phone,
+  }) async {
+    bool val = false;
+    await _myRepo
+        .registerOtpPostRequest(api: AppUrl.registerOtp, phone: phone)
+        .then((value) async {
+      setLoading(false);
+      print(value.token);
+      print(value.otp);
+      Fluttertoast.showToast(
+          msg: value.message.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: colors.buttonColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      if (value.message == "OTP sent success") {
+        val = true;
+        PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
+      }
+    });
+    return val;
+  }
+
+//Function to register vendor
+  Future<bool> registerUser({
+    required String phone,
+    required String otp,
+    required String name,
+    required String email,
+    required String referalcode,
+    required String businessemail,
+    required String businessphoneNo,
+    required String businessname,
+    required String businessType,
+    required String registrationNo,
+    required String gstin,
+    required String tin,
+    required String website,
+    required String password,
+    required String confirmPass,
+    required String addr,
+    required String city,
+    required String state,
+    required String zip,
+    required String country,
+    required String bankName,
+    required String branch,
+    required String accType,
+    required String micr,
+    required String bankAddr,
+    required String accNo,
+    required String ifsc,
+  }) async {
+    bool val = false;
+    await _myRepo
+        .registerVendorPostRequest(
+      api: AppUrl.register,
+      phone: phone,
+      otp: otp,
+      name: name,
+      email: email,
+      referalcode: referalcode,
+      businessemail: businessemail,
+      businessphoneNo: businessphoneNo,
+      businessname: businessname,
+      businessType: businessType,
+      registrationNo: registrationNo,
+      gstin: gstin,
+      tin: tin,
+      website: website,
+      password: password,
+      confirmPass: confirmPass,
+      addr: addr,
+      city: city,
+      state: state,
+      zip: zip,
+      country: country,
+      bankName: bankName,
+      branch: branch,
+      accType: accType,
+      micr: micr,
+      bankAddr: bankAddr,
+      accNo: accNo,
+      ifsc: ifsc,
+    )
+        .then((value) {
+      val = value;
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+    return val;
   }
 }

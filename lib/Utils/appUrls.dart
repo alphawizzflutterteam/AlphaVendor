@@ -8,7 +8,6 @@ class AppUrl {
   static String sendLoginOtp = "${baseURL}auth/send-login-otp";
   static String sendRegisterOtp = "${baseURL}auth/send-otp";
   static String loginWithEmailPassword = "${baseURL}auth/login";
-  static String register = "${baseURL}auth/register";
   static String updatePassword = "${baseURL}auth/update-password";
   static String resetPassword = "${baseURL}customer/reset-password";
   static String getSellerDashboard = "${baseURL1}seller/dashboard";
@@ -55,6 +54,8 @@ class AppUrl {
   static String contactForm = "${baseURL}contact/store";
 //Vendor
   static const String loginOtp = "${baseURL}seller/login-otp";
+  static const String registerOtp = "${baseURL}seller/send-otp";
+  static const String register = "${baseURL}seller/registration";
   static const String productMgmt = "${baseURL}seller/product-management";
   static const String productList = "${baseURL}seller/products/list";
   static const String categoriesList = "${baseURL}seller/get-categories";
@@ -67,4 +68,11 @@ class AppUrl {
   static const String statusUpdate = "${baseURL}seller/products/status-update";
   static const String deleteProduct = "${baseURL}seller/products/delete/";
   static const String updateProduct = "${baseURL}seller/products/update";
+  static const String vendorProfile = "${baseURL}seller/shop-info";
+  static const String updateBusinessDetail =
+      "${baseURL}seller/update-bussiness-details";
+  static const String updateAddressDetail =
+      "${baseURL}seller/update-address-details";
+  static const String updateBankingDetail =
+      "${baseURL}seller/update-bank-details";
 }

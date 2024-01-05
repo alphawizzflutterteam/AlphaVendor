@@ -18,6 +18,7 @@ class DashboardRepository {
       print(url);
       if (res.statusCode == 200) {
         var jsonData = jsonDecode(res.body);
+        print(jsonData);
         return DashboardServiceModel.fromJson(jsonData);
       } else {
         Fluttertoast.showToast(

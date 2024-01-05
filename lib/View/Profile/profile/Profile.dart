@@ -1,15 +1,18 @@
+import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Profile/profile/addressInfo.dart';
 import 'package:alpha_work/View/Profile/profile/bankingInfo.dart';
 import 'package:alpha_work/View/Profile/profile/businessDetail.dart';
 import 'package:alpha_work/View/Profile/profile/editProfile.dart';
+import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  final VendorData vendorData;
 
+  const ProfileScreen({super.key, required this.vendorData});
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -19,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            height: height * .33,
+            height: height * .35,
             decoration: BoxDecoration(
               color: colors.buttonColor,
               borderRadius: BorderRadius.only(
@@ -67,18 +70,8 @@ class ProfileScreen extends StatelessWidget {
                               PageTransition(
                                   child: EditProfileScreen(),
                                   type: PageTransitionType.rightToLeft)),
-                          child: Container(
-                            padding: const EdgeInsets.all(5),
-                            margin: EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withOpacity(0.9),
-                            ),
-                            child: Icon(
-                              Icons.edit,
-                              size: 15,
-                              color: colors.buttonColor,
-                            ),
+                          child: Image.asset(
+                            Images.edit_button,
                           ),
                         ),
                       ],
@@ -94,12 +87,17 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        Images.driver_profile,
-                        height: height * .1,
+                      CircleAvatar(
+                        radius: (height / width) * 25,
+                        child: Image.network(
+                          vendorData.image.toString(),
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) =>
+                              ErrorImageWidget(height: 90),
+                        ),
                       ),
                       Text(
-                        "Jane Cooper",
+                        "${vendorData.fName.toString().toUpperCase()} ${vendorData.lName.toString().toUpperCase()}",
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
@@ -116,7 +114,7 @@ class ProfileScreen extends StatelessWidget {
                           const VerticalDivider(
                               color: Colors.transparent, width: 2),
                           Text(
-                            "janecooper@example.com",
+                            vendorData.email.toString(),
                             style: TextStyle(
                               fontSize: 14,
                               color: colors.lightTextColor,
@@ -135,7 +133,7 @@ class ProfileScreen extends StatelessWidget {
                           const VerticalDivider(
                               color: Colors.transparent, width: 2),
                           Text(
-                            "9685762333",
+                            vendorData.phone.toString(),
                             style: TextStyle(
                               fontSize: 14,
                               color: colors.lightTextColor,
@@ -154,7 +152,7 @@ class ProfileScreen extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 PageTransition(
-                    child: EditBusinessDetailScreen(),
+                    child: EditBusinessDetailScreen(vendorData: vendorData),
                     type: PageTransitionType.rightToLeft)),
             child: ListTile(
               dense: true,
@@ -181,7 +179,7 @@ class ProfileScreen extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 PageTransition(
-                    child: EditAddressDetailScreen(),
+                    child: EditAddressDetailScreen(vendorData: vendorData),
                     type: PageTransitionType.rightToLeft)),
             child: ListTile(
               dense: true,
@@ -208,7 +206,7 @@ class ProfileScreen extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 PageTransition(
-                    child: EditBankingDetailScreen(),
+                    child: EditBankingDetailScreen(vendorData: vendorData),
                     type: PageTransitionType.rightToLeft)),
             child: ListTile(
               dense: true,

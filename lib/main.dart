@@ -3,6 +3,7 @@ import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
+import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/noInternet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,6 +19,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferenceUtils.init();
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<ProfileViewModel>(
+      create: (context) => ProfileViewModel(),
+    ),
     ChangeNotifierProvider<ProductManagementViewModel>(
       create: (context) => ProductManagementViewModel(),
     ),

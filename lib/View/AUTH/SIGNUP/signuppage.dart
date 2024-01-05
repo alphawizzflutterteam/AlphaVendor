@@ -1,7 +1,14 @@
+import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
+import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import 'package:easy_stepper/easy_stepper.dart';
@@ -32,24 +39,14 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   int currentprogressstep = 1;
   bool isChecked = false;
-  final _currentStep = 1;
   var activeStep = 0;
-  final List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
-  ];
+  final _formKey = GlobalKey<FormState>();
   String? selectedValue;
   TextEditingController mobilecontroller = TextEditingController();
-
+  TextEditingController pass = TextEditingController();
+  TextEditingController pass1 = TextEditingController();
   TextEditingController namecontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
-  // TextEditingController mo = TextEditingController();
   TextEditingController referalcodecontroller = TextEditingController();
 
   TextEditingController businesemail = TextEditingController();
@@ -70,14 +67,6 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController postalcodecontroller = TextEditingController();
   TextEditingController countryController = TextEditingController();
 
-// var
-  var _getCountry = [];
-  var _getState = [];
-  var _getCity = [];
-  var _countryname;
-  var _statename;
-  var _cityyname;
-
   // for banking information
   TextEditingController banknamecontroller = TextEditingController();
   TextEditingController bankbranchcontroller = TextEditingController();
@@ -86,453 +75,463 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController bankaddresscontroler = TextEditingController();
   TextEditingController accountcontroller = TextEditingController();
   TextEditingController ifsccontroller = TextEditingController();
+  bool visibility = true;
+  bool visibility1 = true;
+  List<DropdownMenuItem> items = [
+    DropdownMenuItem(
+        child: Text(
+          "Saving Account",
+          style:
+              TextStyle(color: colors.greyText, fontWeight: FontWeight.normal),
+        ),
+        value: "Saving Account"),
+    DropdownMenuItem(
+        child: Text(
+          "Current Account",
+          style:
+              TextStyle(color: colors.greyText, fontWeight: FontWeight.normal),
+        ),
+        value: "Current Account"),
+  ];
+  late AuthViewModel auth;
+  late String savedotp;
+  void getOtp() async {
+    savedotp = PreferenceUtils.getString(PrefKeys.otp);
+    print(savedotp);
+
+    setState(() {
+      pinCtrl.text = savedotp;
+    });
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
+    auth = Provider.of<AuthViewModel>(context, listen: false);
     super.initState();
-    GetCounty();
   }
 
-  GetCounty() {
-    final service = SignupService();
-    service.GetCountryList().then((value) {
-      setState(() {
-        print("My Cintry");
-        print(value['data']);
-        _getCountry = value['data'];
-      });
-    });
-  }
-
-  GetState() {
-    final service = SignupService();
-    service.GetState(_countryname).then((value) {
-      setState(() {
-        print("My state");
-        print(value['data']);
-        _getState = value['data'];
-      });
-    });
-  }
-
-  GetCity() {
-    final service = SignupService();
-    service.GetCity(_statename).then((value) {
-      setState(() {
-        // print("My Cintry");
-        // print(value['data']);
-        _getCity = value['data'];
-      });
-    });
-  }
-
+  final defaultPinTheme = PinTheme(
+    margin: const EdgeInsets.symmetric(horizontal: 15),
+    textStyle: TextStyle(
+        fontSize: 20, color: Colors.black, fontWeight: FontWeight.w600),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: const Color.fromARGB(255, 19, 88, 130),
+      ),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+  final focusedPinTheme = PinTheme(
+    textStyle: TextStyle(
+        fontSize: 20, color: Colors.black, fontWeight: FontWeight.w600),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: const Color.fromARGB(255, 19, 88, 130),
+      ),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+  TextEditingController pinCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.signInToYourAccount),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () {
+            if (activeStep != 0) {
+              setState(() {
+                activeStep--;
+              });
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
       ),
       body: Container(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                StepProgressIndicator(
-                  totalSteps: 6,
-                  currentStep: activeStep,
-                  size: 3,
-                  padding: 0,
-                  selectedColor: Colors.black,
-                  unselectedColor: Colors.grey,
-                  roundedEdges: const Radius.circular(10),
-                ),
-                Divider(color: Colors.transparent, height: 30),
-                if (activeStep == 0)
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Create your account",
-                          style: TextStyle(fontSize: 28),
-                        ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        const Text(
-                          "Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a 1st-century BC text by the Roman statesman ",
-                          style: TextStyle(
-                            color: colors.greyText,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          controller: mobilecontroller,
-                          decoration: InputDecoration()
-                              .applyDefaults(
-                                  Theme.of(context).inputDecorationTheme)
-                              .copyWith(
-                                label: Text("Mobile No."),
-                              ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Enter a valid number";
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
-                          onChanged: (value) {
-                            if (value.length == 10) {
-                              FocusScope.of(context).unfocus();
-                            }
-                          },
-                        ),
-                        Divider(color: Colors.transparent),
-                        Row(
-                          children: [
-                            Checkbox(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3)),
-                              value: isChecked,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isChecked = value!;
-                                });
-                              },
-                            ),
-                            const Column(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              StepProgressIndicator(
+                totalSteps: 6,
+                currentStep: activeStep,
+                size: 3,
+                padding: 0,
+                selectedColor: Colors.black,
+                unselectedColor: Colors.grey,
+                roundedEdges: const Radius.circular(10),
+              ),
+              Divider(color: Colors.transparent, height: height * .05),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (activeStep == 0)
+                        Container(
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "By Continue, you agree to our",
-                                  style: TextStyle(),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Term of Services",
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 16, 89, 132),
-                                          decoration: TextDecoration.underline),
-                                    ),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text("&"),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text(
-                                      "Privacy Policy",
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 16, 89, 132),
-                                          decoration: TextDecoration.underline),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                        Divider(color: Colors.transparent),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              activeStep += 1;
-                            });
-                          },
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              // width: MediaQuery.of(context).size.width - 100,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF0A9494),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "VERIFY",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (activeStep == 1)
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Enter Verification Code",
-                            style: TextStyle(fontSize: 22),
-                          ),
-                          const Text("Enter the otp sent to +916266"),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: OtpTextField(
-                              autoFocus: true,
-                              fieldWidth: 70,
-                              borderRadius: BorderRadius.circular(10),
-                              numberOfFields: 4,
-                              borderColor:
-                                  const Color.fromARGB(255, 19, 88, 130),
-                              //set to true to show as box or false to show as dash
-                              showFieldAsBox: true,
-                              //runs when a code is typed in
-                              onCodeChanged: (String code) {
-                                //handle validation or checks here
-                              },
-                              //runs when every textfield is filled
-                              onSubmit: (String verificationCode) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text("Verification Code"),
-                                        content: Text(
-                                            'Code entered is $verificationCode'),
-                                      );
-                                    });
-                              }, // end onSubmit
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                activeStep += 1;
-                              });
-                            },
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width - 80,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF0A9494),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "VERIFY",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width - 100,
-                              height: 50,
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Didn`t receaved Otp? ",
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  Text(
-                                    "Resend OTP",
-                                    style: TextStyle(
-                                      // fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 29, 104, 136),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                if (activeStep == 2)
-                  Container(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SignupHeadingText(
-                            text: 'Enter personal detail',
-                          ),
-                          const Text(
-                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s '),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Form(
-                              child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Container(
-                                  child: TextFormField(
-                                    onChanged: (value) {
-                                      if (value.length == 10) {
-                                        // FocusScope.of(context).unfocus();
-                                      }
-                                    },
-                                    controller: namecontroller,
-                                    decoration: InputDecoration(
-                                      labelText: "Full Name*",
-                                      fillColor: Colors.white,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.black,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                const Text(
+                                  "Create your account",
+                                  style: TextStyle(fontSize: 28),
                                 ),
                                 const SizedBox(
-                                  height: 10,
+                                  height: 6,
                                 ),
-                                Container(
-                                    child: TextFormField(
+                                const Text(
+                                  "Join us today and unlock exclusive benefits by creating your account now.",
+                                  style: TextStyle(
+                                    color: colors.greyText,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: height * .05,
+                                ),
+                                TextFormField(
+                                  controller: mobilecontroller,
+                                  decoration: InputDecoration()
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                        label: Text("Mobile No."),
+                                        counterText: '',
+                                      ),
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty ||
+                                        value.length < 10) {
+                                      return "Enter a valid number";
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 10,
                                   onChanged: (value) {
                                     if (value.length == 10) {
-                                      // FocusScope.of(context).unfocus();
+                                      FocusScope.of(context).unfocus();
                                     }
                                   },
-                                  controller: emailcontroller,
-                                  decoration: InputDecoration(
-                                    labelText: "Personal Email Id*",
-                                    labelStyle: const TextStyle(
-                                        color: colors.lightTextColor),
-                                    fillColor: Colors.white,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: const BorderSide(
-                                        color: Colors.black,
-                                      ),
+                                ),
+                                Divider(color: Colors.transparent),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                      value: isChecked,
+                                      activeColor: colors.buttonColor,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          isChecked = value!;
+                                        });
+                                      },
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: const BorderSide(
-                                        color: Colors.black,
-                                        width: 1.0,
+                                    const Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "By Continue, you agree to our",
+                                          style: TextStyle(),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Term of Services",
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 16, 89, 132),
+                                                  decoration:
+                                                      TextDecoration.underline),
+                                            ),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Text("&"),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Text(
+                                              "Privacy Policy",
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 16, 89, 132),
+                                                  decoration:
+                                                      TextDecoration.underline),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Divider(color: Colors.transparent),
+                                GestureDetector(
+                                  onTap: isChecked
+                                      ? () {
+                                          if (_formKey.currentState!
+                                                  .validate() &&
+                                              isChecked) {
+                                            print(mobilecontroller.text);
+                                            auth
+                                                .getRegistrarionOtp(
+                                                    phone: mobilecontroller.text
+                                                        .toString())
+                                                .then((value) {
+                                              if (value) {
+                                                getOtp();
+                                                setState(() {
+                                                  activeStep++;
+                                                });
+                                              }
+                                            });
+                                          }
+                                        }
+                                      : null,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      // width: MediaQuery.of(context).size.width - 100,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: isChecked
+                                            ? const Color(0xFF0A9494)
+                                            : colors.greyText,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "VERIFY",
+                                            style: TextStyle(
+                                                color: isChecked
+                                                    ? Colors.white
+                                                    : colors.lightTextColor,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                )),
-                                const SizedBox(
-                                  height: 10,
                                 ),
-                                Container(
-                                  child: TextField(
-                                      onChanged: (value) {
-                                        if (value.length == 10) {
-                                          FocusScope.of(context).unfocus();
-                                        }
-                                      },
-                                      keyboardType: TextInputType.phone,
-                                      controller: mobilecontroller,
-                                      decoration: InputDecoration(
-                                        labelText: "Personal Phone Number*",
-                                        fillColor: Colors.white,
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.black,
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                      )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (activeStep == 1)
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Divider(color: Colors.transparent),
+                              const Text(
+                                "Enter Verification Code",
+                                style: TextStyle(fontSize: 22),
+                              ),
+                              Text(
+                                "Enter the otp sent to ${mobilecontroller.text.toString()}",
+                                style: TextStyle(
+                                    fontSize: 14, color: colors.greyText),
+                              ),
+                              Divider(
+                                  color: Colors.transparent,
+                                  height: height * .05),
+                              Pinput(
+                                defaultPinTheme: defaultPinTheme.copyWith(
+                                  width: width * .2,
+                                  height: 50,
                                 ),
-                                const SizedBox(
-                                  height: 10,
+                                focusedPinTheme: focusedPinTheme.copyWith(
+                                  width: width * .2,
+                                  height: 50,
                                 ),
-                                Container(
-                                  child: TextField(
-                                      onChanged: (value) {
-                                        if (value.length == 10) {
-                                          FocusScope.of(context).unfocus();
-                                        }
-                                      },
-                                      keyboardType: TextInputType.phone,
-                                      controller: referalcodecontroller,
-                                      decoration: InputDecoration(
-                                        labelText: "Referall Code*",
-                                        fillColor: Colors.white,
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.black,
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                                const SizedBox(
-                                  height: 80,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
+                                length: 4,
+                                controller: pinCtrl,
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (pinCtrl.text == savedotp) {
                                     setState(() {
                                       activeStep += 1;
                                     });
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "OTP did not match!",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: colors.buttonColor,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                },
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 80,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF0A9494),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "VERIFY",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width - 100,
+                                  height: 50,
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Didn`t receaved Otp? ",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "Resend OTP",
+                                        style: TextStyle(
+                                          // fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(255, 29, 104, 136),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (activeStep == 2)
+                        Container(
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SignupHeadingText(
+                                  text: 'Enter personal detail',
+                                ),
+                                const Text(
+                                  "Enter your personal details to create an account and unlock a world of possibilities",
+                                  style: TextStyle(color: colors.greyText),
+                                ),
+                                SizedBox(height: height * .04),
+                                TextFormField(
+                                  controller: namecontroller,
+                                  keyboardType: TextInputType.name,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter your name";
+                                    }
+                                    return null;
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration()
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                        labelText: "Full Name*",
+                                      ),
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: emailcontroller,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration()
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                        labelText: "Email ID*",
+                                      ),
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter your Email";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter your phone";
+                                    }
+                                    return null;
+                                  },
+                                  maxLength: 10,
+                                  keyboardType: TextInputType.phone,
+                                  controller: mobilecontroller,
+                                  decoration: InputDecoration()
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                          labelText: "Phone Number*",
+                                          counterText: ""),
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  keyboardType: TextInputType.phone,
+                                  controller: referalcodecontroller,
+                                  decoration: InputDecoration()
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                        labelText: "Referral Code (Optional)",
+                                      ),
+                                ),
+                                Divider(
+                                  color: Colors.transparent,
+                                  height: height * .1,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      setState(() {
+                                        activeStep += 1;
+                                      });
+                                    }
                                   },
                                   child: Align(
                                     alignment: Alignment.center,
@@ -560,569 +559,733 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ],
                             ),
-                          )),
-                        ],
-                      ),
-                    ),
-                  ),
-                if (activeStep == 3)
-                  Container(
-                    child: Form(
-                        child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SignupHeadingText(
-                            text: 'Enter your detail',
                           ),
-                          const Text(
-                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s '),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          CommonTextForm(
-                            controllername: businesemail,
-                            labelname: 'Enter Business Email ID*',
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          CommonTextForm(
-                            controllername: businesphoneNo,
-                            labelname: 'Business Phone No*',
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all()),
-                            child: ListTile(
-                              // title: const Text("Business Type*"),
-                              subtitle: DropdownButton2(
-                                isExpanded: true,
-                                hint: const Row(
+                        ),
+                      if (activeStep == 3)
+                        Container(
+                          child: Form(
+                              key: _formKey,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: 4,
+                                    const SignupHeadingText(
+                                      text: 'Enter your Business detail',
                                     ),
-                                    Expanded(
-                                      child: Text(
-                                        'Business Type*',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
+                                    const Text(
+                                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s ',
+                                      style: TextStyle(color: colors.greyText),
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      controller: businesemail,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                            labelText: "Email ID*",
+                                          ),
+                                      textInputAction: TextInputAction.next,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Enter your Email";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      textInputAction: TextInputAction.next,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Enter your phone";
+                                        }
+                                        return null;
+                                      },
+                                      maxLength: 10,
+                                      keyboardType: TextInputType.phone,
+                                      controller: businesphoneNo,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                              labelText: "Phone Number*",
+                                              counterText: ""),
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      controller: companyname,
+                                      keyboardType: TextInputType.name,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                            labelText:
+                                                "Company or Business Name*",
+                                          ),
+                                      textInputAction: TextInputAction.next,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Enter business name";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      controller: busineType,
+                                      keyboardType: TextInputType.name,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                            labelText: "Business Type*",
+                                          ),
+                                      textInputAction: TextInputAction.next,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Enter business type";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      controller: businesRegNo,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                            labelText:
+                                                "Registration Number (if applicable)",
+                                          ),
+                                      textInputAction: TextInputAction.next,
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      controller: businesGSTNIN,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                            labelText: "GSTIN (Optional)",
+                                          ),
+                                      textInputAction: TextInputAction.next,
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      controller: businesTaxIDNM,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                            labelText:
+                                                "Tax Identification Number (TIN)*",
+                                          ),
+                                      textInputAction: TextInputAction.next,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Enter Tax Identification Number (TIN)*";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const Divider(color: Colors.transparent),
+                                    TextFormField(
+                                      controller: null,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration()
+                                          .applyDefaults(Theme.of(context)
+                                              .inputDecorationTheme)
+                                          .copyWith(
+                                            labelText: "Website  (Optional)",
+                                          ),
+                                      textInputAction: TextInputAction.done,
+                                    ),
+                                    Divider(color: Colors.transparent),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          setState(() {
+                                            activeStep += 1;
+                                          });
+                                        }
+                                      },
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          // width: MediaQuery.of(context).size.width - 100,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF0A9494),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "CONTINUE",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                                items: items
-                                    .map((String item) => DropdownMenuItem(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                      if (activeStep == 4)
+                        Container(
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SignupHeadingText(
+                                  text: 'Enter new Password',
+                                ),
+                                const Text(
+                                  "Set your password your new password so you can access alpha e-commerce",
+                                  style: TextStyle(color: colors.greyText),
+                                ),
+                                SizedBox(
+                                  height: height * .07,
+                                ),
+                                TextFormField(
+                                  controller: pass,
+                                  decoration: InputDecoration()
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                          label: Text("New Password"),
+                                          suffixIcon: GestureDetector(
+                                            onTap: () => setState(() {
+                                              visibility = !visibility;
+                                              print("object");
+                                            }),
+                                            child: Icon(
+                                              visibility
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
                                               color: Colors.black,
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ))
-                                    .toList(),
-                                value: selectedValue,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    selectedValue = value;
-                                  });
-                                },
-                              ),
+                                          )),
+                                  keyboardType: TextInputType.emailAddress,
+                                  obscureText: visibility,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter password";
+                                    }
+                                    return null;
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: pass1,
+                                  decoration: InputDecoration()
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                          label: Text("Confirm Password"),
+                                          suffixIcon: GestureDetector(
+                                            onTap: () => setState(() {
+                                              visibility1 = !visibility1;
+                                              print("object");
+                                            }),
+                                            child: Icon(
+                                              visibility1
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: Colors.black,
+                                            ),
+                                          )),
+                                  keyboardType: TextInputType.emailAddress,
+                                  obscureText: visibility1,
+                                  textInputAction: TextInputAction.done,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Enter password";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Divider(
+                                  color: Colors.transparent,
+                                  height: height * .07,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      if (pass.text == pass1.text) {
+                                        setState(() {
+                                          activeStep += 1;
+                                        });
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: "Password did not match!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: colors.buttonColor,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFF0A9494),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Center(
+                                        child: Text(
+                                      "CREATE PASSWORD",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          CommonTextForm(
-                            controllername: companyname,
-                            labelname: 'Company Name Or Business Name*',
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          CommonTextForm(
-                            controllername: businesRegNo,
-                            labelname:
-                                'Business Registration Number(If applicable)*',
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          CommonTextForm(
-                            controllername: businesGSTNIN,
-                            labelname: 'Enter GSTIN*',
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          CommonTextForm(
-                            controllername: businesTaxIDNM,
-                            labelname: 'Tax Identification Number(TIN)*',
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          CommonTextForm(
-                            controllername: businesWebsite,
-                            labelname: 'Website*',
-                          ),
-                        ],
-                      ),
-                    )),
-                  ),
-
-                //for password setup
-
-                if (activeStep == 4)
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SignupHeadingText(
-                          text: 'Enter new Password',
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const Text(
-                            "Set Your new password , So you can use for Login"),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Form(
+                      if (activeStep == 5)
+                        Container(
+                          child: Form(
+                            key: _formKey,
                             child: Column(
-                          children: [
-                            CommonPAssword(
-                              controllername: passwordsetup,
-                              labelname: 'Enter New Password',
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            CommonPAssword(
-                              controllername: cnfrmPassword,
-                              labelname: 'Confirm Password',
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print("object");
-                                setState(() {
-                                  activeStep += 1;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFF0A9494),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: const Center(
-                                      child: Text("CREATE PASSWORD")),
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SignupHeadingText(
+                                  text: 'Enter Your Address Information',
                                 ),
-                              ),
-                            )
-                          ],
-                        ))
-                      ],
-                    ),
-                  ),
-
-                //for address information
-
-                if (activeStep == 5)
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SignupHeadingText(
-                          text: 'Enter Your Address Information',
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const Text('Lorem '),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        CommonTextForm(
-                          controllername: addresscontroller,
-                          labelname: 'Address*',
-                        ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                                isExpanded: true,
-                                hint: const Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Select Country*',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                                const Text(
+                                  'Unlock exclusive access! Complete your signup by adding your address details.',
+                                  style: TextStyle(color: colors.greyText),
+                                ),
+                                SizedBox(
+                                  height: height * .05,
+                                ),
+                                TextFormField(
+                                  controller: addresscontroller,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "Address*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter Address";
+                                    }
+                                    return null;
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: citynamecontroller,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "City*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter City*";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: statacontroler,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "State/Province*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter State/Province*";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: postalcodecontroller,
+                                  textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.number,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                        labelText: "Postal/ZIP Code*",
+                                        counterText: "",
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ],
+                                  maxLength: 6,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter Postal/ZIP Code";
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                items: _getCountry
-                                    .map((item) => DropdownMenuItem(
-                                          value: item['id'],
-                                          onTap: () {},
-                                          child: Text(
-                                            item['name'],
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0),
-                                            ),
-                                            // overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ))
-                                    .toList(),
-                                value: _countryname,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _getState = [];
-                                    _getCity = [];
-                                    _statename = null;
-                                    _cityyname = null;
-                                    //  GetState();
-                                    _countryname = value;
-
-                                    GetState();
-                                  });
-                                },
-                              ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: countryController,
+                                  textInputAction: TextInputAction.done,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "Country*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter Country";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(height: height * .07),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      setState(() {
+                                        activeStep += 1;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFF0A9494),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Center(
+                                        child: Text(
+                                      "CONTINUE",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 6,
-                        ),
+                      if (activeStep == 6)
                         Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                                isExpanded: true,
-                                hint: const Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Select State*',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ],
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SignupHeadingText(
+                                  text: 'Enter Your banking Information',
                                 ),
-                                items: _getState
-                                    .map((item) => DropdownMenuItem(
-                                          value: item['id'],
-                                          onTap: () {},
-                                          child: Text(
-                                            item['name'],
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0),
-                                            ),
-                                            // overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ))
-                                    .toList(),
-                                value: _statename,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _getCity = [];
-                                    _cityyname = null;
-                                    // GetState();
-
-                                    _statename = value;
-                                    GetCity();
-
-                                    // GetState();
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 7,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                                isExpanded: true,
-                                hint: const Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Select City*',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ],
+                                const Text(
+                                  "Enter your banking information to get started and manage your finances hassle-free.",
+                                  style: TextStyle(color: colors.greyText),
                                 ),
-                                items: _getCity
-                                    .map((item) => DropdownMenuItem(
-                                          value: item['id'],
-                                          onTap: () {},
-                                          child: Text(
-                                            item['name'],
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0),
-                                            ),
-                                            // overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ))
-                                    .toList(),
-                                value: _cityyname,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _cityyname = value;
-
-                                    // GetState();
-                                  });
-                                },
-                              ),
+                                SizedBox(
+                                  height: height * .05,
+                                ),
+                                TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  controller: banknamecontroller,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "Bank Name*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter Bank Name";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  controller: bankbranchcontroller,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "Bank Branch*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter Bank Branch";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                DropdownButtonFormField2(
+                                    decoration: const InputDecoration()
+                                        .applyDefaults(Theme.of(context)
+                                            .inputDecorationTheme)
+                                        .copyWith(
+                                            contentPadding:
+                                                EdgeInsets.only(right: 10)),
+                                    hint: Text("Account Type*",
+                                        style: TextStyle(
+                                            color: colors.greyText,
+                                            fontWeight: FontWeight.normal)),
+                                    value: selectedValue,
+                                    onChanged: (value) {
+                                      selectedValue = value;
+                                    },
+                                    items: items),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textCapitalization:
+                                      TextCapitalization.characters,
+                                  controller: micrController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: " MICR code*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter MICR code";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  controller: bankaddresscontroler,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "Bank address*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter Bank address";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.number,
+                                  controller: accountcontroller,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "Account Number*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter Account Number";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textCapitalization:
+                                      TextCapitalization.characters,
+                                  controller: ifsccontroller,
+                                  textInputAction: TextInputAction.done,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(labelText: "IFSC Code*"),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter IFSC Code";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Divider(color: Colors.transparent),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      print(savedotp);
+                                      print(namecontroller.text);
+                                      print(emailcontroller.text);
+                                      print(mobilecontroller.text);
+                                      print(referalcodecontroller.text);
+                                      print(businesemail.text);
+                                      print(businesphoneNo.text);
+                                      print(companyname.text);
+                                      print(busineType.text);
+                                      print(businesRegNo.text);
+                                      print(businesGSTNIN.text);
+                                      print(businesTaxIDNM.text);
+                                      print(businesWebsite.text);
+                                      print(pass.text);
+                                      print(pass1.text);
+                                      print(addresscontroller.text);
+                                      print(citynamecontroller.text);
+                                      print(statacontroler.text);
+                                      print(postalcodecontroller.text);
+                                      print(countryController.text);
+                                      print(banknamecontroller.text);
+                                      print(bankbranchcontroller.text);
+                                      print(selectedValue);
+                                      print(micrController.text);
+                                      print(bankaddresscontroler.text);
+                                      print(accountcontroller.text);
+                                      print(ifsccontroller.text);
+                                      auth
+                                          .registerUser(
+                                        phone: mobilecontroller.text.toString(),
+                                        otp: savedotp.toString(),
+                                        name: namecontroller.text.toString(),
+                                        email: emailcontroller.text.toString(),
+                                        referalcode: referalcodecontroller.text
+                                            .toString(),
+                                        businessemail:
+                                            businesemail.text.toString(),
+                                        businessphoneNo:
+                                            businesphoneNo.text.toString(),
+                                        businessname:
+                                            companyname.text.toString(),
+                                        businessType:
+                                            busineType.text.toString(),
+                                        registrationNo:
+                                            businesRegNo.text.toString(),
+                                        gstin: businesGSTNIN.text.toString(),
+                                        tin: businesGSTNIN.text.toString(),
+                                        website: businesWebsite.text.toString(),
+                                        password: pass.text.toString(),
+                                        confirmPass: pass1.text.toString(),
+                                        addr: addresscontroller.text.toString(),
+                                        city:
+                                            citynamecontroller.text.toString(),
+                                        state: statacontroler.text.toString(),
+                                        zip: postalcodecontroller.text
+                                            .toString(),
+                                        country:
+                                            countryController.text.toString(),
+                                        bankName:
+                                            banknamecontroller.text.toString(),
+                                        branch: bankbranchcontroller.text
+                                            .toString(),
+                                        accType: selectedValue.toString(),
+                                        micr: micrController.text.toString(),
+                                        bankAddr: bankaddresscontroler.text
+                                            .toString(),
+                                        accNo:
+                                            accountcontroller.text.toString(),
+                                        ifsc: ifsccontroller.text.toString(),
+                                      )
+                                          .then((value) {
+                                        if (value) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              Future.delayed(
+                                                  Duration(seconds: 5), () {
+                                                Navigator.of(context).pop(true);
+                                                Navigator.pushAndRemoveUntil(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LoginPage(),
+                                                    ),
+                                                    (route) => false);
+                                              });
+                                              return RegistrationSuccessDialog(
+                                                  context);
+                                            },
+                                          );
+                                        } else {
+                                          Fluttertoast.showToast(
+                                            msg:
+                                                "Something went wrong! Please try again.",
+                                            backgroundColor: colors.buttonColor,
+                                            gravity: ToastGravity.BOTTOM,
+                                            textColor: Colors.white,
+                                            fontSize: 14,
+                                          );
+                                        }
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFF0A9494),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Center(
+                                        child: Text(
+                                      "FINISH",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        CommonTextForm(
-                          controllername: postalcodecontroller,
-                          labelname: 'Postal/ZIP Code*',
-                        ),
-                        const SizedBox(
-                          height: 36,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            print("my data");
-                            setState(() {
-                              activeStep += 1;
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: const Color(0xFF0A9494),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Center(child: Text("CONTINUE")),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                    ],
                   ),
-                if (activeStep == 6)
-                  Container(
-                    child: Form(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SignupHeadingText(
-                            text: 'Enter Your banking Information',
-                          ),
-                          const Text("abc"),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          CommonTextForm(
-                            controllername: banknamecontroller,
-                            labelname: 'Bank Name*',
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          CommonTextForm(
-                            controllername: bankbranchcontroller,
-                            labelname: 'Bank Branch*',
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          CommonTextForm(
-                            controllername: accounttypecontroller,
-                            labelname: 'Account Type*',
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          CommonTextForm(
-                            controllername: micrController,
-                            labelname: 'MICR code*',
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          CommonTextForm(
-                            controllername: bankaddresscontroler,
-                            labelname: 'Bank Address*',
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          CommonTextForm(
-                            controllername: accountcontroller,
-                            labelname: 'Account Number*',
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          CommonTextForm(
-                            controllername: ifsccontroller,
-                            labelname: 'IFSC Code*',
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              print("object");
-                              setState(() {
-                                // activeStep += 1;
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            const DashboardScreen1())));
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: const Color(0xFF0A9494),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const Center(child: Text("FINISH")),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       currentprogressstep += 1;
-      //       print(currentprogressstep);
-      //     });
-      //   },
-      //   child: const Icon(Icons.abc),
-      // ),
-
-      bottomNavigationBar: activeStep == 3
-          ? GestureDetector(
-              onTap: () {
-                print("object");
-                setState(() {
-                  activeStep += 1;
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF0A9494),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: const Center(child: Text("CONTINUE")),
-                ),
-              ),
-            )
-          : Container(
-              height: 1,
-            ),
     );
   }
+}
+
+RegistrationSuccessDialog(BuildContext context) {
+  return Material(
+    child: Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(Images.success_bg), fit: BoxFit.fill)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Image.asset(
+            Images.success_check,
+            height: 100,
+            width: 100,
+          ),
+          Divider(color: Colors.transparent),
+          Center(
+            child: Text(
+              "Request successfully send to admin",
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+          ),
+          Divider(color: Colors.transparent),
+          Center(
+            child: Text(
+              "Please wait for confirmation",
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }

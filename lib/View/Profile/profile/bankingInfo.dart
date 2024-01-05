@@ -1,11 +1,54 @@
+import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
+import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
-class EditBankingDetailScreen extends StatelessWidget {
-  EditBankingDetailScreen({super.key});
+class EditBankingDetailScreen extends StatefulWidget {
+  EditBankingDetailScreen({super.key, required this.vendorData});
+  final VendorData vendorData;
+  @override
+  State<EditBankingDetailScreen> createState() =>
+      _EditBankingDetailScreenState();
+}
+
+class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController nameCtrl = TextEditingController();
+  final TextEditingController branchCtrl = TextEditingController();
+  final TextEditingController micrrl = TextEditingController();
+  final TextEditingController addrCtrl = TextEditingController();
+  final TextEditingController accNoCtrl = TextEditingController();
+  final TextEditingController ifscCtrl = TextEditingController();
+  String? selectedVal;
+  List<DropdownMenuItem> items = [
+    DropdownMenuItem(
+        child: Text(
+          "Saving Account",
+        ),
+        value: "Saving Account"),
+    DropdownMenuItem(
+        child: Text(
+          "Current Account",
+        ),
+        value: "Current Account"),
+  ];
+  late ProfileViewModel profilePro;
+  @override
+  void initState() {
+    nameCtrl.text = widget.vendorData.bankName.toString();
+    branchCtrl.text = widget.vendorData.branch.toString();
+    micrrl.text = widget.vendorData.micrCode.toString();
+    addrCtrl.text = widget.vendorData.bankAddress.toString();
+    accNoCtrl.text = widget.vendorData.accountNo.toString();
+    ifscCtrl.text = widget.vendorData.ifscCode.toString();
+    profilePro = Provider.of<ProfileViewModel>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -22,6 +65,8 @@ class EditBankingDetailScreen extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
+                  controller: nameCtrl,
+                  textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "Bank Name*"),
@@ -34,6 +79,8 @@ class EditBankingDetailScreen extends StatelessWidget {
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  controller: branchCtrl,
+                  textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "Bank Branch*"),
@@ -53,10 +100,17 @@ class EditBankingDetailScreen extends StatelessWidget {
                         style: TextStyle(
                             color: colors.greyText,
                             fontWeight: FontWeight.normal)),
-                    value: null,
-                    items: []),
+                    value: selectedVal,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedVal = value;
+                      });
+                    },
+                    items: items),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  controller: micrrl,
+                  textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: " MICR code*"),
@@ -69,6 +123,8 @@ class EditBankingDetailScreen extends StatelessWidget {
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  controller: addrCtrl,
+                  textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "Bank address*"),
@@ -81,6 +137,8 @@ class EditBankingDetailScreen extends StatelessWidget {
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  controller: accNoCtrl,
+                  textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "Account Number*"),
@@ -93,6 +151,8 @@ class EditBankingDetailScreen extends StatelessWidget {
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  controller: ifscCtrl,
+                  textInputAction: TextInputAction.done,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "IFSC Code*"),
@@ -111,7 +171,27 @@ class EditBankingDetailScreen extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              profilePro
+                  .updateBankDetail(
+                      bank_name: nameCtrl.text.toString(),
+                      branch_name: branchCtrl.text.toString(),
+                      account_type: selectedVal.toString(),
+                      micr_code: micrrl.text.toString(),
+                      bank_address: addrCtrl.text.toString(),
+                      account_number: accNoCtrl.text.toString(),
+                      ifsc_code: ifscCtrl.text.toString())
+                  .then(
+                    (value) => Fluttertoast.showToast(
+                      msg: value['msg'],
+                      backgroundColor: colors.buttonColor,
+                      textColor: Colors.white,
+                      gravity: ToastGravity.BOTTOM,
+                    ),
+                  );
+            }
+          },
           style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
           child: Text(
             "SAVE",
