@@ -64,14 +64,20 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       actions: [
-                        GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: EditProfileScreen(),
-                                  type: PageTransitionType.rightToLeft)),
-                          child: Image.asset(
-                            Images.edit_button,
+                        Container(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: EditProfileScreen(
+                                        vendorData: vendorData),
+                                    type: PageTransitionType.rightToLeft)),
+                            child: Image.asset(
+                              Images.edit_button,
+                              height: 20,
+                              width: 20,
+                            ),
                           ),
                         ),
                       ],
@@ -82,19 +88,18 @@ class ProfileScreen extends StatelessWidget {
                   // top: height * .13,
                   right: width * .1,
                   left: width * .1,
-                  bottom: 16,
+                  bottom: 10,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CircleAvatar(
                         radius: (height / width) * 25,
-                        child: Image.network(
+                        backgroundImage: NetworkImage(
                           vendorData.image.toString(),
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) =>
-                              ErrorImageWidget(height: 90),
                         ),
+                        onBackgroundImageError: (exception, stackTrace) =>
+                            ErrorImageWidget(height: 90),
                       ),
                       Text(
                         "${vendorData.fName.toString().toUpperCase()} ${vendorData.lName.toString().toUpperCase()}",

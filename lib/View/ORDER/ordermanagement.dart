@@ -1,7 +1,9 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/View/ORDER/pendingOrderDetail.dart';
 import 'package:alpha_work/View/ORDER/pickupSlot.dart';
+import 'package:alpha_work/View/Product/model/productListModel.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/comman_header.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
@@ -165,10 +167,13 @@ class _OrderManagementState extends State<OrderManagement> {
                                       ],
                                     )
                                   : Container(
+                                      alignment: Alignment.topCenter,
                                       child: ListView.builder(
+                                          shrinkWrap: true,
                                           itemCount: order.orderList.length,
                                           itemBuilder: (context, indx) {
                                             return OrderListTile(
+                                              order: order.orderList[index],
                                               title: order
                                                   .orderList[indx].detail!.name
                                                   .toString(),
@@ -230,14 +235,17 @@ class OrderListTile extends StatelessWidget {
   final String date;
   final String price;
   final bool isAlpha;
+  final OrderData order;
 
-  const OrderListTile(
-      {super.key,
-      required this.title,
-      required this.id,
-      required this.date,
-      required this.price,
-      required this.isAlpha});
+  const OrderListTile({
+    super.key,
+    required this.title,
+    required this.id,
+    required this.date,
+    required this.price,
+    required this.isAlpha,
+    required this.order,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -245,12 +253,12 @@ class OrderListTile extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           PageTransition(
-            child: PendingOrderDetail(),
+            child: PendingOrderDetail(order: order),
             type: PageTransitionType.rightToLeft,
           )),
       child: Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color(0xFFE9E9E9)),

@@ -13,6 +13,7 @@ import 'package:alpha_work/View/Wallet/wallet.dart';
 import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
+import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -33,14 +34,18 @@ class DashboardScreen1 extends StatefulWidget {
 class _DashboardScreen1State extends State<DashboardScreen1> {
   late DashboardViewModel dashProvider;
   late ProfileViewModel vendorProvider;
+  getData() async {
+    await vendorProvider.getvendorProfileData();
+    await dashProvider.getDashboardData();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     dashProvider = Provider.of<DashboardViewModel>(context, listen: false);
     vendorProvider = Provider.of<ProfileViewModel>(context, listen: false);
-    dashProvider.getDashboardData();
-    vendorProvider.getvendorProfileData();
+    getData();
     ProfileViewModel().getvendorProfileData();
     _tooltipBehavior = TooltipBehavior(enable: true);
     _tooltipBehavior1 = TooltipBehavior(enable: true);
@@ -125,6 +130,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
     return dashProvider.isLoading
         ? appLoader()
         : Scaffold(
+            backgroundColor: Colors.blue[50],
             drawer: Drawer(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,21 +139,24 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                   DrawerHeader(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          // color: Colors.green,
+                          color: colors.buttonColor,
                           image: DecorationImage(
                               image: AssetImage(
-                                "assets/images/success.png",
+                                Images.onboardingBg_light,
                               ),
-                              fit: BoxFit.cover)),
+                              fit: BoxFit.contain)),
                       //BoxDecoration
                       child: Center(
                         child: ListTile(
                           leading: CircleAvatar(
-                              radius: 30,
-                              backgroundImage:
-                                  AssetImage(Images.driver_profile)),
+                            radius: 30,
+                            backgroundImage: NetworkImage(
+                                vendorProvider.vendorData.image.toString()),
+                            onBackgroundImageError: (exception, stackTrace) =>
+                                ErrorImageWidget(height: height * .09),
+                          ),
                           title: Text(
-                            "Jane Cooper",
+                            "${vendorProvider.vendorData.fName.toString()} ${vendorProvider.vendorData.lName.toString()}",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -316,29 +325,27 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                 ],
               ),
             ),
-            backgroundColor: Colors.blue[50],
+            // backgroundColor: Colors.blue[50],
             body: dashProvider.isLoading
                 ? appLoader()
                 : Column(
                     children: [
                       Container(
-                        height: height * .33,
+                        // height: height * .33,
                         decoration: BoxDecoration(
-                            color: colors.buttonColor,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            )),
-                        child: Stack(
+                          color: colors.buttonColor,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                          ),
+                          image: DecorationImage(
+                            image: AssetImage(Images.profile_bg_circle),
+                            alignment: Alignment.topRight,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        child: Column(
                           children: [
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: Image.asset(
-                                Images.profile_bg_circle,
-                                height: height * .2,
-                              ),
-                            ),
                             AppBar(
                               backgroundColor: Colors.transparent,
                               centerTitle: true,
@@ -373,141 +380,129 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                 ),
                               ],
                             ),
-                            Positioned(
-                              bottom: 10,
-                              child: SizedBox(
-                                width: width,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "Total Sale",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal,
-                                                color: colors.lightGrey),
-                                          ),
-                                          Spacer(),
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ),
-                                          VerticalDivider(width: 5),
-                                          Text(
-                                            dashProvider
-                                                .dashData.ratingsNdReviews
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        dashProvider.dashData.totalSale
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          fontFamily: 'Montreal',
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
+                            SizedBox(
+                              width: width,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Total Sale",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                              color: colors.lightGrey),
                                         ),
+                                        Spacer(),
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        VerticalDivider(width: 5),
+                                        Text(
+                                          dashProvider.dashData.ratingsNdReviews
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      dashProvider.dashData.totalSale
+                                          .toString(),
+                                      style: TextStyle(
+                                        fontSize: 28,
+                                        fontFamily: 'Montreal',
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
                                       ),
-                                      Divider(color: Colors.transparent),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                "Sold Out",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: colors.lightGrey),
-                                              ),
-                                              Text(
-                                                dashProvider.dashData.soldOut
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 28,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: height * .04,
-                                            child: VerticalDivider(
-                                              color: colors.lightTextColor,
-                                              thickness: 2,
+                                    ),
+                                    Divider(color: Colors.transparent),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(
+                                              "Sold Out",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: colors.lightGrey),
                                             ),
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                "Total Products",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: colors.lightGrey),
-                                              ),
-                                              Text(
-                                                dashProvider
-                                                    .dashData.totalProduct
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 28,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: height * .04,
-                                            child: VerticalDivider(
-                                              color: colors.lightTextColor,
-                                              thickness: 2,
+                                            Text(
+                                              dashProvider.dashData.soldOut
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 28,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white),
                                             ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: height * .04,
+                                          child: VerticalDivider(
+                                            color: colors.lightTextColor,
+                                            thickness: 2,
                                           ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                "Total Order",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: colors.lightGrey),
-                                              ),
-                                              Text(
-                                                dashProvider
-                                                    .dashData.totalOrders
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 28,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: Colors.white),
-                                              ),
-                                            ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              "Total Products",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: colors.lightGrey),
+                                            ),
+                                            Text(
+                                              dashProvider.dashData.totalProduct
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 28,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: height * .04,
+                                          child: VerticalDivider(
+                                            color: colors.lightTextColor,
+                                            thickness: 2,
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              "Total Order",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: colors.lightGrey),
+                                            ),
+                                            Text(
+                                              dashProvider.dashData.totalOrders
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 28,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

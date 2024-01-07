@@ -75,4 +75,6 @@ class AppUrl {
       "${baseURL}seller/update-address-details";
   static const String updateBankingDetail =
       "${baseURL}seller/update-bank-details";
+  static const String updateProfileDetail = "${baseURL}seller/update-profile";
+  static const String staticPage = '${baseURL}seller/static-pages';
 }

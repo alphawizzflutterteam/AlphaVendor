@@ -1,11 +1,53 @@
+import 'dart:io';
+
+import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class EditProfileScreen extends StatelessWidget {
-  EditProfileScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  EditProfileScreen({super.key, required this.vendorData});
+  final VendorData vendorData;
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController nameCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController phoneCtrl = TextEditingController();
+  late ProfileViewModel profilePro;
+
+  String path = '';
+  File? _image;
+  final picker = ImagePicker();
+  Future getImageFromGallery() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    print(pickedFile!.path.toString());
+
+    setState(() {
+      if (pickedFile != null) {}
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    nameCtrl.text =
+        "${widget.vendorData.fName.toString().toUpperCase()} ${widget.vendorData.lName.toString().toUpperCase()}";
+    emailCtrl.text = widget.vendorData.email.toString();
+    phoneCtrl.text = widget.vendorData.phone.toString();
+    profilePro = Provider.of<ProfileViewModel>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -21,24 +63,33 @@ class EditProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  height: (height / width) * 80,
-                  width: (height / width) * 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: colors.buttonColor,
+                CircleAvatar(
+                  radius: height * .08,
+                  backgroundImage: NetworkImage(
+                    widget.vendorData.image.toString(),
                   ),
-                  child: Image.asset(Images.driver_profile),
+                  onBackgroundImageError: (exception, stackTrace) =>
+                      ErrorImageWidget(height: height * .1),
                 ),
+                const SizedBox(height: 5),
                 TextButton.icon(
-                    onPressed: () {},
+                    onPressed: () => getImageFromGallery(),
+                    style: TextButton.styleFrom(
+                        backgroundColor: colors.buttonColor),
                     icon: Icon(
                       Icons.edit,
                       size: 18,
+                      color: Colors.white,
                     ),
-                    label: Text("Edit Image")),
+                    label: Text(
+                      "Edit Image",
+                      style: TextStyle(color: Colors.white),
+                    )),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.characters,
+                  controller: nameCtrl,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "Full Name*"),
@@ -51,6 +102,9 @@ class EditProfileScreen extends StatelessWidget {
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: emailCtrl,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "Personal Email ID*"),
@@ -63,9 +117,14 @@ class EditProfileScreen extends StatelessWidget {
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
+                  textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  controller: phoneCtrl,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "Personal Phone Number*"),
+                      .copyWith(
+                          labelText: "Personal Phone Number*", counterText: ''),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter Phone Number";
@@ -79,6 +138,34 @@ class EditProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              profilePro
+                  .updateProfileDetail(
+                      name: nameCtrl.text.toString(),
+                      email: emailCtrl.text.toString(),
+                      phone: phoneCtrl.text.toString())
+                  .then(
+                    (value) => Fluttertoast.showToast(
+                      msg: value['msg'],
+                      backgroundColor: colors.buttonColor,
+                      textColor: Colors.white,
+                      gravity: ToastGravity.BOTTOM,
+                    ),
+                  );
+            }
+          },
+          style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
+          child: Text(
+            "SAVE",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          )),
     );
   }
 }

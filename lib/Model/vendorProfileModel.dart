@@ -19,12 +19,6 @@ class VendorProfileModel {
               json["data"]!.map((x) => VendorData.fromJson(x))),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": data.map((x) => x?.toJson()).toList(),
-      };
 }
 
 class VendorData {
@@ -73,10 +67,10 @@ class VendorData {
   final String? branch;
   final String? accountNo;
   final String? holderName;
-  final dynamic accountType;
-  final dynamic micrCode;
-  final dynamic bankAddress;
-  final dynamic ifscCode;
+  final String? accountType;
+  final String? micrCode;
+  final String? bankAddress;
+  final String? ifscCode;
   final String? authToken;
   final String? salesCommissionPercentage;
   final String? gst;
@@ -117,36 +111,6 @@ class VendorData {
       shop: json["shop"] == null ? null : Shop.fromJson(json["shop"]),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "f_name": fName,
-        "l_name": lName,
-        "phone": phone,
-        "image": image,
-        "email": email,
-        "password": password,
-        "status": status,
-        "remember_token": rememberToken,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "bank_name": bankName,
-        "branch": branch,
-        "account_no": accountNo,
-        "holder_name": holderName,
-        "account_type": accountType,
-        "micr_code": micrCode,
-        "bank_address": bankAddress,
-        "ifsc_code": ifscCode,
-        "auth_token": authToken,
-        "sales_commission_percentage": salesCommissionPercentage,
-        "gst": gst,
-        "cm_firebase_token": cmFirebaseToken,
-        "pos_status": posStatus,
-        "rating": rating,
-        "rating_count": ratingCount,
-        "shop": shop?.toJson(),
-      };
 }
 
 class Shop {
@@ -183,7 +147,7 @@ class Shop {
   final String? name;
   final String? address;
   final String? contact;
-  final dynamic email;
+  final String? email;
   final String? image;
   final String? bottomBanner;
   final String? vacationStartDate;
@@ -233,32 +197,4 @@ class Shop {
       country: json["country"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "seller_id": sellerId,
-        "name": name,
-        "address": address,
-        "contact": contact,
-        "email": email,
-        "image": image,
-        "bottom_banner": bottomBanner,
-        "vacation_start_date": vacationStartDate,
-        "vacation_end_date": vacationEndDate,
-        "vacation_note": vacationNote,
-        "vacation_status": vacationStatus,
-        "temporary_close": temporaryClose,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "banner": banner,
-        "bussiness_type": bussinessType,
-        "registeration_number": registerationNumber,
-        "gst_in": gstIn,
-        "tax_identification_number": taxIdentificationNumber,
-        "website_link": websiteLink,
-        "city": city,
-        "state": state,
-        "pincode": pincode,
-        "country": country,
-      };
 }

@@ -1,3 +1,4 @@
+import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 class ProfileViewModel with ChangeNotifier {
   ProfileRepository _myRepo = ProfileRepository();
   late VendorData vendorData;
+  late StaticPageData staticPageData;
   bool isLoading = true;
   bool get loading => isLoading;
   setLoading(bool value) {
@@ -112,5 +114,36 @@ class ProfileViewModel with ChangeNotifier {
       val['msg'] = value['message'];
     });
     return val;
+  }
+
+//Function to update Bank Detail
+  Future<Map<String, dynamic>> updateProfileDetail({
+    required String name,
+    required String email,
+    required String phone,
+  }) async {
+    Map<String, dynamic> val = {'status': false, 'msg': 'Something went wrong'};
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .updateProfileDetail(
+            api: AppUrl.updateProfile,
+            token: token,
+            name: name,
+            email: email,
+            phone: phone)
+        .then((value) {
+      val['status'] = value['status'];
+      val['msg'] = value['message'];
+    });
+    return val;
+  }
+
+//Function to fetch static page data(faq,privacy-policy etc)
+  Future<void> getStaticPageData() async {
+    isLoading = true;
+    await _myRepo.staticPageGetRequest(api: AppUrl.staticPage).then((value) {
+      staticPageData = value.data!;
+      setLoading(false);
+    });
   }
 }

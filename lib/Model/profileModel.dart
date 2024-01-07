@@ -1,12 +1,12 @@
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Profile/Advertising/advertising.dart';
 import 'package:alpha_work/View/Profile/Faq/faq.dart';
+import 'package:alpha_work/View/Profile/aboutUs/aboutus.dart';
 import 'package:alpha_work/View/Profile/referEarn/referEarn.dart';
 import 'package:alpha_work/View/Profile/subscription/subscription.dart';
 import 'package:alpha_work/View/Profile/support/support.dart';
 import 'package:alpha_work/View/Profile/termsCondition/termsCondition.dart';
 import 'package:alpha_work/View/changePassword/changePassword.dart';
-import 'package:flutter/material.dart';
 
 class ProfileList {
   String profileIcon;
@@ -47,6 +47,10 @@ List<ProfileList> profileItem = [
       profileIcon: Images.speaker,
       profileText: 'Adverting',
       navigationScreen: const AdvertisingScreen()),
+  ProfileList(
+      profileIcon: Images.document,
+      profileText: 'About Us',
+      navigationScreen: AboutUsScreen()),
   ProfileList(
       profileIcon: Images.currency,
       profileText: 'Currency',

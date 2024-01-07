@@ -164,7 +164,7 @@ class Images {
   static const paymentWallet = "assets/images/payment_wallet.png";
   static const document = "assets/icons/Document.png";
   static const paper = "assets/icons/Paper.png";
-  static const locaction = "assets/icons/Location.png";
+  static const locaction = "assets/icons/location.png";
   static const edit = "assets/icons/Edit Square.png";
   static const delete_icon = "assets/icons/Delete.png";
   static const noInternet = "assets/images/nointernet.png";

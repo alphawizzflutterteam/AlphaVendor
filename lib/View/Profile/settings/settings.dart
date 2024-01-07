@@ -21,10 +21,15 @@ class ProfileSettingScreen extends StatefulWidget {
 
 class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
   late ProfileViewModel profilePro;
+  getData() async {
+    await profilePro.getvendorProfileData();
+    await profilePro.getStaticPageData();
+  }
+
   @override
   void initState() {
     profilePro = Provider.of<ProfileViewModel>(context, listen: false);
-    profilePro.getvendorProfileData();
+    getData();
     super.initState();
   }
 
@@ -109,12 +114,17 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "${profilePro.vendorData.fName.toString().toUpperCase()} ${profilePro.vendorData.lName.toString().toUpperCase()}",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  SizedBox(
+                                    width: width * .55,
+                                    child: Text(
+                                      "${profilePro.vendorData.fName.toString().toUpperCase()} ${profilePro.vendorData.lName.toString().toUpperCase()}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   Row(

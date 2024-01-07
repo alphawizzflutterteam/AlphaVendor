@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:http/http.dart' as http;
 
@@ -138,6 +139,60 @@ class ProfileRepository {
       } else {
         print(response.reasonPhrase);
         return res;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to update user profile details
+  Future<dynamic> updateProfileDetail({
+    required String api,
+    required String token,
+    required String name,
+    required String email,
+    required String phone,
+  }) async {
+    try {
+      var headers = {'Authorization': 'Bearer $token'};
+      var request = http.MultipartRequest('POST', Uri.parse(api));
+      request.fields.addAll({
+        'name': name,
+        'email': email,
+        'phone': phone,
+      });
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var res = await jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200) {
+        return res;
+      } else {
+        print(response.reasonPhrase);
+        return {
+          'status': false,
+          'message': "Something went wrong",
+        };
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to get static pages
+  Future<StaticPageModel> staticPageGetRequest({
+    required String api,
+  }) async {
+    try {
+      var url = Uri.parse(api);
+      http.Response res = await http.get(url);
+      var ans = jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        return StaticPageModel.fromJson(ans);
+      } else {
+        print(res.reasonPhrase);
+        return StaticPageModel.fromJson(ans);
       }
     } catch (e) {
       throw Exception(e);
