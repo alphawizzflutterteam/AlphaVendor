@@ -8,6 +8,7 @@ import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 
 class ActiveProductScreen extends StatefulWidget {
   final String appBartitle;
@@ -28,6 +29,10 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
         Provider.of<ProductManagementViewModel>(context, listen: false);
     productstatusP.getProductsListWithStatus(Type: widget.type);
     super.initState();
+  }
+
+  void filterSearchResults(String query) {
+    setState(() {});
   }
 
   @override
@@ -67,199 +72,180 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
               : Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Column(
-                    children: [
-                      TextField(
-                        decoration: (const InputDecoration())
-                            .applyDefaults(
-                                Theme.of(context).inputDecorationTheme)
-                            .copyWith(
-                                hintText: "Search",
-                                hintStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal),
-                                prefixIcon: Icon(
-                                  Icons.search_rounded,
-                                  color: Colors.black,
-                                )),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      SizedBox(
-                        height: height * .75,
-                        child: ListView.builder(
-                          itemCount: productstatusP.productList.length,
-                          itemBuilder: (context, index) => GestureDetector(
-                            onTap: () => Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        child: ProductDetailScreen(
-                                            id: productstatusP
-                                                .productList[index].id
-                                                .toString()),
-                                        type: PageTransitionType.rightToLeft))
-                                .then((value) => initState()),
-                            child: Container(
-                              height: height * .13,
-                              margin: const EdgeInsets.only(bottom: 10),
-                              padding: const EdgeInsets.all(8),
+                  child: SearchableList(
+                    inputDecoration: (const InputDecoration())
+                        .applyDefaults(Theme.of(context).inputDecorationTheme)
+                        .copyWith(
+                          hintText: "Search",
+                          hintStyle: TextStyle(
+                              color: colors.greyText,
+                              fontWeight: FontWeight.normal),
+                        ),
+                    filter: (value) => productstatusP.productList
+                        .where(
+                          (element) => element.name!
+                              .toString()
+                              .toLowerCase()
+                              .contains(value),
+                        )
+                        .toList(),
+                    initialList: productstatusP.productList,
+                    builder: (displayedList, index, item) => GestureDetector(
+                      onTap: () => Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: ProductDetailScreen(
+                                      id: productstatusP.productList[index].id
+                                          .toString()),
+                                  type: PageTransitionType.rightToLeft))
+                          .then((value) => initState()),
+                      child: Container(
+                        height: height * .13,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: colors.lightGrey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: height * .1,
+                              width: height * .1,
                               decoration: BoxDecoration(
-                                color: colors.lightGrey,
                                 borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: height * .1,
-                                    width: height * .1,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        productstatusP
-                                            .productList[index].thumbnail
-                                            .toString(),
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (context, url, error) =>
-                                            ErrorImageWidget(height: null),
-                                      ),
-                                    ),
-                                  ),
-                                  VerticalDivider(
-                                      color: Colors.transparent, width: 7),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      SizedBox(
-                                        width: width * .51,
-                                        child: Text(
-                                          productstatusP.productList[index].name
-                                              .toString(),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: width * .5,
-                                        child: RichText(
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          text: TextSpan(children: [
-                                            TextSpan(
-                                                text: "SKU ID-",
-                                                style: TextStyle(
-                                                  color: colors.greyText,
-                                                  fontSize: 14,
-                                                )),
-                                            TextSpan(text: " "),
-                                            TextSpan(
-                                                text: productstatusP
-                                                    .productList[index].slug
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                )),
-                                          ]),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: width * .63,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                    text: productstatusP
-                                                        .productList[index]
-                                                        .specialPrice
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                      color: colors.buttonColor,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    )),
-                                                TextSpan(text: ' '),
-                                                TextSpan(
-                                                    text: productstatusP
-                                                        .productList[index]
-                                                        .unitPrice
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                      color: colors.greyText,
-                                                      fontSize: 14,
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
-                                                    )),
-                                              ]),
-                                            ),
-                                            widget.appBartitle == "All Products"
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                        color: productstatusP
-                                                                    .productList[
-                                                                        index]
-                                                                    .status ==
-                                                                1
-                                                            ? Colors.green
-                                                                .withOpacity(
-                                                                    0.3)
-                                                            : Colors.red
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 5,
-                                                            vertical: 3),
-                                                    child: Text(
-                                                      productstatusP
-                                                                  .productList[
-                                                                      index]
-                                                                  .status ==
-                                                              1
-                                                          ? "Active"
-                                                          : "Inactive",
-                                                      style: TextStyle(
-                                                          color: productstatusP
-                                                                      .productList[
-                                                                          index]
-                                                                      .status ==
-                                                                  1
-                                                              ? Colors.green
-                                                              : Colors
-                                                                  .redAccent),
-                                                    ),
-                                                  )
-                                                : Container(),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  productstatusP.productList[index].thumbnail
+                                      .toString(),
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, url, error) =>
+                                      ErrorImageWidget(height: null),
+                                ),
                               ),
                             ),
-                          ),
+                            VerticalDivider(
+                                color: Colors.transparent, width: 7),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SizedBox(
+                                  width: width * .51,
+                                  child: Text(
+                                    productstatusP.productList[index].name
+                                        .toString(),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width * .5,
+                                  child: RichText(
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                          text: "SKU ID-",
+                                          style: TextStyle(
+                                            color: colors.greyText,
+                                            fontSize: 14,
+                                          )),
+                                      TextSpan(text: " "),
+                                      TextSpan(
+                                          text: productstatusP
+                                              .productList[index].slug
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                          )),
+                                    ]),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width * .63,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(children: [
+                                          TextSpan(
+                                              text: productstatusP
+                                                  .productList[index]
+                                                  .specialPrice
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: colors.buttonColor,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          TextSpan(text: ' '),
+                                          TextSpan(
+                                              text: productstatusP
+                                                  .productList[index].unitPrice
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: colors.greyText,
+                                                fontSize: 14,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              )),
+                                        ]),
+                                      ),
+                                      widget.appBartitle == "All Products"
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: productstatusP
+                                                              .productList[
+                                                                  index]
+                                                              .status ==
+                                                          1
+                                                      ? Colors.green
+                                                          .withOpacity(0.3)
+                                                      : Colors.red
+                                                          .withOpacity(0.3)),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 5, vertical: 3),
+                                              child: Text(
+                                                productstatusP
+                                                            .productList[index]
+                                                            .status ==
+                                                        1
+                                                    ? "Active"
+                                                    : "Inactive",
+                                                style: TextStyle(
+                                                    color: productstatusP
+                                                                .productList[
+                                                                    index]
+                                                                .status ==
+                                                            1
+                                                        ? Colors.green
+                                                        : Colors.redAccent),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
     );

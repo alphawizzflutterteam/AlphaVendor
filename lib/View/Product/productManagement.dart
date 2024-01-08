@@ -255,6 +255,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                             appBartitle: productMgmtProvider
                                                 .productManagementData
                                                 .categories[slectedIndex]
+                                                .childes[indx]
                                                 .name
                                                 .toString(),
                                             subCatID: productMgmtProvider

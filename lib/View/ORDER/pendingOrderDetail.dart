@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PendingOrderDetail extends StatefulWidget {
-  const PendingOrderDetail({super.key, required this.order});
+  const PendingOrderDetail(
+      {super.key, required this.order, required this.orderType});
   final OrderData order;
+  final String orderType;
   @override
   State<PendingOrderDetail> createState() => _PendingOrderDetailState();
 }
@@ -20,10 +22,29 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
   late ProductManagementViewModel productPro;
   @override
   void initState() {
+    print(widget.order.detail!.id.toString());
     productPro =
         Provider.of<ProductManagementViewModel>(context, listen: false);
     productPro.getProductDetail(id: widget.order.detail!.id.toString());
     super.initState();
+  }
+
+  Color getTextColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        return Colors.blue;
+      case 'processing':
+        return colors.deliveredLight;
+      case 'cancelled':
+        return Colors.red;
+      case 'delivered':
+        return Colors.green;
+      case 'pending':
+        return Colors.orange;
+
+      default:
+        return Colors.black;
+    }
   }
 
   @override
@@ -225,15 +246,16 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                               EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: Color(0xFFE17A1A).withOpacity(0.2),
+                              color: getTextColor(widget.orderType)
+                                  .withOpacity(0.2),
                               border: Border.all(
-                                color: Color(0xFFE17A1A),
+                                color: getTextColor(widget.orderType),
                                 width: 1,
                               )),
                           child: Text(
-                            "Pending",
+                            widget.orderType,
                             style: TextStyle(
-                              color: Color(0xFFE17A1A),
+                              color: getTextColor(widget.orderType),
                               fontSize: 14,
                             ),
                           ),
@@ -499,59 +521,62 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
               ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                width: width * .43,
-                height: 50,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: colors.lightBorder,
+      floatingActionButton: widget.orderType == "Pending"
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: width * .43,
+                      height: 50,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: colors.lightBorder,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        "CANCEL",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  "CANCEL",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
-                ),
+                  ),
+                  VerticalDivider(color: Colors.transparent),
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PickupSlotScreen(
+                          orderID: widget.order.orderId.toString()),
+                    )),
+                    child: Container(
+                      width: width * .43,
+                      height: 50,
+                      padding: const EdgeInsets.all(8),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: colors.buttonColor,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        "SHIP NOW",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            VerticalDivider(color: Colors.transparent),
-            GestureDetector(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PickupSlotScreen(),
-              )),
-              child: Container(
-                width: width * .43,
-                height: 50,
-                padding: const EdgeInsets.all(8),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: colors.buttonColor,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  "SHIP NOW",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : null,
     );
   }
 }

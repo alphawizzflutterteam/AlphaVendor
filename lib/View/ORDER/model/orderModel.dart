@@ -25,13 +25,6 @@ class OrderModel {
               json["order_status"]!.map((x) => OrderStatus.fromJson(x))),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": data.map((x) => x?.toJson()).toList(),
-        "order_status": orderStatus.map((x) => x?.toJson()).toList(),
-      };
 }
 
 class OrderData {
@@ -79,19 +72,6 @@ class OrderData {
       customer: json["customer"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "order_id": orderId,
-        "order_status": orderStatus,
-        "order_date": orderDate,
-        "order_amount": orderAmount,
-        "is_alpha_delivery": isAlphaDelivery,
-        "shipping_address_data": shippingAddressData?.toJson(),
-        "billing_address_data": billingAddressData?.toJson(),
-        "detail": detail?.toJson(),
-        "price_detail": priceDetail?.toJson(),
-        "customer": customer,
-      };
 }
 
 class IngAddressData {
@@ -125,12 +105,12 @@ class IngAddressData {
   final String? zip;
   final String? phone;
   final dynamic altPhone;
-  final dynamic createdAt;
-  final dynamic updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final dynamic state;
   final String? country;
-  final String? latitude;
-  final String? longitude;
+  final dynamic latitude;
+  final dynamic longitude;
   final int? isBilling;
 
   factory IngAddressData.fromJson(Map<String, dynamic> json) {
@@ -145,8 +125,8 @@ class IngAddressData {
       zip: json["zip"],
       phone: json["phone"],
       altPhone: json["alt_phone"],
-      createdAt: json["created_at"],
-      updatedAt: json["updated_at"],
+      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
+      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
       state: json["state"],
       country: json["country"],
       latitude: json["latitude"],
@@ -154,26 +134,6 @@ class IngAddressData {
       isBilling: json["is_billing"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "customer_id": customerId,
-        "contact_person_name": contactPersonName,
-        "address_type": addressType,
-        "address": address,
-        "address1": address1,
-        "city": city,
-        "zip": zip,
-        "phone": phone,
-        "alt_phone": altPhone,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-        "state": state,
-        "country": country,
-        "latitude": latitude,
-        "longitude": longitude,
-        "is_billing": isBilling,
-      };
 }
 
 class Detail {
@@ -270,7 +230,7 @@ class Detail {
   final int? currentStock;
   final int? minimumOrderQty;
   final int? freeShipping;
-  final String? createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? status;
   final int? featuredStatus;
@@ -282,16 +242,16 @@ class Detail {
   final int? multiplyQty;
   final String? code;
   final int? reviewsCount;
-  final List<Rating> rating;
-  final List<dynamic> tags;
+  final List<dynamic> rating;
+  final List<Tag> tags;
   final List<dynamic> translations;
   final String? shareLink;
-  final List<Review> reviews;
+  final List<dynamic> reviews;
   final List<ColorsFormatted> colorsFormatted;
   final bool? isFavorite;
   final bool? isCart;
   final int? cartId;
-  final String? manufacturingDate;
+  final DateTime? manufacturingDate;
   final String? madeIn;
   final String? warranty;
   final String? useCoinsWithAmount;
@@ -347,7 +307,7 @@ class Detail {
       currentStock: json["current_stock"],
       minimumOrderQty: json["minimum_order_qty"],
       freeShipping: json["free_shipping"],
-      createdAt: json["created_at"],
+      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
       updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
       status: json["status"],
       featuredStatus: json["featured_status"],
@@ -361,17 +321,17 @@ class Detail {
       reviewsCount: json["reviews_count"],
       rating: json["rating"] == null
           ? []
-          : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
+          : List<dynamic>.from(json["rating"]!.map((x) => x)),
       tags: json["tags"] == null
           ? []
-          : List<dynamic>.from(json["tags"]!.map((x) => x)),
+          : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
       translations: json["translations"] == null
           ? []
           : List<dynamic>.from(json["translations"]!.map((x) => x)),
       shareLink: json["share_link"],
       reviews: json["reviews"] == null
           ? []
-          : List<Review>.from(json["reviews"]!.map((x) => Review.fromJson(x))),
+          : List<dynamic>.from(json["reviews"]!.map((x) => x)),
       colorsFormatted: json["colors_formatted"] == null
           ? []
           : List<ColorsFormatted>.from(json["colors_formatted"]!
@@ -379,74 +339,13 @@ class Detail {
       isFavorite: json["is_favorite"],
       isCart: json["is_cart"],
       cartId: json["cart_id"],
-      manufacturingDate: json["manufacturing_date"],
+      manufacturingDate: DateTime.tryParse(json["manufacturing_date"] ?? ""),
       madeIn: json["made_in"],
       warranty: json["warranty"],
       useCoinsWithAmount: json["use_coins_with_amount"],
       amountAfterCoinUse: json["amount_after_coin_use"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "category_ids": categoryIds.map((x) => x?.toJson()).toList(),
-        "user_id": userId,
-        "shop": shop?.toJson(),
-        "name": name,
-        "slug": slug,
-        "images": images.map((x) => x).toList(),
-        "color_image": colorImage.map((x) => x?.toJson()).toList(),
-        "thumbnail": thumbnail,
-        "brand_id": brandId,
-        "unit": unit,
-        "min_qty": minQty,
-        "featured": featured,
-        "refundable": refundable,
-        "variant_product": variantProduct,
-        "attributes": attributes.map((x) => x).toList(),
-        "choice_options": choiceOptions.map((x) => x?.toJson()).toList(),
-        "variation": variation.map((x) => x?.toJson()).toList(),
-        "weight": weight,
-        "published": published,
-        "unit_price": unitPrice,
-        "special_price": specialPrice,
-        "purchase_price": purchasePrice,
-        "tax": tax,
-        "tax_type": taxType,
-        "tax_model": taxModel,
-        "tax_amount": taxAmount,
-        "discount": discount,
-        "discount_type": discountType,
-        "current_stock": currentStock,
-        "minimum_order_qty": minimumOrderQty,
-        "free_shipping": freeShipping,
-        "created_at": createdAt,
-        "updated_at": updatedAt?.toIso8601String(),
-        "status": status,
-        "featured_status": featuredStatus,
-        "meta_title": metaTitle,
-        "meta_description": metaDescription,
-        "meta_image": metaImage,
-        "request_status": requestStatus,
-        "shipping_cost": shippingCost,
-        "multiply_qty": multiplyQty,
-        "code": code,
-        "reviews_count": reviewsCount,
-        "rating": rating.map((x) => x?.toJson()).toList(),
-        "tags": tags.map((x) => x).toList(),
-        "translations": translations.map((x) => x).toList(),
-        "share_link": shareLink,
-        "reviews": reviews.map((x) => x?.toJson()).toList(),
-        "colors_formatted": colorsFormatted.map((x) => x?.toJson()).toList(),
-        "is_favorite": isFavorite,
-        "is_cart": isCart,
-        "cart_id": cartId,
-        "manufacturing_date": manufacturingDate,
-        "made_in": madeIn,
-        "warranty": warranty,
-        "use_coins_with_amount": useCoinsWithAmount,
-        "amount_after_coin_use": amountAfterCoinUse,
-      };
 }
 
 class CategoryId {
@@ -464,11 +363,6 @@ class CategoryId {
       position: json["position"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "position": position,
-      };
 }
 
 class ChoiceOption {
@@ -491,12 +385,6 @@ class ChoiceOption {
           : List<String>.from(json["options"]!.map((x) => x)),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "title": title,
-        "options": options.map((x) => x).toList(),
-      };
 }
 
 class ColorImage {
@@ -514,11 +402,6 @@ class ColorImage {
       imageName: json["image_name"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "color": color,
-        "image_name": imageName,
-      };
 }
 
 class ColorsFormatted {
@@ -536,128 +419,6 @@ class ColorsFormatted {
       code: json["code"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "code": code,
-      };
-}
-
-class Rating {
-  Rating({
-    required this.average,
-    required this.productId,
-  });
-
-  final String? average;
-  final int? productId;
-
-  factory Rating.fromJson(Map<String, dynamic> json) {
-    return Rating(
-      average: json["average"],
-      productId: json["product_id"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "average": average,
-        "product_id": productId,
-      };
-}
-
-class Review {
-  Review({
-    required this.id,
-    required this.productId,
-    required this.customerId,
-    required this.deliveryManId,
-    required this.orderId,
-    required this.comment,
-    required this.attachment,
-    required this.rating,
-    required this.status,
-    required this.isSaved,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.customer,
-  });
-
-  final int? id;
-  final int? productId;
-  final int? customerId;
-  final String? deliveryManId;
-  final String? orderId;
-  final String? comment;
-  final List<String> attachment;
-  final int? rating;
-  final int? status;
-  final int? isSaved;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final Customer? customer;
-
-  factory Review.fromJson(Map<String, dynamic> json) {
-    return Review(
-      id: json["id"],
-      productId: json["product_id"],
-      customerId: json["customer_id"],
-      deliveryManId: json["delivery_man_id"],
-      orderId: json["order_id"],
-      comment: json["comment"],
-      attachment: json["attachment"] == null
-          ? []
-          : List<String>.from(json["attachment"]!.map((x) => x)),
-      rating: json["rating"],
-      status: json["status"],
-      isSaved: json["is_saved"],
-      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
-      customer:
-          json["customer"] == null ? null : Customer.fromJson(json["customer"]),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "product_id": productId,
-        "customer_id": customerId,
-        "delivery_man_id": deliveryManId,
-        "order_id": orderId,
-        "comment": comment,
-        "attachment": attachment.map((x) => x).toList(),
-        "rating": rating,
-        "status": status,
-        "is_saved": isSaved,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "customer": customer?.toJson(),
-      };
-}
-
-class Customer {
-  Customer({
-    required this.id,
-    required this.name,
-    required this.image,
-  });
-
-  final int? id;
-  final String? name;
-  final String? image;
-
-  factory Customer.fromJson(Map<String, dynamic> json) {
-    return Customer(
-      id: json["id"],
-      name: json["name"],
-      image: json["image"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "image": image,
-      };
 }
 
 class Shop {
@@ -726,28 +487,52 @@ class Shop {
       banner: json["banner"],
     );
   }
+}
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "seller_id": sellerId,
-        "name": name,
-        "address": address,
-        "contact": contact,
-        "image": image,
-        "bottom_banner": bottomBanner,
-        "vacation_start_date": vacationStartDate,
-        "vacation_end_date": vacationEndDate,
-        "vacation_note": vacationNote,
-        "vacation_status": vacationStatus,
-        "temporary_close": temporaryClose,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "rating": rating,
-        "followers": followers,
-        "is_verified": isVerified,
-        "is_following": isFollowing,
-        "banner": banner,
-      };
+class Tag {
+  Tag({
+    required this.id,
+    required this.tag,
+    required this.visitCount,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.pivot,
+  });
+
+  final int? id;
+  final String? tag;
+  final int? visitCount;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final Pivot? pivot;
+
+  factory Tag.fromJson(Map<String, dynamic> json) {
+    return Tag(
+      id: json["id"],
+      tag: json["tag"],
+      visitCount: json["visit_count"],
+      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
+      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
+      pivot: json["pivot"] == null ? null : Pivot.fromJson(json["pivot"]),
+    );
+  }
+}
+
+class Pivot {
+  Pivot({
+    required this.productId,
+    required this.tagId,
+  });
+
+  final int? productId;
+  final int? tagId;
+
+  factory Pivot.fromJson(Map<String, dynamic> json) {
+    return Pivot(
+      productId: json["product_id"],
+      tagId: json["tag_id"],
+    );
+  }
 }
 
 class Variation {
@@ -771,13 +556,6 @@ class Variation {
       qty: json["qty"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "type": type,
-        "price": price,
-        "sku": sku,
-        "qty": qty,
-      };
 }
 
 class PriceDetail {
@@ -801,13 +579,6 @@ class PriceDetail {
       total: json["total"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "subtotal": subtotal,
-        "discount": discount,
-        "delivery_fee": deliveryFee,
-        "total": total,
-      };
 }
 
 class OrderStatus {
@@ -828,10 +599,4 @@ class OrderStatus {
       value: json["value"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "is_active": isActive,
-        "title": title,
-        "value": value,
-      };
 }

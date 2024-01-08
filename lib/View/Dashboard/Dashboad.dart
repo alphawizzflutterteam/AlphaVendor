@@ -259,7 +259,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   context,
                                   PageTransition(
                                       type: PageTransitionType.rightToLeft,
-                                      child: const WalletScreen()));
+                                      child: WalletScreen()));
                             },
                           ),
                           ListTile(
@@ -331,6 +331,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                 : Column(
                     children: [
                       Container(
+                        padding: const EdgeInsets.only(bottom: 16),
                         // height: height * .33,
                         decoration: BoxDecoration(
                           color: colors.buttonColor,
@@ -338,173 +339,178 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                             bottomLeft: Radius.circular(15),
                             bottomRight: Radius.circular(15),
                           ),
-                          image: DecorationImage(
-                            image: AssetImage(Images.profile_bg_circle),
-                            alignment: Alignment.topRight,
-                            fit: BoxFit.contain,
-                          ),
                         ),
-                        child: Column(
+                        child: Stack(
                           children: [
-                            AppBar(
-                              backgroundColor: Colors.transparent,
-                              centerTitle: true,
-                              title: const Text(
-                                "Seller Dashboard",
-                                style: TextStyle(color: Colors.white),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Image.asset(
+                                Images.profile_bg_circle,
+                                height: height * .2,
                               ),
-                              leading: Builder(builder: (context) {
-                                return IconButton(
-                                  icon: Image.asset(
-                                    Images.hamburgerMenuIcon,
-                                    color: Colors.white,
-                                    height: 25,
-                                  ),
-                                  onPressed: () =>
-                                      Scaffold.of(context).openDrawer(),
-                                );
-                              }),
-                              actions: [
-                                IconButton(
-                                  icon: Image.asset(
-                                    Images.notification,
-                                    color: Colors.white,
-                                    height: 25,
-                                  ),
-                                  onPressed: () => Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          child: NotificationScreen(),
-                                          type:
-                                              PageTransitionType.rightToLeft)),
-                                ),
-                              ],
                             ),
-                            SizedBox(
-                              width: width,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Total Sale",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                              color: colors.lightGrey),
-                                        ),
-                                        Spacer(),
-                                        Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        VerticalDivider(width: 5),
-                                        Text(
-                                          dashProvider.dashData.ratingsNdReviews
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      dashProvider.dashData.totalSale
-                                          .toString(),
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        fontFamily: 'Montreal',
-                                        fontWeight: FontWeight.w700,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                AppBar(
+                                  backgroundColor: Colors.transparent,
+                                  centerTitle: true,
+                                  title: const Text(
+                                    "Seller Dashboard",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  leading: Builder(builder: (context) {
+                                    return IconButton(
+                                      icon: Image.asset(
+                                        Images.hamburgerMenuIcon,
                                         color: Colors.white,
+                                        height: 25,
                                       ),
-                                    ),
-                                    Divider(color: Colors.transparent),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Text(
-                                              "Sold Out",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: colors.lightGrey),
-                                            ),
-                                            Text(
-                                              dashProvider.dashData.soldOut
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: height * .04,
-                                          child: VerticalDivider(
-                                            color: colors.lightTextColor,
-                                            thickness: 2,
-                                          ),
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              "Total Products",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: colors.lightGrey),
-                                            ),
-                                            Text(
-                                              dashProvider.dashData.totalProduct
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: height * .04,
-                                          child: VerticalDivider(
-                                            color: colors.lightTextColor,
-                                            thickness: 2,
-                                          ),
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              "Total Order",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: colors.lightGrey),
-                                            ),
-                                            Text(
-                                              dashProvider.dashData.totalOrders
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                      onPressed: () =>
+                                          Scaffold.of(context).openDrawer(),
+                                    );
+                                  }),
+                                  actions: [
+                                    IconButton(
+                                      icon: Image.asset(
+                                        Images.notification,
+                                        color: Colors.white,
+                                        height: 25,
+                                      ),
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: NotificationScreen(),
+                                              type: PageTransitionType
+                                                  .rightToLeft)),
                                     ),
                                   ],
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Total Sale",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                            color: colors.lightGrey),
+                                      ),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      VerticalDivider(width: 5),
+                                      Text(
+                                        dashProvider.dashData.ratingsNdReviews
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Text(
+                                    dashProvider.dashData.totalSale.toString(),
+                                    style: TextStyle(
+                                      fontSize: 28,
+                                      fontFamily: 'Montreal',
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Divider(color: Colors.transparent),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "Sold Out",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
+                                                color: colors.lightGrey),
+                                          ),
+                                          Text(
+                                            dashProvider.dashData.soldOut
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: height * .04,
+                                        child: VerticalDivider(
+                                          color: colors.lightTextColor,
+                                          thickness: 2,
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "Total Products",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
+                                                color: colors.lightGrey),
+                                          ),
+                                          Text(
+                                            dashProvider.dashData.totalProduct
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: height * .04,
+                                        child: VerticalDivider(
+                                          color: colors.lightTextColor,
+                                          thickness: 2,
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "Total Order",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
+                                                color: colors.lightGrey),
+                                          ),
+                                          Text(
+                                            dashProvider.dashData.totalOrders
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

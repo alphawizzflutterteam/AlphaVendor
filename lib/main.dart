@@ -1,9 +1,12 @@
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
+import 'package:alpha_work/ViewModel/customerViewModel.dart';
 import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
+import 'package:alpha_work/ViewModel/walletViewModel.dart';
 import 'package:alpha_work/Widget/noInternet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,6 +24,12 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ProfileViewModel>(
       create: (context) => ProfileViewModel(),
+    ),
+    ChangeNotifierProvider<WalletViewMaodel>(
+      create: (context) => WalletViewMaodel(),
+    ),
+    ChangeNotifierProvider<CustomerViewModel>(
+      create: (context) => CustomerViewModel(),
     ),
     ChangeNotifierProvider<ProductManagementViewModel>(
       create: (context) => ProductManagementViewModel(),

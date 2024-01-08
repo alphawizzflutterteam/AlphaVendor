@@ -13,6 +13,7 @@ import 'package:page_transition/page_transition.dart';
 
 import 'package:flutter_custom_tab_bar/library.dart';
 import 'package:provider/provider.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 
 class OrderManagement extends StatefulWidget {
   const OrderManagement({super.key});
@@ -70,6 +71,7 @@ class _OrderManagementState extends State<OrderManagement> {
                 CustomTabBar(
                   tabBarController: _tabBarController,
                   height: 40,
+                  direction: Axis.horizontal,
                   itemCount: orderProvider.orderStatus.length,
                   builder: (context, index) => getTabbarChild(
                       context: context,
@@ -83,51 +85,10 @@ class _OrderManagementState extends State<OrderManagement> {
                   ),
                   pageController: _controller,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 8, right: 8, top: 15, bottom: 8),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 45,
-                        width: MediaQuery.of(context).size.width * .8,
-                        child: TextFormField(
-                          // controller: searchcontroller,
-                          onChanged: (String? value) {
-                            setState(() {
-                              // search = value.toString();
-                            });
-                          },
-                          decoration: InputDecoration(
-                            filled: true,
-                            // fillColor: const Color.fromARGB(255, 233, 233, 253),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    width: 0, color: Colors.grey)),
-                            hintText: "Search ",
-                            hintStyle: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.grey),
-                            prefixIcon: const Icon(Icons.search),
-                            prefixIconColor: Colors.grey,
-                          ),
-                          style: const TextStyle(),
-                        ),
-                      ),
-                      Spacer(),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.filter_list_outlined,
-                            color: Colors.black,
-                          ))
-                    ],
-                  ),
-                ),
                 Expanded(
                   child: PageView.builder(
                       controller: _controller,
+                      scrollDirection: Axis.horizontal,
                       itemCount: pageCount,
                       onPageChanged: (value) {
                         orderProvider.getOrderList(
@@ -135,62 +96,60 @@ class _OrderManagementState extends State<OrderManagement> {
                                 .toString());
                       },
                       itemBuilder: (context, index) {
-                        return Consumer<OrderManagementViewModel>(
-                            builder: (context, order, _) {
-                          print("Order list${order.orderList.length}");
+                        return Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Consumer<OrderManagementViewModel>(
+                              builder: (context, order, _) {
+                            print(
+                                "Order list length :${order.orderList.length} page index: ${index}");
 
-                          return order.isLoading
-                              ? appLoader()
-                              : order.orderList.isEmpty
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Image.asset(Images.noOrder,
-                                              height: height * .35,
-                                              width: height * .35,
-                                              fit: BoxFit.fitWidth),
-                                        ),
-                                        Text(
-                                          "No Order Data Found",
-                                          style: TextStyle(
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.w600,
-                                            color: colors.buttonColor,
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  : Container(
-                                      alignment: Alignment.topCenter,
-                                      child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: order.orderList.length,
-                                          itemBuilder: (context, indx) {
-                                            return OrderListTile(
-                                              order: order.orderList[index],
-                                              title: order
-                                                  .orderList[indx].detail!.name
-                                                  .toString(),
-                                              id: order.orderList[indx].orderId
-                                                  .toString(),
-                                              date: order
-                                                  .orderList[indx].orderDate
-                                                  .toString(),
-                                              price: order
-                                                  .orderList[indx].orderAmount
-                                                  .toString(),
-                                              isAlpha: order.orderList[indx]
-                                                  .isAlphaDelivery!,
-                                            );
-                                          }),
-                                    );
-                        });
+                            return order.isLoading
+                                ? appLoader()
+                                : order.orderList.isEmpty
+                                    ? NoOrderFound(height: 100)
+                                    : SearchableList(
+                                        autoFocusOnSearch: false,
+                                        filter: (query) => order.orderList
+                                            .where((ele) => ele.orderId
+                                                .toString()
+                                                .contains(query))
+                                            .toList(),
+                                        inputDecoration:
+                                            (const InputDecoration())
+                                                .applyDefaults(Theme.of(context)
+                                                    .inputDecorationTheme)
+                                                .copyWith(
+                                                  hintText: "Search by OrderID",
+                                                  hintStyle: TextStyle(
+                                                      color: colors.greyText,
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                                ),
+                                        initialList: order.orderList,
+                                        emptyWidget:
+                                            NoOrderFound(height: height),
+                                        builder: (context, indx, item) {
+                                          return OrderListTile(
+                                            type: order.orderStatus[index].value
+                                                .toString(),
+                                            order: order.orderList[indx],
+                                            title: order
+                                                .orderList[indx].detail!.name
+                                                .toString(),
+                                            id: order.orderList[indx].orderId
+                                                .toString(),
+                                            date: order
+                                                .orderList[indx].orderDate
+                                                .toString(),
+                                            price: order
+                                                .orderList[indx].orderAmount
+                                                .toString(),
+                                            isAlpha: order.orderList[indx]
+                                                .isAlphaDelivery!,
+                                          );
+                                        });
+                          }),
+                        );
                       }),
                 )
               ],
@@ -229,11 +188,45 @@ class _OrderManagementState extends State<OrderManagement> {
   }
 }
 
+class NoOrderFound extends StatelessWidget {
+  const NoOrderFound({
+    super.key,
+    required this.height,
+  });
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Image.asset(Images.noOrder,
+              height: 150, width: 150, fit: BoxFit.fitWidth),
+        ),
+        Text(
+          "No Order Data Found",
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w600,
+            color: colors.buttonColor,
+          ),
+        )
+      ],
+    );
+  }
+}
+
 class OrderListTile extends StatelessWidget {
   final String title;
   final String id;
   final String date;
   final String price;
+  final String type;
   final bool isAlpha;
   final OrderData order;
 
@@ -245,24 +238,26 @@ class OrderListTile extends StatelessWidget {
     required this.price,
     required this.isAlpha,
     required this.order,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-          context,
-          PageTransition(
-            child: PendingOrderDetail(order: order),
-            type: PageTransitionType.rightToLeft,
-          )),
+      onTap: () {
+        print(order.detail!.id);
+        Navigator.push(
+            context,
+            PageTransition(
+              child: PendingOrderDetail(order: order, orderType: type),
+              type: PageTransitionType.rightToLeft,
+            ));
+      },
       child: Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color(0xFFE9E9E9)),
-        height: MediaQuery.of(context).size.height * .18,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -319,49 +314,28 @@ class OrderListTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 24,
-                    fontFamily: 'Liber',
+                    fontFamily: 'Montreal',
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Spacer(),
-                GestureDetector(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: colors.lightBorder,
+                type == 'Pending'
+                    ? pendOrderWidget(context: context, orderId: id)
+                    : Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: getTextColor(type).withOpacity(0.2),
+                          border:
+                              Border.all(width: 1, color: getTextColor(type)),
                         ),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Text(
-                      "CANCEL",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
+                        child: Text(
+                          type,
+                          style: TextStyle(color: getTextColor(type)),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                VerticalDivider(color: Colors.transparent),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PickupSlotScreen(),
-                  )),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: colors.buttonColor,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Text(
-                      "SHIP NOW",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ],
@@ -369,4 +343,67 @@ class OrderListTile extends StatelessWidget {
       ),
     );
   }
+}
+
+Color getTextColor(String status) {
+  switch (status.toLowerCase()) {
+    case 'confirmed':
+      return Colors.blue;
+    case 'processing':
+      return colors.deliveredLight;
+    case 'cancelled':
+      return Colors.red;
+    case 'delivered':
+      return Colors.green;
+    case 'pending':
+      return Colors.orange;
+
+    default:
+      return Colors.black;
+  }
+}
+
+pendOrderWidget<Widget>(
+    {required BuildContext context, required String orderId}) {
+  return Row(
+    children: [
+      GestureDetector(
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: colors.lightBorder,
+              ),
+              borderRadius: BorderRadius.circular(5)),
+          child: Text(
+            "CANCEL",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 12,
+            ),
+          ),
+        ),
+      ),
+      VerticalDivider(color: Colors.transparent),
+      GestureDetector(
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PickupSlotScreen(orderID: orderId),
+        )),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: colors.buttonColor,
+              borderRadius: BorderRadius.circular(5)),
+          child: Text(
+            "SHIP NOW",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
 }

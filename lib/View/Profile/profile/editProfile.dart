@@ -24,16 +24,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController phoneCtrl = TextEditingController();
   late ProfileViewModel profilePro;
-
-  String path = '';
+  String? image;
   File? _image;
+  bool isFromFile = false;
   final picker = ImagePicker();
   Future getImageFromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     print(pickedFile!.path.toString());
-
+    image = pickedFile.path.toString();
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      image = pickedFile.path.toString();
+    }
     setState(() {
-      if (pickedFile != null) {}
+      isFromFile = true;
     });
   }
 
@@ -44,6 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         "${widget.vendorData.fName.toString().toUpperCase()} ${widget.vendorData.lName.toString().toUpperCase()}";
     emailCtrl.text = widget.vendorData.email.toString();
     phoneCtrl.text = widget.vendorData.phone.toString();
+    image = widget.vendorData.image.toString();
     profilePro = Provider.of<ProfileViewModel>(context, listen: false);
     super.initState();
   }
@@ -63,14 +68,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: height * .08,
-                  backgroundImage: NetworkImage(
-                    widget.vendorData.image.toString(),
-                  ),
-                  onBackgroundImageError: (exception, stackTrace) =>
-                      ErrorImageWidget(height: height * .1),
-                ),
+                isFromFile
+                    ? CircleAvatar(
+                        radius: height * .08,
+                        backgroundImage: FileImage(_image!),
+                        onBackgroundImageError: (exception, stackTrace) =>
+                            ErrorImageWidget(height: height * .1),
+                      )
+                    : CircleAvatar(
+                        radius: height * .08,
+                        backgroundImage: NetworkImage(
+                          widget.vendorData.image.toString(),
+                        ),
+                        onBackgroundImageError: (exception, stackTrace) =>
+                            ErrorImageWidget(height: height * .1),
+                      ),
                 const SizedBox(height: 5),
                 TextButton.icon(
                     onPressed: () => getImageFromGallery(),
@@ -142,11 +154,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       floatingActionButton: ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
+              print(image);
               profilePro
                   .updateProfileDetail(
                       name: nameCtrl.text.toString(),
                       email: emailCtrl.text.toString(),
-                      phone: phoneCtrl.text.toString())
+                      phone: phoneCtrl.text.toString(),
+                      imageUrl: image.toString())
                   .then(
                     (value) => Fluttertoast.showToast(
                       msg: value['msg'],

@@ -278,23 +278,23 @@ class _PickupDetailScreenState extends State<PickupDetailScreen> {
             ),
           ),
           Spacer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: ElevatedButton(
-              onPressed: () => showBottomSheet(
-                context: context,
-                builder: (context) => PickupBottomSheet(),
-              ),
-              child: Text("SHIP NOW", style: TextStyle(color: Colors.white)),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: colors.buttonColor,
-                  padding: const EdgeInsets.all(12),
-                  minimumSize: Size(width, 45),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  )),
-            ),
-          )
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          //   child: ElevatedButton(
+          //     onPressed: () => showBottomSheet(
+          //       context: context,
+          //       builder: (context) => PickupBottomSheet(orderId: ""),
+          //     ),
+          //     child: Text("SHIP NOW", style: TextStyle(color: Colors.white)),
+          //     style: ElevatedButton.styleFrom(
+          //         backgroundColor: colors.buttonColor,
+          //         padding: const EdgeInsets.all(12),
+          //         minimumSize: Size(width, 45),
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(10),
+          //         )),
+          //   ),
+          // )
         ],
       ),
     );

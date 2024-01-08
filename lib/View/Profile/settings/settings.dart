@@ -102,12 +102,12 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             children: [
                               CircleAvatar(
                                 radius: (height / width) * 20,
-                                child: Image.network(
+                                backgroundImage: NetworkImage(
                                   profilePro.vendorData.image.toString(),
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      ErrorImageWidget(height: 50),
                                 ),
+                                onBackgroundImageError:
+                                    (exception, stackTrace) =>
+                                        ErrorImageWidget(height: 50),
                               ),
                               VerticalDivider(),
                               Column(

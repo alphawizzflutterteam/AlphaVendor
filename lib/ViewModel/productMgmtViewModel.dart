@@ -234,7 +234,7 @@ class ProductManagementViewModel extends ChangeNotifier {
         .productDetailGetRequest(
             api: AppUrl.productDetailAndedit, bearerToken: token, id: id)
         .then((value) {
-      print(value.product.first.name);
+      print(value.product.first.id);
       productDetail = value.product;
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));

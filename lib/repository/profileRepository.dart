@@ -152,31 +152,30 @@ class ProfileRepository {
     required String name,
     required String email,
     required String phone,
+    required String image,
   }) async {
-    try {
-      var headers = {'Authorization': 'Bearer $token'};
-      var request = http.MultipartRequest('POST', Uri.parse(api));
-      request.fields.addAll({
-        'name': name,
-        'email': email,
-        'phone': phone,
-      });
+    var headers = {'Authorization': 'Bearer $token'};
+    var request = http.MultipartRequest('POST', Uri.parse(api));
+    request.fields.addAll({
+      'name': name.toString(),
+      'email': email.toString(),
+      'phone': phone.toString()
+    });
+    if (image.isNotEmpty) {
+      request.files.add(
+          await http.MultipartFile.fromPath('image', '${image.toString()}'));
+    }
+    request.headers.addAll(headers);
 
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-      var res = await jsonDecode(await response.stream.bytesToString());
-      if (response.statusCode == 200) {
-        return res;
-      } else {
-        print(response.reasonPhrase);
-        return {
-          'status': false,
-          'message': "Something went wrong",
-        };
-      }
-    } catch (e) {
-      throw Exception(e);
+    http.StreamedResponse response = await request.send();
+    var result = await response.stream.bytesToString();
+    var ans = jsonDecode(result);
+    if (response.statusCode == 200) {
+      print(ans);
+      return ans;
+    } else {
+      print(response.statusCode);
+      return ans;
     }
   }
 
@@ -196,6 +195,35 @@ class ProfileRepository {
       }
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+//Function to update password
+  Future<bool> updateProfilePassword({
+    required String api,
+    required String token,
+    required String old_password,
+    required String newPass,
+    required String confirmPass,
+  }) async {
+    var headers = {'Authorization': 'Bearer $token'};
+    var request = http.MultipartRequest('POST', Uri.parse(api));
+    request.fields.addAll({
+      'old_password': old_password,
+      'password': newPass,
+      'password_confirmation': confirmPass
+    });
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var json = jsonDecode(await response.stream.bytesToString());
+    if (response.statusCode == 200) {
+      print(json);
+      return json['status'];
+    } else {
+      print(response.reasonPhrase);
+      return json['status'];
     }
   }
 }

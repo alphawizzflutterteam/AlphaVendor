@@ -62,6 +62,7 @@ dependencies:
   chat_bubbles: ^1.5.0
   flutter_no_internet_widget: ^1.0.0+18-dev.1
   expandable: ^5.0.1
+  searchable_listview: ^2.10.0
   
   
   

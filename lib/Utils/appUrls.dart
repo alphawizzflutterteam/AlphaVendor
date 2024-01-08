@@ -8,7 +8,6 @@ class AppUrl {
   static String sendLoginOtp = "${baseURL}auth/send-login-otp";
   static String sendRegisterOtp = "${baseURL}auth/send-otp";
   static String loginWithEmailPassword = "${baseURL}auth/login";
-  static String updatePassword = "${baseURL}auth/update-password";
   static String resetPassword = "${baseURL}customer/reset-password";
   static String getSellerDashboard = "${baseURL1}seller/dashboard";
 
@@ -71,10 +70,19 @@ class AppUrl {
   static const String vendorProfile = "${baseURL}seller/shop-info";
   static const String updateBusinessDetail =
       "${baseURL}seller/update-bussiness-details";
+  static const String updatePassword = '${baseURL}seller/update-password';
   static const String updateAddressDetail =
       "${baseURL}seller/update-address-details";
   static const String updateBankingDetail =
       "${baseURL}seller/update-bank-details";
   static const String updateProfileDetail = "${baseURL}seller/update-profile";
   static const String staticPage = '${baseURL}seller/static-pages';
+  static const String Customers = '${baseURL}seller/customers';
+  static const String DeliveryMan = '${baseURL}seller/seller-delivery-man';
+  static const String updateOrderStatus =
+      '${baseURL}seller/orders/order-detail-status/';
+  static const String assignDriver =
+      '${baseURL}seller/orders/assign-delivery-man';
+  static const String withdrawRequest = '${baseURL}seller/balance-withdraw';
+  static const String transactions = '${baseURL}seller/transactions';
 }

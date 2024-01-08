@@ -51,18 +51,18 @@ List<ProfileList> profileItem = [
       profileIcon: Images.document,
       profileText: 'About Us',
       navigationScreen: AboutUsScreen()),
-  ProfileList(
-      profileIcon: Images.currency,
-      profileText: 'Currency',
-      navigationScreen: ""),
+  // ProfileList(
+  //     profileIcon: Images.currency,
+  //     profileText: 'Currency',
+  //     navigationScreen: ""),
   ProfileList(
       profileIcon: Images.changePassword,
       profileText: 'Change Password',
       navigationScreen: ChangePasswordScreen()),
-  ProfileList(
-      profileIcon: Images.changeLanguage,
-      profileText: 'Change Language',
-      navigationScreen: ""),
+  // ProfileList(
+  //     profileIcon: Images.changeLanguage,
+  //     profileText: 'Change Language',
+  //     navigationScreen: ""),
 
   ProfileList(
       profileIcon: Images.logOut, profileText: 'Logout', navigationScreen: ""),

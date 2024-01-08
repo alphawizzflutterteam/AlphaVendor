@@ -121,20 +121,23 @@ class ProfileViewModel with ChangeNotifier {
     required String name,
     required String email,
     required String phone,
+    required String imageUrl,
   }) async {
     Map<String, dynamic> val = {'status': false, 'msg': 'Something went wrong'};
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo
         .updateProfileDetail(
-            api: AppUrl.updateProfile,
+            api: AppUrl.updateProfileDetail,
             token: token,
             name: name,
             email: email,
+            image: imageUrl,
             phone: phone)
         .then((value) {
       val['status'] = value['status'];
       val['msg'] = value['message'];
     });
+    await getvendorProfileData();
     return val;
   }
 
@@ -145,5 +148,32 @@ class ProfileViewModel with ChangeNotifier {
       staticPageData = value.data!;
       setLoading(false);
     });
+  }
+
+//Function to change password
+  Future<String> cahngePassword({
+    required String old_password,
+    required String newPass,
+    required String confirmPass,
+  }) async {
+    String msg = '';
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .updateProfilePassword(
+      api: AppUrl.updatePassword,
+      token: token,
+      old_password: old_password,
+      newPass: newPass,
+      confirmPass: confirmPass,
+    )
+        .then((value) {
+      if (value) {
+        msg = "Password updated sucessfully";
+      } else {
+        msg = "Something went wrong!";
+      }
+      setLoading(false);
+    });
+    return msg;
   }
 }
