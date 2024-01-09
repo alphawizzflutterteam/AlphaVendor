@@ -643,33 +643,29 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                 DottedBorder(
                                   color: colors.buttonColor,
                                   strokeWidth: 1,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: GestureDetector(
-                                      onTap: () => getImageFromGallery(),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFD5F6F6),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              Images.selectImage,
-                                              height: 30,
-                                              width: 30,
-                                              fit: BoxFit.fitHeight,
+                                  child: GestureDetector(
+                                    onTap: () => getImageFromGallery(),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(15),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFD5F6F6),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            Images.selectImage,
+                                            height: 30,
+                                            width: 30,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                          Text(
+                                            "Main Image",
+                                            style: TextStyle(
+                                              color: colors.buttonColor,
+                                              fontSize: 12,
                                             ),
-                                            Text(
-                                              "Main Image",
-                                              style: TextStyle(
-                                                color: colors.buttonColor,
-                                                fontSize: 12,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -699,111 +695,111 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                               ],
                             ),
                             const Divider(color: Colors.transparent),
-                            Row(
-                              children: [
-                                DottedBorder(
-                                  color: colors.buttonColor,
-                                  strokeWidth: 1,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(15),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFD5F6F6),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Column(
-                                        children: [
-                                          Image.asset(
-                                            Images.selectImage,
-                                            height: 30,
-                                            width: 30,
-                                            fit: BoxFit.fitHeight,
-                                          ),
-                                          Text(
-                                            "Other Image",
-                                            style: TextStyle(
-                                              color: colors.buttonColor,
-                                              fontSize: 12,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                VerticalDivider(color: Colors.transparent),
-                                Container(
-                                  height: height * .1,
-                                  width: width * .25,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: colors.lightGrey,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Text(
-                                    "Image\nContainer",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Divider(color: Colors.transparent),
-                            Row(
-                              children: [
-                                DottedBorder(
-                                  color: colors.buttonColor,
-                                  strokeWidth: 1,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Container(
-                                      width: width * .24,
-                                      padding: const EdgeInsets.all(15),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFD5F6F6),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                              Icons.play_circle_outline_rounded,
-                                              color: colors.buttonColor,
-                                              size: 25),
-                                          Text(
-                                            "Video",
-                                            style: TextStyle(
-                                              color: colors.buttonColor,
-                                              fontSize: 12,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                VerticalDivider(color: Colors.transparent),
-                                Container(
-                                  height: height * .1,
-                                  width: width * .25,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: colors.lightGrey,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Text(
-                                    "Video\nContainer",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Divider(color: Colors.transparent),
+                            // Row(
+                            //   children: [
+                            //     DottedBorder(
+                            //       color: colors.buttonColor,
+                            //       strokeWidth: 1,
+                            //       child: ClipRRect(
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         child: Container(
+                            //           padding: const EdgeInsets.all(15),
+                            //           decoration: BoxDecoration(
+                            //               color: Color(0xFFD5F6F6),
+                            //               borderRadius:
+                            //                   BorderRadius.circular(10)),
+                            //           child: Column(
+                            //             children: [
+                            //               Image.asset(
+                            //                 Images.selectImage,
+                            //                 height: 30,
+                            //                 width: 30,
+                            //                 fit: BoxFit.fitHeight,
+                            //               ),
+                            //               Text(
+                            //                 "Other Image",
+                            //                 style: TextStyle(
+                            //                   color: colors.buttonColor,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               )
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     VerticalDivider(color: Colors.transparent),
+                            //     Container(
+                            //       height: height * .1,
+                            //       width: width * .25,
+                            //       alignment: Alignment.center,
+                            //       decoration: BoxDecoration(
+                            //           color: colors.lightGrey,
+                            //           borderRadius: BorderRadius.circular(10)),
+                            //       child: Text(
+                            //         "Image\nContainer",
+                            //         textAlign: TextAlign.center,
+                            //         style: TextStyle(
+                            //           color: Colors.black,
+                            //           fontSize: 12,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // const Divider(color: Colors.transparent),
+                            // Row(
+                            //   children: [
+                            //     DottedBorder(
+                            //       color: colors.buttonColor,
+                            //       strokeWidth: 1,
+                            //       child: ClipRRect(
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         child: Container(
+                            //           width: width * .24,
+                            //           padding: const EdgeInsets.all(15),
+                            //           decoration: BoxDecoration(
+                            //               color: Color(0xFFD5F6F6),
+                            //               borderRadius:
+                            //                   BorderRadius.circular(10)),
+                            //           child: Column(
+                            //             children: [
+                            //               Icon(
+                            //                   Icons.play_circle_outline_rounded,
+                            //                   color: colors.buttonColor,
+                            //                   size: 25),
+                            //               Text(
+                            //                 "Video",
+                            //                 style: TextStyle(
+                            //                   color: colors.buttonColor,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               )
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     VerticalDivider(color: Colors.transparent),
+                            //     Container(
+                            //       height: height * .1,
+                            //       width: width * .25,
+                            //       alignment: Alignment.center,
+                            //       decoration: BoxDecoration(
+                            //           color: colors.lightGrey,
+                            //           borderRadius: BorderRadius.circular(10)),
+                            //       child: Text(
+                            //         "Video\nContainer",
+                            //         textAlign: TextAlign.center,
+                            //         style: TextStyle(
+                            //           color: Colors.black,
+                            //           fontSize: 12,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // const Divider(color: Colors.transparent),
                             // Row(
                             //   children: [
                             //     SizedBox(

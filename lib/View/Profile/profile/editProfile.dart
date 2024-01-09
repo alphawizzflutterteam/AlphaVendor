@@ -160,6 +160,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       name: nameCtrl.text.toString(),
                       email: emailCtrl.text.toString(),
                       phone: phoneCtrl.text.toString(),
+                      isFromFile: isFromFile,
                       imageUrl: image.toString())
                   .then(
                     (value) => Fluttertoast.showToast(

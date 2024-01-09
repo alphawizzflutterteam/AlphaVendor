@@ -1,5 +1,6 @@
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/View/Payment/model/orderTransactions.dart';
 import 'package:alpha_work/View/Wallet/model/transactionModel.dart';
 import 'package:alpha_work/repository/walletRepository.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 class WalletViewMaodel with ChangeNotifier {
   WalletRepository _myRepo = WalletRepository();
   TransactionModel? transaction;
+  List<OrderTransaction> orderTransactions = [];
   bool isLoading = true;
   bool get loading => isLoading;
   setLoading(bool value) {
@@ -41,6 +43,20 @@ class WalletViewMaodel with ChangeNotifier {
         .transactionGetRequest(api: AppUrl.transactions, token: token)
         .then((value) {
       transaction = value;
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get transaction history
+  Future<void> orderTransactionList() async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    isLoading = true;
+    orderTransactions.clear();
+    await _myRepo
+        .orderTransactionGetRequest(api: AppUrl.Ordertransactions, token: token)
+        .then((value) {
+      orderTransactions = value.data;
+      print(orderTransactions.length);
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

@@ -1,3 +1,4 @@
+import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';

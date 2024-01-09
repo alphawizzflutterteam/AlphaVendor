@@ -1,6 +1,7 @@
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/View/changePassword/changePassword.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -12,6 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Dashboard/Dashboad.dart';
 
 class OtpCheckPage extends StatefulWidget {
+  final bool isPass;
+
+  const OtpCheckPage({super.key, required this.isPass});
   @override
   State<OtpCheckPage> createState() => _OtpCheckPageState();
 }
@@ -115,7 +119,7 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (pinCtrl.text == savedotp) {
+                    if (pinCtrl.text == savedotp && !widget.isPass) {
                       PreferenceUtils.setString(PrefKeys.isLoggedIn, "true");
                       Navigator.pushAndRemoveUntil(
                           context,
@@ -123,6 +127,12 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                               child: const DashboardScreen1(),
                               type: PageTransitionType.rightToLeft),
                           (route) => false);
+                    } else {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: ChangePasswordScreen(),
+                              type: PageTransitionType.rightToLeft));
                     }
                   },
                   child: Align(

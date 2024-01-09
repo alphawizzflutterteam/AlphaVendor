@@ -68,7 +68,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                           onTap: () => Navigator.push(
                               context,
                               PageTransition(
-                                  child: CustomerDetailScreen(),
+                                  child: CustomerDetailScreen(
+                                      data: provider.customers[index]),
                                   type: PageTransitionType.rightToLeft)),
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
@@ -159,8 +160,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           fontWeight: FontWeight.normal),
                                     ),
                                     Text(
-                                      provider.customers[index].streetAddress
-                                          .toString(),
+                                      "${provider.customers[index].streetAddress.toString()} ${provider.customers[index].city.toString()} ${provider.customers[index].state.toString()} ${provider.customers[index].country.toString()}",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(

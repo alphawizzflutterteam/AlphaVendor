@@ -86,7 +86,6 @@ class Images {
   static const setting = "assets/icons/setting.png";
   static const discountProfile = 'assets/icons/discount.png';
   static const walletProfile = "assets/icons/wallet.png";
-  static const locationProfile = "assets/icons/location.png";
   static const aboutUs = "assets/icons/aboutUs.png";
   static const logOut = "assets/icons/logOut.png";
   static const privacyPolicy = 'assets/icons/privacyPolicy.png';
@@ -172,4 +171,6 @@ class Images {
   static const alphalogo_light = "assets/images/alpha_logo-light.png";
   static const success_bg = "assets/images/success_bg.png";
   static const success_check = "assets/images/success_check.png";
+  static const emptySearch = "assets/images/searchData.png";
+  static const noProduct = "assets/images/noProduct.png";
 }

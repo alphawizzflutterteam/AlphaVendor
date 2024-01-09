@@ -85,4 +85,11 @@ class AppUrl {
       '${baseURL}seller/orders/assign-delivery-man';
   static const String withdrawRequest = '${baseURL}seller/balance-withdraw';
   static const String transactions = '${baseURL}seller/transactions';
+  static const String Ordertransactions =
+      '${baseURL}seller/orders/transaction-list';
+  static const String getSubscription = '${baseURL}seller/plans';
+  static const String buySubscription = '${baseURL}seller/purchase-plan';
+  static const String updateStoreDetail =
+      '${baseURL}seller/update-store-details';
+  static const String getAdvert = '${baseURL}seller/get-advertisement';
 }

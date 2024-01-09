@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
+import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
+import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileRepository {
@@ -153,6 +156,7 @@ class ProfileRepository {
     required String email,
     required String phone,
     required String image,
+    required bool isFromFile,
   }) async {
     var headers = {'Authorization': 'Bearer $token'};
     var request = http.MultipartRequest('POST', Uri.parse(api));
@@ -161,9 +165,11 @@ class ProfileRepository {
       'email': email.toString(),
       'phone': phone.toString()
     });
-    if (image.isNotEmpty) {
+    if (image.isNotEmpty && isFromFile) {
       request.files.add(
           await http.MultipartFile.fromPath('image', '${image.toString()}'));
+    } else {
+      request.fields.addAll({'image': image.toString()});
     }
     request.headers.addAll(headers);
 
@@ -224,6 +230,95 @@ class ProfileRepository {
     } else {
       print(response.reasonPhrase);
       return json['status'];
+    }
+  }
+
+//Function to get Subscription Plans
+  Future<SubscriptionModel> subscriptionPlanGetRequest({
+    required String api,
+    required String token,
+  }) async {
+    try {
+      var url = Uri.parse(api);
+      var response =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        print(ans);
+        return SubscriptionModel.fromJson(ans);
+      } else {
+        print(response.reasonPhrase);
+        return SubscriptionModel(status: false, message: '', data: []);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to update user profile details
+  Future<dynamic> updateStoreDetail({
+    required String api,
+    required String token,
+    required bool isFromFile,
+    required String name,
+    required String email,
+    required String desc,
+    required String imageUrl,
+    required String type,
+    required String reg,
+    required String tax,
+    required String gst,
+    required String website,
+    required String social,
+  }) async {
+    var headers = {'Authorization': 'Bearer $token'};
+    var request = http.MultipartRequest('POST', Uri.parse(api));
+    request.fields.addAll({
+      'bussiness_email_id': email,
+      'bussiness_type': type,
+      'company_name': name,
+      'gst_in': gst,
+      'bussiness_registeration_number': reg,
+      'tax_identification_number': tax,
+      'website_link': website,
+      'social_link': social,
+      'details': desc,
+    });
+    if (imageUrl.isNotEmpty && isFromFile) {
+      request.files.add(
+          await http.MultipartFile.fromPath('image', '${imageUrl.toString()}'));
+    } else {
+      request.fields.addAll({'image': imageUrl.toString()});
+    }
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var result = await response.stream.bytesToString();
+    var ans = jsonDecode(result);
+    if (response.statusCode == 200) {
+      print(ans);
+      return ans;
+    } else {
+      print(response.statusCode);
+      return ans;
+    }
+  }
+
+//Function to get Advert Data
+  Future<AdvertModel> advertListGetRequest({required api}) async {
+    try {
+      var url = Uri.parse(api);
+      var res = await http.get(url);
+      var ans = jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        print(res);
+        return AdvertModel.fromJson(ans);
+      } else {
+        print(res.reasonPhrase);
+        return AdvertModel(status: null, message: null, data: []);
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

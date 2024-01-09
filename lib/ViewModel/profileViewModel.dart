@@ -2,6 +2,8 @@ import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
+import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
 import 'package:alpha_work/repository/profileRepository.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,9 @@ class ProfileViewModel with ChangeNotifier {
   ProfileRepository _myRepo = ProfileRepository();
   late VendorData vendorData;
   late StaticPageData staticPageData;
+  List<Monthly> yearly = [];
+  List<Monthly> monthly = [];
+  List<AdvertData> adverts = [];
   bool isLoading = true;
   bool get loading => isLoading;
   setLoading(bool value) {
@@ -122,6 +127,7 @@ class ProfileViewModel with ChangeNotifier {
     required String email,
     required String phone,
     required String imageUrl,
+    required bool isFromFile,
   }) async {
     Map<String, dynamic> val = {'status': false, 'msg': 'Something went wrong'};
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
@@ -132,6 +138,7 @@ class ProfileViewModel with ChangeNotifier {
             name: name,
             email: email,
             image: imageUrl,
+            isFromFile: isFromFile,
             phone: phone)
         .then((value) {
       val['status'] = value['status'];
@@ -175,5 +182,71 @@ class ProfileViewModel with ChangeNotifier {
       setLoading(false);
     });
     return msg;
+  }
+
+//Function to get subscription data
+  Future<void> getSubscriptions() async {
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    monthly.clear();
+    yearly.clear();
+    await _myRepo
+        .subscriptionPlanGetRequest(api: AppUrl.getSubscription, token: token)
+        .then((value) {
+      monthly = value.data.first.monthly;
+      yearly = value.data.first.yearly;
+      setLoading(false);
+    });
+  }
+
+//Function to update Bank Detail
+  Future<Map<String, dynamic>> updateStoreDetail({
+    required bool isFromFile,
+    required String name,
+    required String email,
+    required String desc,
+    required String imageUrl,
+    required String type,
+    required String reg,
+    required String gst,
+    required String tax,
+    required String website,
+    required String social,
+  }) async {
+    Map<String, dynamic> val = {'status': false, 'msg': 'Something went wrong'};
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .updateStoreDetail(
+      api: AppUrl.updateStoreDetail,
+      token: token,
+      isFromFile: isFromFile,
+      name: name,
+      email: email,
+      desc: desc,
+      tax: tax,
+      imageUrl: imageUrl,
+      type: type,
+      reg: reg,
+      gst: gst,
+      website: website,
+      social: social,
+    )
+        .then((value) {
+      val['status'] = value['status'];
+      val['msg'] = value['message'];
+    });
+    await getvendorProfileData();
+    return val;
+  }
+
+//Function to get Advert data
+  Future<void> getAdvertData() async {
+    isLoading = true;
+    adverts.clear();
+    await _myRepo.advertListGetRequest(api: AppUrl.getAdvert).then((value) {
+      adverts = value.data;
+      print(adverts.length);
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
   }
 }

@@ -1,16 +1,12 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/AUTH/ForgotPass/forgotpass.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
-import '../../../Widget/CommonTextFromWidget/commontextform.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../Dashboard/Dashboad.dart';
 import '../SIGNUP/signuppage.dart';
-import 'otpfind.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -210,7 +206,8 @@ class PhoneLogin extends StatelessWidget {
               onTap: () {
                 if (_formKey.currentState!.validate()) {
                   print(mobile.text);
-                  auth.loginwithPhone(phone: mobile.text, context: context);
+                  auth.loginwithPhone(
+                      phone: mobile.text, context: context, isPass: false);
                 }
               },
               child: Container(
@@ -241,13 +238,20 @@ class PhoneLogin extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const Align(
+            Align(
                 alignment: Alignment.centerRight,
-                child: Text(
-                  "Forget Password?",
-                  style: TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline),
+                child: GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      PageTransition(
+                          child: ForgotPassForm(),
+                          type: PageTransitionType.rightToLeft)),
+                  child: Text(
+                    "Forget Password?",
+                    style: TextStyle(
+                        // fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
+                  ),
                 ))
           ],
         ),

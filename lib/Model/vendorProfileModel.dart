@@ -140,6 +140,10 @@ class Shop {
     required this.state,
     required this.pincode,
     required this.country,
+    required this.details,
+    required this.socialLink,
+    required this.refferral,
+    required this.friendsCode,
   });
 
   final int? id;
@@ -167,6 +171,10 @@ class Shop {
   final String? state;
   final String? pincode;
   final String? country;
+  final String? details;
+  final String? socialLink;
+  final String? refferral;
+  final String? friendsCode;
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
@@ -195,6 +203,10 @@ class Shop {
       state: json["state"],
       pincode: json["pincode"],
       country: json["country"],
+      details: json["details"],
+      socialLink: json["social_link"],
+      refferral: json["refferral"],
+      friendsCode: json["friends_code"],
     );
   }
 }

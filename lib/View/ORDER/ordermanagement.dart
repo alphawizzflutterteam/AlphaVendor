@@ -126,8 +126,32 @@ class _OrderManagementState extends State<OrderManagement> {
                                                           FontWeight.normal),
                                                 ),
                                         initialList: order.orderList,
-                                        emptyWidget:
-                                            NoOrderFound(height: height),
+                                        emptyWidget: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Image.asset(
+                                                  Images.emptySearch,
+                                                  height: 200,
+                                                  width: 200,
+                                                  fit: BoxFit.contain),
+                                            ),
+                                            Text(
+                                              "Nothing Found",
+                                              style: TextStyle(
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.w600,
+                                                color: colors.buttonColor,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                         builder: (context, indx, item) {
                                           return OrderListTile(
                                             type: order.orderStatus[index].value
@@ -205,8 +229,7 @@ class NoOrderFound extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Image.asset(Images.noOrder,
-              height: 150, width: 150, fit: BoxFit.fitWidth),
+          child: Image.asset(Images.noOrder, fit: BoxFit.fitWidth),
         ),
         Text(
           "No Order Data Found",
@@ -255,6 +278,7 @@ class OrderListTile extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color(0xFFE9E9E9)),

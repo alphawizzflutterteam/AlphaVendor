@@ -42,6 +42,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
     productstatusP = Provider.of<ProductManagementViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       appBar: CommanAppbar(appbarTitle: widget.appBartitle),
       body: productstatusP.isLoading
           ? appLoader()
@@ -53,7 +54,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.asset(Images.noOrder,
+                      child: Image.asset(Images.noProduct,
                           height: height * .32,
                           width: width,
                           fit: BoxFit.contain),
@@ -89,6 +90,29 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                               .contains(value),
                         )
                         .toList(),
+                    emptyWidget: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Image.asset(Images.emptySearch,
+                              height: height * .25,
+                              width: width,
+                              fit: BoxFit.contain),
+                        ),
+                        Text(
+                          "No Data Found",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: colors.greyText,
+                          ),
+                        ),
+                      ],
+                    ),
                     initialList: productstatusP.productList,
                     builder: (displayedList, index, item) => GestureDetector(
                       onTap: () => Navigator.push(

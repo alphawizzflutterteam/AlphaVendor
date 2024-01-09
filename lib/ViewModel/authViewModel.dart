@@ -109,6 +109,7 @@ class AuthViewModel with ChangeNotifier {
   Future<void> loginwithPhone({
     required String phone,
     required BuildContext context,
+    required bool isPass,
   }) async {
     await _myRepo
         .loginOtpPostRequest(api: AppUrl.loginOtp, phone: phone)
@@ -129,7 +130,7 @@ class AuthViewModel with ChangeNotifier {
         PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
         PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => OtpCheckPage(),
+          builder: (context) => OtpCheckPage(isPass: isPass),
         ));
       }
     });

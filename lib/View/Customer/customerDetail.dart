@@ -1,11 +1,13 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/Customer/Model/customerModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
 
 class CustomerDetailScreen extends StatelessWidget {
-  const CustomerDetailScreen({super.key});
-
+  const CustomerDetailScreen({super.key, required this.data});
+  final CustomerData data;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -39,7 +41,7 @@ class CustomerDetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Jane Cooper",
+                          data.fName.toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -48,7 +50,7 @@ class CustomerDetailScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "9685585586",
+                          data.phone.toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -74,7 +76,7 @@ class CustomerDetailScreen extends StatelessWidget {
                           fontWeight: FontWeight.normal),
                     ),
                     Text(
-                      "acermonitor@gmail.com",
+                      data.email.toString(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -97,7 +99,7 @@ class CustomerDetailScreen extends StatelessWidget {
                           fontWeight: FontWeight.normal),
                     ),
                     Text(
-                      "28502 Preston Rd. Inglewood, Maine 98380",
+                      "${data.streetAddress.toString()} ${data.city.toString()} ${data.state.toString()} ${data.country.toString()}",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -169,7 +171,11 @@ class CustomerDetailScreen extends StatelessWidget {
                                 Radius.circular(10),
                               ),
                               image: DecorationImage(
-                                image: AssetImage(Images.powder),
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                    data.products[index].thumbnail.toString()),
+                                onError: (exception, stackTrace) =>
+                                    ErrorImageWidget(height: height),
                               ),
                             ),
                           ),
@@ -184,7 +190,7 @@ class CustomerDetailScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "35 % Off",
+                                  "${data.products[index].discount.toString()} %",
                                   style: const TextStyle(
                                     color: Colors.orange,
                                     fontSize: 12,
@@ -198,7 +204,7 @@ class CustomerDetailScreen extends StatelessWidget {
                               horizontal: 10,
                             ),
                             child: Text(
-                              "Dettol Refresh Long...",
+                              data.products[index].name.toString(),
                               maxLines: 2,
                               style: TextStyle(
                                   color: Theme.of(context).brightness ==
@@ -217,10 +223,11 @@ class CustomerDetailScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text(
-                                  "\$120",
+                                  data.products[index].specialPrice.toString(),
                                   style: const TextStyle(
                                     color: colors.buttonColor,
                                     fontSize: 24,
+                                    fontFamily: 'Montreal',
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -228,12 +235,12 @@ class CustomerDetailScreen extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  "\$200",
+                                  data.products[index].unitPrice.toString(),
                                   style: const TextStyle(
-                                    color: colors.lightTextColor,
-                                    decoration: TextDecoration.lineThrough,
-                                    fontSize: 14,
-                                  ),
+                                      color: colors.lightTextColor,
+                                      decoration: TextDecoration.lineThrough,
+                                      fontSize: 14,
+                                      fontFamily: 'Montreal'),
                                 ),
                               ],
                             ),

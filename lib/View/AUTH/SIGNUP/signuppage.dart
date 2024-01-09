@@ -678,7 +678,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                     const Divider(color: Colors.transparent),
                                     TextFormField(
                                       controller: businesTaxIDNM,
-                                      keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration()
                                           .applyDefaults(Theme.of(context)
                                               .inputDecorationTheme)
@@ -1152,8 +1151,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                         otp: savedotp.toString(),
                                         name: namecontroller.text.toString(),
                                         email: emailcontroller.text.toString(),
-                                        referalcode: referalcodecontroller.text
-                                            .toString(),
+                                        referalcode:
+                                            referalcodecontroller.text.isEmpty
+                                                ? ""
+                                                : referalcodecontroller.text
+                                                    .toString(),
                                         businessemail:
                                             businesemail.text.toString(),
                                         businessphoneNo:
@@ -1165,8 +1167,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                         registrationNo:
                                             businesRegNo.text.toString(),
                                         gstin: businesGSTNIN.text.toString(),
-                                        tin: businesGSTNIN.text.toString(),
-                                        website: businesWebsite.text.toString(),
+                                        tin: businesTaxIDNM.text.toString(),
+                                        website: businesWebsite.text.isEmpty
+                                            ? ""
+                                            : businesWebsite.text.toString(),
                                         password: pass.text.toString(),
                                         confirmPass: pass1.text.toString(),
                                         addr: addresscontroller.text.toString(),
@@ -1193,22 +1197,22 @@ class _SignUpPageState extends State<SignUpPage> {
                                         if (value) {
                                           showDialog(
                                             context: context,
-                                            builder: (context) {
+                                            builder: (dCtx) {
                                               Future.delayed(
                                                   Duration(seconds: 5), () {
-                                                Navigator.of(context).pop(true);
-                                                Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LoginPage(),
-                                                    ),
-                                                    (route) => false);
+                                                Navigator.of(dCtx).pop(true);
                                               });
                                               return RegistrationSuccessDialog(
-                                                  context);
+                                                  dCtx);
                                             },
-                                          );
+                                          ).then((value) =>
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage(),
+                                                  ),
+                                                  (route) => false));
                                         } else {
                                           Fluttertoast.showToast(
                                             msg:

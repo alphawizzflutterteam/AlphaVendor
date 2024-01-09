@@ -90,8 +90,7 @@ class AuthRepository {
     required String ifsc,
   }) async {
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(api));
-      request.fields.addAll({
+      var body = {
         'email': email,
         'name': name,
         'phone': phone,
@@ -119,15 +118,17 @@ class AuthRepository {
         'account_number': accNo,
         'ifsc_code': ifsc,
         'otp': otp,
-      });
-      http.StreamedResponse response = await request.send();
-      var res = await jsonDecode(await response.stream.bytesToString());
-      print(res);
+      };
+      var url = Uri.parse(api);
+      final response = await http.post(url, body: body);
+      print(body);
+      var res = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        print(await response.stream.bytesToString());
+        print(res);
         return res['status'];
       } else {
         print(response.reasonPhrase);
+        print(res);
         return res['status'];
       }
     } catch (e) {

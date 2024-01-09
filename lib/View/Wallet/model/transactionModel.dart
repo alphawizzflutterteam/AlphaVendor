@@ -45,7 +45,7 @@ class Transaction {
   final int? adminId;
   final String? amount;
   final String? withdrawalMethodId;
-  final List<dynamic> withdrawalMethodFields;
+  final String? withdrawalMethodFields;
   final String? transactionNote;
   final int? approved;
   final DateTime? createdAt;
@@ -59,9 +59,7 @@ class Transaction {
       adminId: json["admin_id"],
       amount: json["amount"],
       withdrawalMethodId: json["withdrawal_method_id"],
-      withdrawalMethodFields: json["withdrawal_method_fields"] == null
-          ? []
-          : List<dynamic>.from(json["withdrawal_method_fields"]!.map((x) => x)),
+      withdrawalMethodFields: json["withdrawal_method_fields"],
       transactionNote: json["transaction_note"],
       approved: json["approved"],
       createdAt: DateTime.tryParse(json["created_at"] ?? ""),

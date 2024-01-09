@@ -295,7 +295,8 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   context,
                                   PageTransition(
                                       type: PageTransitionType.rightToLeft,
-                                      child: EditStoreDetailScreen()));
+                                      child: EditStoreDetailScreen(
+                                          vendor: vendorProvider.vendorData)));
                             },
                           ),
                           ListTile(
