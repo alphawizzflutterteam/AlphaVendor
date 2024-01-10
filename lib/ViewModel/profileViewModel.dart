@@ -3,7 +3,9 @@ import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
+import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
+import 'package:alpha_work/View/Profile/support/model/customerSupportModel.dart';
 import 'package:alpha_work/repository/profileRepository.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +13,11 @@ class ProfileViewModel with ChangeNotifier {
   ProfileRepository _myRepo = ProfileRepository();
   late VendorData vendorData;
   late StaticPageData staticPageData;
+  List<ReferralData> referrals = [];
   List<Monthly> yearly = [];
   List<Monthly> monthly = [];
   List<AdvertData> adverts = [];
+  List<SupportData> queries = [];
   bool isLoading = true;
   bool get loading => isLoading;
   setLoading(bool value) {
@@ -32,6 +36,7 @@ class ProfileViewModel with ChangeNotifier {
         .then((value) {
       print(value.data.first.fName);
       vendorData = value.data.first;
+      PreferenceUtils.setString("ref", vendorData.shop!.refferral.toString());
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }
@@ -246,6 +251,36 @@ class ProfileViewModel with ChangeNotifier {
     await _myRepo.advertListGetRequest(api: AppUrl.getAdvert).then((value) {
       adverts = value.data;
       print(adverts.length);
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get Support Query Data
+  Future<void> getSupportQuerys() async {
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print(token);
+    queries.clear();
+    await _myRepo
+        .supportQueryListGetRequest(api: AppUrl.getSupportQueries, token: token)
+        .then((value) {
+      queries = value.data;
+      print(queries.length);
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get referral Data
+  Future<void> getReferralData() async {
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print(token);
+    referrals.clear();
+    await _myRepo
+        .referralListGetRequest(api: AppUrl.referral, token: token)
+        .then((value) {
+      referrals = value.data;
+      print(referrals.length);
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

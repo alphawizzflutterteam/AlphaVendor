@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class WalletViewMaodel with ChangeNotifier {
   WalletRepository _myRepo = WalletRepository();
   TransactionModel? transaction;
-  List<OrderTransaction> orderTransactions = [];
+  OrderTransactionModel? orderTransactions;
   bool isLoading = true;
   bool get loading => isLoading;
   setLoading(bool value) {
@@ -51,12 +51,12 @@ class WalletViewMaodel with ChangeNotifier {
   Future<void> orderTransactionList() async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     isLoading = true;
-    orderTransactions.clear();
+
     await _myRepo
         .orderTransactionGetRequest(api: AppUrl.Ordertransactions, token: token)
         .then((value) {
-      orderTransactions = value.data;
-      print(orderTransactions.length);
+      orderTransactions = value;
+      print(orderTransactions!.data.length);
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

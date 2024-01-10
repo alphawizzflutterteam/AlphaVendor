@@ -1,5 +1,6 @@
 import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
+import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/Product/model/brandModel.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
@@ -7,6 +8,8 @@ import 'package:alpha_work/View/Product/model/productDetailModel.dart';
 import 'package:alpha_work/View/Product/model/productListModel.dart';
 import 'package:alpha_work/repository/productMgmtEepository.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
 
 class ProductManagementViewModel extends ChangeNotifier {
   final _myRepo = ProductManagementRepository();
@@ -315,5 +318,31 @@ class ProductManagementViewModel extends ChangeNotifier {
         )
         .then((value) => status = value);
     return status;
+  }
+
+//Function to request category
+  Future<void> RequestCategory({
+    required String catName,
+    required String subcatName,
+    required BuildContext context,
+    required String subSubName,
+  }) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .addCategoryPostRequest(
+            api: AppUrl.RequestCategory,
+            bearerToken: token,
+            catName: catName,
+            subcatName: subcatName,
+            subSubName: subSubName)
+        .then(
+          (value) => Fluttertoast.showToast(
+            msg: value['message'],
+            backgroundColor: colors.buttonColor,
+            textColor: Colors.white,
+            gravity: ToastGravity.BOTTOM,
+          ),
+        )
+        .then((value) => setLoading(false));
   }
 }

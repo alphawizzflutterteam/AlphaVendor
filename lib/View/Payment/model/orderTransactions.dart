@@ -3,16 +3,19 @@ class OrderTransactionModel {
     required this.status,
     required this.message,
     required this.data,
+    required this.totalOrderTransaction,
   });
 
   final bool? status;
   final String? message;
+  final String? totalOrderTransaction;
   final List<OrderTransaction> data;
 
   factory OrderTransactionModel.fromJson(Map<String, dynamic> json) {
     return OrderTransactionModel(
       status: json["status"],
       message: json["message"],
+      totalOrderTransaction: json['total_order_amount'],
       data: json["data"] == null
           ? []
           : List<OrderTransaction>.from(

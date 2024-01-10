@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Container(
           height: height,
           child: Stack(
@@ -123,7 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      indx == 0 ? PhoneLogin(auth: auth) : EmailView(),
+                      indx == 0
+                          ? PhoneLogin(auth: auth)
+                          : EmailView(auth: auth),
                       Spacer(),
                       GestureDetector(
                         onTap: () {
@@ -261,8 +264,8 @@ class PhoneLogin extends StatelessWidget {
 }
 
 class EmailView extends StatefulWidget {
-  const EmailView({super.key});
-
+  const EmailView({super.key, required this.auth});
+  final AuthViewModel auth;
   @override
   State<EmailView> createState() => _EmailViewState();
 }
@@ -272,7 +275,7 @@ class _EmailViewState extends State<EmailView> {
   final TextEditingController email = TextEditingController();
   final TextEditingController pass = TextEditingController();
   FocusNode passFocus = new FocusNode();
-  bool visibility = false;
+  bool visibility = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -283,26 +286,31 @@ class _EmailViewState extends State<EmailView> {
             const Divider(color: Colors.transparent),
             TextFormField(
               controller: email,
+              textInputAction: TextInputAction.next,
               decoration: InputDecoration()
                   .applyDefaults(Theme.of(context).inputDecorationTheme)
                   .copyWith(
                     label: Text("Email ID"),
                   ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter email";
+                }
+                return null;
+              },
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
                 if (value.length == 10) {
                   FocusScope.of(context).unfocus();
                 }
               },
-              onFieldSubmitted: (value) =>
-                  FocusScope.of(context).requestFocus(passFocus),
             ),
             const Divider(
               color: Colors.transparent,
             ),
             TextFormField(
+              textInputAction: TextInputAction.done,
               controller: pass,
-              focusNode: passFocus,
               decoration: InputDecoration()
                   .applyDefaults(Theme.of(context).inputDecorationTheme)
                   .copyWith(
@@ -317,19 +325,26 @@ class _EmailViewState extends State<EmailView> {
                           color: Colors.black,
                         ),
                       )),
-              keyboardType: TextInputType.emailAddress,
-              obscureText: visibility,
-              onChanged: (value) {
-                if (value.length == 10) {
-                  FocusScope.of(context).unfocus();
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter password";
                 }
+                return null;
               },
+              obscureText: visibility,
             ),
             const Divider(
               color: Colors.transparent,
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (_formKey.currentState!.validate()) {
+                  widget.auth.loginwithEmail(
+                      email: email.text.toString(),
+                      context: context,
+                      pass: pass.text.toString());
+                }
+              },
               child: Container(
                 height: 50,
                 decoration: BoxDecoration(

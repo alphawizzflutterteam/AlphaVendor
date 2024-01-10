@@ -8,6 +8,7 @@ import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -67,19 +68,20 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                           ).then((value) =>
                               productMgmtProvider.getProductManagement()),
                           child: Container(
-                            height: height * .115,
-                            width: width * .29,
-                            padding: const EdgeInsets.all(10),
+                            width: width / 3.33,
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                AutoSizeText(
                                   "Total Product",
+                                  maxFontSize: 14,
+                                  minFontSize: 10,
+                                  maxLines: 1,
                                   style: TextStyle(
-                                    fontSize: 14,
                                     color: colors.greyText,
                                   ),
                                 ),
@@ -109,9 +111,8 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                           ).then((value) =>
                               productMgmtProvider.getProductManagement()),
                           child: Container(
-                            height: height * .115,
-                            width: width * .29,
-                            padding: const EdgeInsets.all(10),
+                            width: width / 3.33,
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)),
@@ -151,9 +152,8 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                           ).then((value) =>
                               productMgmtProvider.getProductManagement()),
                           child: Container(
-                            height: height * .115,
-                            width: width * .29,
-                            padding: const EdgeInsets.all(10),
+                            width: width / 3.33,
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)),

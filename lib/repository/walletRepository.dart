@@ -68,7 +68,8 @@ class WalletRepository {
         return OrderTransactionModel.fromJson(ans);
       } else {
         print(res.reasonPhrase);
-        return OrderTransactionModel(status: null, message: null, data: []);
+        return OrderTransactionModel(
+            status: null, message: null, data: [], totalOrderTransaction: null);
       }
     } catch (e) {
       throw Exception(e);

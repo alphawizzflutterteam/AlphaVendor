@@ -69,11 +69,19 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                     child: Row(
                       children: [
                         SizedBox.square(
-                          child: Image.network(
-                            productPro.productDetail.first.thumbnail.toString(),
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                ErrorImageWidget(height: height),
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: colors.lightGrey,
+                            ),
+                            child: Image.network(
+                              productPro.productDetail.first.thumbnail
+                                  .toString(),
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  ErrorImageWidget(height: height),
+                            ),
                           ),
                           dimension: height * .11,
                         ),

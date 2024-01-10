@@ -5,11 +5,14 @@ import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:html/parser.dart' show parse;
 
 class ProductDetailScreen extends StatefulWidget {
   final String id;
@@ -23,6 +26,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late bool switchVal;
   late ProductManagementViewModel productP;
+
   getData() async {
     productP = Provider.of<ProductManagementViewModel>(context, listen: false);
     await productP.getProductDetail(id: widget.id);
@@ -131,23 +135,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       productP.productDetail.first.specialPrice
                                           .toString(),
+                                      maxFontSize: 24,
+                                      minFontSize: 20,
                                       style: TextStyle(
                                           color: colors.buttonColor,
                                           fontFamily: 'Montreal',
-                                          fontSize: 24,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     VerticalDivider(
                                         color: Colors.transparent, width: 5),
-                                    Text(
+                                    AutoSizeText(
                                       productP.productDetail.first.unitPrice
                                           .toString(),
+                                      maxFontSize: 16,
+                                      minFontSize: 14,
                                       style: TextStyle(
                                         color: colors.greyText,
-                                        fontSize: 14,
                                         fontFamily: 'Montreal',
                                         decoration: TextDecoration.lineThrough,
                                       ),
@@ -325,10 +331,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       "Description",
                       style: TextStyle(fontSize: 16, color: colors.greyText),
                     ),
-                    Text(
-                      productP.productDetail.first.metaDescription.toString(),
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
+                    Html(data: productP.productDetail.first.details.toString()),
+                    // Text(
+                    //   productP.productDetail.first.details.toString(),
+                    //   style: TextStyle(fontSize: 16, color: Colors.black),
+                    // ),
                     Divider(height: 25),
                     Row(
                       children: [
@@ -474,18 +481,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
       ),
-      floatingActionButton: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
-        child: Text(
-          "SCHEDULE TIME TO ACTIVE",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
+      // floatingActionButton: ElevatedButton(
+      //   onPressed: () {},
+      //   style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
+      //   child: Text(
+      //     "SCHEDULE TIME TO ACTIVE",
+      //     style: TextStyle(
+      //       color: Colors.white,
+      //       fontSize: 14,
+      //       fontWeight: FontWeight.w600,
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

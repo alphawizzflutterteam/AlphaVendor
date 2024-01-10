@@ -147,6 +147,11 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     discountPriceCtrl.clear;
   }
 
+  String removeHtmlTags(String htmlString) {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    return htmlString.replaceAll(exp, '');
+  }
+
   getData() async {
     await productProvider.getCategory(id: '0');
     await productProvider.getBrandList();
@@ -197,7 +202,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     shippingCtrl.text = widget.productDetail.shippingCost
         .toString()
         .replaceAll(RegExp('[^A-Za-z0-9]'), '');
-    descCtrl.text = widget.productDetail.metaDescription.toString();
+    descCtrl.text = removeHtmlTags(widget.productDetail.details.toString());
     PurchaceCtrl.text = widget.productDetail.purchasePrice
         .toString()
         .replaceAll(RegExp('[^A-Za-z0-9]'), '');

@@ -4,6 +4,7 @@ import 'package:alpha_work/View/Profile/Faq/faq.dart';
 import 'package:alpha_work/View/Profile/aboutUs/aboutus.dart';
 import 'package:alpha_work/View/Profile/referEarn/referEarn.dart';
 import 'package:alpha_work/View/Profile/subscription/subscription.dart';
+import 'package:alpha_work/View/Profile/support/queryList.dart';
 import 'package:alpha_work/View/Profile/support/support.dart';
 import 'package:alpha_work/View/Profile/termsCondition/termsCondition.dart';
 import 'package:alpha_work/View/changePassword/changePassword.dart';
@@ -30,7 +31,7 @@ List<ProfileList> profileItem = [
   ProfileList(
       profileIcon: Images.support,
       profileText: 'Customer Support',
-      navigationScreen: const CustomerSupportScreen()),
+      navigationScreen: const QueryListScreen()),
   ProfileList(
       profileIcon: Images.terms,
       profileText: 'Terms and Conditions',

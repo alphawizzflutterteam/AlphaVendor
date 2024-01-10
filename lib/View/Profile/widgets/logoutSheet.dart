@@ -10,6 +10,7 @@ class LogoutBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
             ? colors.overlayBG
@@ -17,30 +18,16 @@ class LogoutBottomSheet extends StatelessWidget {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      height: MediaQuery.of(context).size.height * .35,
-      padding: const EdgeInsets.all(20.0),
+      height: 250,
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            children: [
-              Image.asset(
-                Images.iconBG,
-                width: 80,
-                height: 80,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Image.asset(
-                  Images.logOutSystem,
-                  width: 60,
-                  height: 60,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
+          Image.asset(
+            Images.logOut,
+            color: Colors.black,
+            height: 70,
+            width: 70,
           ),
           Text(
             'Logout',

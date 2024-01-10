@@ -173,4 +173,27 @@ class Images {
   static const success_check = "assets/images/success_check.png";
   static const emptySearch = "assets/images/searchData.png";
   static const noProduct = "assets/images/noProduct.png";
+  static const noTransaction = "assets/images/noTransaction.png";
+  static const dashImages = [
+    'assets/icons/DrawerItems/category.png',
+    'assets/icons/DrawerItems/OrderM.png',
+    'assets/icons/DrawerItems/Product.png',
+    'assets/icons/DrawerItems/profile.png',
+    'assets/icons/DrawerItems/Analytics.png',
+    'assets/icons/DrawerItems/Wallet.png',
+    'assets/icons/DrawerItems/setting.png',
+    'assets/icons/DrawerItems/Payment.png',
+    'assets/icons/DrawerItems/Store.png',
+  ];
+  static const dashImagesFilled = [
+    'assets/icons/DrawerItems/Category_fill.png',
+    'assets/icons/DrawerItems/OrderM_fill.png',
+    'assets/icons/DrawerItems/Product_fill.png',
+    'assets/icons/DrawerItems/Profile_fill.png',
+    'assets/icons/DrawerItems/Analytics_fill.png',
+    'assets/icons/DrawerItems/wallet_fill.png',
+    'assets/icons/DrawerItems/Setting_fill.png',
+    'assets/icons/DrawerItems/Payment_fill.png',
+    'assets/icons/DrawerItems/Store_fill.png',
+  ];
 }

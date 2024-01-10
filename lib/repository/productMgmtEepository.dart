@@ -143,7 +143,7 @@ class ProductManagementRepository {
       required String token}) async {
     var headers = {'Authorization': token};
     var request = http.MultipartRequest('POST', Uri.parse(api));
-    request.fields.addAll({'type': 'product'});
+    request.fields.addAll({'type': 'thumbnail'});
     request.files.add(await http.MultipartFile.fromPath('image', path));
     request.headers.addAll(headers);
 
@@ -202,7 +202,7 @@ class ProductManagementRepository {
       'code': skuId,
       'minimum_order_qty': minimum_order_qty,
       'brand_id': brand_id,
-      'quantity': quantity,
+      'current_stock': quantity,
       'description[]': description,
       'lang[]': 'en',
       'purchase_price': purchase_price,
@@ -214,6 +214,7 @@ class ProductManagementRepository {
 
     http.StreamedResponse response = await request.send();
     var ans = jsonDecode(await response.stream.bytesToString());
+    print(ans);
     if (response.statusCode == 200 && ans['status'] == true) {
       return true;
     } else {
@@ -346,7 +347,7 @@ class ProductManagementRepository {
         'code': skuId,
         'minimum_order_qty': minimum_order_qty,
         'brand_id': brand_id,
-        'quantity': quantity,
+        'current_stock': quantity,
         'description[]': description,
         'lang[]': 'en',
         'purchase_price': purchase_price,
@@ -360,6 +361,39 @@ class ProductManagementRepository {
         return true;
       } else {
         return false;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  //Future to request Category
+  Future<Map<String, dynamic>> addCategoryPostRequest({
+    required String api,
+    required String bearerToken,
+    required String catName,
+    required String subcatName,
+    required String subSubName,
+  }) async {
+    try {
+      var headers = {'Authorization': 'Bearer $bearerToken'};
+      var request = http.MultipartRequest('POST', Uri.parse(api));
+
+      request.headers.addAll(headers);
+      request.fields.addAll({
+        'category_name': catName,
+        'sub_category_name': subcatName,
+        'sub_sub_category_name': subSubName,
+      });
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200) {
+        print(ans);
+        return ans;
+      } else {
+        showTost();
+        print(response.stream.bytesToString());
+        return ans;
       }
     } catch (e) {
       throw Exception(e);

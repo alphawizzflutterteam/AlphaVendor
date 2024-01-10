@@ -7,7 +7,6 @@ class AppUrl {
 
   static String sendLoginOtp = "${baseURL}auth/send-login-otp";
   static String sendRegisterOtp = "${baseURL}auth/send-otp";
-  static String loginWithEmailPassword = "${baseURL}auth/login";
   static String resetPassword = "${baseURL}customer/reset-password";
   static String getSellerDashboard = "${baseURL1}seller/dashboard";
 
@@ -53,6 +52,7 @@ class AppUrl {
   static String contactForm = "${baseURL}contact/store";
 //Vendor
   static const String loginOtp = "${baseURL}seller/login-otp";
+  static const String loginWithEmailPassword = "${baseURL}seller/auth/login";
   static const String registerOtp = "${baseURL}seller/send-otp";
   static const String register = "${baseURL}seller/registration";
   static const String productMgmt = "${baseURL}seller/product-management";
@@ -68,6 +68,8 @@ class AppUrl {
   static const String deleteProduct = "${baseURL}seller/products/delete/";
   static const String updateProduct = "${baseURL}seller/products/update";
   static const String vendorProfile = "${baseURL}seller/shop-info";
+  static const String RequestCategory =
+      "${baseURL}seller/request-category-name";
   static const String updateBusinessDetail =
       "${baseURL}seller/update-bussiness-details";
   static const String updatePassword = '${baseURL}seller/update-password';
@@ -92,4 +94,6 @@ class AppUrl {
   static const String updateStoreDetail =
       '${baseURL}seller/update-store-details';
   static const String getAdvert = '${baseURL}seller/get-advertisement';
+  static const String getSupportQueries = '${baseURL}seller/support-ticket/get';
+  static const String referral = '${baseURL}seller/get-referrals';
 }

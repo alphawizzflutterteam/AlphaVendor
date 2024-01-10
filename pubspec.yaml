@@ -63,6 +63,7 @@ dependencies:
   flutter_no_internet_widget: ^1.0.0+18-dev.1
   expandable: ^5.0.1
   searchable_listview: ^2.10.0
+  auto_size_text: ^3.0.0
   
   
   
@@ -93,6 +94,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/images/temporaryImages/
+    - assets/icons/DrawerItems/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

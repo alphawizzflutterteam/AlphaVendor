@@ -231,4 +231,32 @@ class AuthViewModel with ChangeNotifier {
     }).onError((error, stackTrace) => setLoading(false));
     return val;
   }
+
+//Function to login with email
+  Future<void> loginwithEmail({
+    required String email,
+    required BuildContext context,
+    required String pass,
+  }) async {
+    await _myRepo
+        .loginEmailPostRequest(
+            api: AppUrl.loginWithEmailPassword, email: email, pass: pass)
+        .then((value) {
+      Fluttertoast.showToast(
+          msg: value.message.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: colors.buttonColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      if (value.status == true) {
+        PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
+        PreferenceUtils.setString(PrefKeys.isLoggedIn, "true");
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DashboardScreen1(),
+        ));
+      }
+    });
+  }
 }

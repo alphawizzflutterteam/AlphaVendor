@@ -43,7 +43,7 @@ class _WalletScreenState extends State<WalletScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: height * .34,
+                  // height: height * .34,
                   padding: const EdgeInsets.all(16),
                   color: colors.buttonColor.withOpacity(0.2),
                   child: Column(
@@ -197,85 +197,125 @@ class _WalletScreenState extends State<WalletScreen> {
                       const Divider(color: Colors.transparent),
                       SizedBox(
                         height: height * .44,
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) => Divider(
-                            color: colors.lightGrey,
-                            thickness: 2,
-                          ),
-                          shrinkWrap: true,
-                          itemCount: provider.transaction!.data.length,
-                          itemBuilder: (context, index) => Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    provider.transaction!.data[index]
-                                        .withdrawalMethodId
-                                        .toString(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Text(
-                                    provider.transaction!.data[index].amount
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: 'Montreal',
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    formatter.format(DateTime.parse(provider
-                                        .transaction!.data[index].createdAt
-                                        .toString())),
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  Divider(color: Colors.transparent, height: 3),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 3, horizontal: 5),
-                                    decoration: BoxDecoration(
-                                        color: provider.transaction!.data[index]
-                                                    .approved ==
-                                                0
-                                            ? Colors.redAccent.withOpacity(0.3)
-                                            : colors.buttonColor
-                                                .withOpacity(0.3),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Text(
-                                      provider.transaction!.data[index]
-                                                  .approved ==
-                                              0
-                                          ? "Declined"
-                                          : "Accepted",
-                                      style: TextStyle(
-                                        color: provider.transaction!.data[index]
-                                                    .approved ==
-                                                0
-                                            ? Colors.redAccent
-                                            : colors.buttonColor,
-                                        fontSize: 12,
+                        child: provider.transaction!.data.length == 0
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox.square(
+                                      dimension: height * .2,
+                                      child: Image.asset(
+                                        Images.noTransaction,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      "No transaction ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      "You haven’t made any transactions yet",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: colors.greyText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : ListView.separated(
+                                separatorBuilder: (context, index) => Divider(
+                                  color: colors.lightGrey,
+                                  thickness: 2,
+                                ),
+                                shrinkWrap: true,
+                                itemCount: provider.transaction!.data.length,
+                                itemBuilder: (context, index) => Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          provider.transaction!.data[index]
+                                              .withdrawalMethodId
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Text(
+                                          provider
+                                              .transaction!.data[index].amount
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'Montreal',
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          formatter.format(DateTime.parse(
+                                              provider.transaction!.data[index]
+                                                  .createdAt
+                                                  .toString())),
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Divider(
+                                            color: Colors.transparent,
+                                            height: 3),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 3, horizontal: 5),
+                                          decoration: BoxDecoration(
+                                              color: provider
+                                                          .transaction!
+                                                          .data[index]
+                                                          .approved ==
+                                                      0
+                                                  ? Colors.redAccent
+                                                      .withOpacity(0.3)
+                                                  : colors.buttonColor
+                                                      .withOpacity(0.3),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Text(
+                                            provider.transaction!.data[index]
+                                                        .approved ==
+                                                    0
+                                                ? "Declined"
+                                                : "Accepted",
+                                            style: TextStyle(
+                                              color: provider
+                                                          .transaction!
+                                                          .data[index]
+                                                          .approved ==
+                                                      0
+                                                  ? Colors.redAccent
+                                                  : colors.buttonColor,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
                       ),
                     ],
                   ),

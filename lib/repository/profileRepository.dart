@@ -4,7 +4,9 @@ import 'dart:ffi';
 import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
+import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
+import 'package:alpha_work/View/Profile/support/model/customerSupportModel.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileRepository {
@@ -22,7 +24,7 @@ class ProfileRepository {
 
       http.StreamedResponse response = await request.send();
       var res = await jsonDecode(await response.stream.bytesToString());
-      print(res);
+      // print(res);
       if (response.statusCode == 200) {
         return VendorProfileModel.fromJson(res);
       } else {
@@ -316,6 +318,48 @@ class ProfileRepository {
       } else {
         print(res.reasonPhrase);
         return AdvertModel(status: null, message: null, data: []);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to get support query Data
+  Future<CustomerSupportModel> supportQueryListGetRequest(
+      {required api, required String token}) async {
+    try {
+      var url = Uri.parse(api);
+      var res =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(res.body);
+      print(ans);
+      if (res.statusCode == 200) {
+        print(res);
+        return CustomerSupportModel.fromJson(ans);
+      } else {
+        print(res.reasonPhrase);
+        return CustomerSupportModel(status: null, message: null, data: []);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to get referral list
+  Future<ReferralModel> referralListGetRequest(
+      {required api, required String token}) async {
+    try {
+      var url = Uri.parse(api);
+      var res =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(res.body);
+      print(ans);
+      if (res.statusCode == 200) {
+        print(res);
+        return ReferralModel.fromJson(ans);
+      } else {
+        print(res.reasonPhrase);
+        return ReferralModel(status: null, message: null, data: [], wallet: "");
       }
     } catch (e) {
       throw Exception(e);

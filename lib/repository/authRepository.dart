@@ -135,4 +135,33 @@ class AuthRepository {
       throw Exception(e);
     }
   }
+
+  //Function to login with email and pass
+  Future<LoginOtpModel> loginEmailPostRequest({
+    required String api,
+    required String email,
+    required String pass,
+  }) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(api));
+      request.fields.addAll({'email': email, 'password': pass});
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200 || response.statusCode == 401) {
+        print(ans);
+        return LoginOtpModel.fromJson(ans);
+      } else {
+        print(response.reasonPhrase);
+        return LoginOtpModel(
+            status: false,
+            message: "Something went wrong",
+            token: null,
+            errors: [],
+            data: [],
+            otp: "");
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

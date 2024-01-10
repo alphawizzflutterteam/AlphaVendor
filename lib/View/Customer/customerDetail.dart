@@ -4,6 +4,7 @@ import 'package:alpha_work/View/Customer/Model/customerModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class CustomerDetailScreen extends StatelessWidget {
   const CustomerDetailScreen({super.key, required this.data});
@@ -26,16 +27,16 @@ class CustomerDetailScreen extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      height: height * .06,
-                      width: height * .06,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Image.asset(
-                        Images.profile,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+                        height: height * .08,
+                        width: height * .08,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.network(
+                          data.image.toString(),
+                          errorBuilder: (context, error, stackTrace) =>
+                              ErrorImageWidget(height: height),
+                        )),
                     VerticalDivider(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,12 +131,13 @@ class CustomerDetailScreen extends StatelessWidget {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.32,
                   child: ListView.builder(
-                    itemCount: 3,
+                    itemCount: data.products.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => Container(
-                      width: MediaQuery.of(context).size.width * 0.44,
+                      width: MediaQuery.of(context).size.width * 0.45,
                       margin: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
                           // image: DecorationImage(image: NetworkImage(model.images.first)),
                           borderRadius:
@@ -171,7 +173,7 @@ class CustomerDetailScreen extends StatelessWidget {
                                 Radius.circular(10),
                               ),
                               image: DecorationImage(
-                                fit: BoxFit.fill,
+                                fit: BoxFit.contain,
                                 image: NetworkImage(
                                     data.products[index].thumbnail.toString()),
                                 onError: (exception, stackTrace) =>
@@ -220,29 +222,39 @@ class CustomerDetailScreen extends StatelessWidget {
                               horizontal: 10,
                               vertical: 5,
                             ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  data.products[index].specialPrice.toString(),
-                                  style: const TextStyle(
-                                    color: colors.buttonColor,
-                                    fontSize: 24,
-                                    fontFamily: 'Montreal',
-                                    fontWeight: FontWeight.bold,
+                            child: SizedBox(
+                              width: width * .4,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AutoSizeText(
+                                    data.products[index].specialPrice
+                                        .toString(),
+                                    maxFontSize: 22,
+                                    // minFontSize: 18,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                      color: colors.buttonColor,
+                                      fontFamily: 'Montreal',
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  data.products[index].unitPrice.toString(),
-                                  style: const TextStyle(
-                                      color: colors.lightTextColor,
-                                      decoration: TextDecoration.lineThrough,
-                                      fontSize: 14,
-                                      fontFamily: 'Montreal'),
-                                ),
-                              ],
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  AutoSizeText(
+                                    data.products[index].unitPrice.toString(),
+                                    maxFontSize: 16,
+                                    // minFontSize: 12,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        color: colors.lightTextColor,
+                                        decoration: TextDecoration.lineThrough,
+                                        fontSize: 14,
+                                        fontFamily: 'Montreal'),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Padding(
@@ -271,14 +283,6 @@ class CustomerDetailScreen extends StatelessWidget {
             ),
           ),
           const Divider(color: colors.lightGrey, height: 2),
-          // Padding(
-          //   padding: const EdgeInsets.all(16),
-          //   child: Column(
-          //     mainAxisSize: MainAxisSize.min,
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [],
-          //   ),
-          // )
         ],
       ),
     );

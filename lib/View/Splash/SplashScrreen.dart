@@ -44,7 +44,9 @@ class _SpalashScreenState extends State<SpalashScreen> {
         Image.asset(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          "assets/images/splash.png",
+          Theme.of(context).brightness == Brightness.dark
+              ? "assets/images/splash.png"
+              : "assets/images/white-splash.png",
           fit: BoxFit.fill,
         ),
       ],
