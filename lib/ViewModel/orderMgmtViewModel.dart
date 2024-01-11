@@ -1,11 +1,14 @@
 import 'dart:ffi';
 
 import 'package:alpha_work/Utils/appUrls.dart';
+import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/ORDER/model/derliveryManModel.dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/repository/orderMgmtRepository.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class OrderManagementViewModel with ChangeNotifier {
   OrderManagementRepository _myRepo = OrderManagementRepository();
@@ -31,6 +34,7 @@ class OrderManagementViewModel with ChangeNotifier {
       print(value.data.length);
       if (orderStatus.isEmpty) {
         orderStatus = value.orderStatus;
+        notifyListeners();
         print(orderStatus.length);
       }
       orderList = value.data;
@@ -74,6 +78,30 @@ class OrderManagementViewModel with ChangeNotifier {
       val = value;
       setLoading(false);
       return val;
+    }).onError((error, stackTrace) => setLoading(false));
+    return val;
+  }
+
+//Function to cancel order status
+  Future<bool> cancelOrder({
+    required BuildContext ctx,
+    required String id,
+  }) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    isLoading = false;
+    bool val = false;
+    print(token);
+    await _myRepo
+        .orderStatusUpatePutRequest(
+            api: "${AppUrl.orderStatusUpdate}$id", token: token)
+        .then((value) {
+      Fluttertoast.showToast(
+        msg: value['message'].toString(),
+        backgroundColor: colors.buttonColor,
+        textColor: Colors.white,
+        gravity: ToastGravity.BOTTOM,
+      );
+      val = value['status'].toString() == 'true' ? true : false;
     }).onError((error, stackTrace) => setLoading(false));
     return val;
   }

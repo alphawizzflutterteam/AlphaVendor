@@ -14,6 +14,7 @@ import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -596,15 +597,17 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: 16,
                                               fontWeight: FontWeight.normal,
+                                              fontSize: 16,
                                               color: colors.greyText,
                                             ),
                                           ),
-                                          Text(
+                                          AutoSizeText(
                                             getCardVal(index),
+                                            maxFontSize: 28,
+                                            minFontSize: 22,
+                                            maxLines: 1,
                                             style: TextStyle(
-                                              fontSize: 28,
                                               fontFamily: 'Montreal',
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,

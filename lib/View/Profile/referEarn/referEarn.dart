@@ -1,11 +1,16 @@
+import 'dart:ffi';
+
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ReferAndEarnScreen extends StatefulWidget {
@@ -18,6 +23,14 @@ class ReferAndEarnScreen extends StatefulWidget {
 class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
   String refCode = "";
   late ProfileViewModel proProvider;
+  String formatDaate(String dateString) {
+    // Parse the date string
+    DateTime dateTime = DateTime.parse(dateString);
+
+    // Format the date
+    String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+    return formattedDate;
+  }
 
   @override
   void initState() {
@@ -158,10 +171,12 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                         ),
                                         InkWell(
                                           onTap: () async {
-                                            // await Clipboard.setData(ClipboardData(
-                                            //     text: user.data[0].referralCode));
-                                            // Utils.showFlushBarWithMessage("Alert",
-                                            //     "Referral Code Copied.", context);
+                                            await Clipboard.setData(
+                                                ClipboardData(text: refCode));
+                                            Utils.showFlushBarWithMessage(
+                                                "Alert",
+                                                "Referral Code Copied.",
+                                                context);
                                           },
                                           child: Text(
                                             "Copy\nCode",
@@ -218,7 +233,7 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 20),
                     child: Text(
-                      "Referall Member & Amount",
+                      "Referall Members",
                       style: TextStyle(
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
@@ -231,7 +246,7 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                     child: ListView.separated(
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
-                      itemCount: 10,
+                      itemCount: proProvider.referrals.length,
                       separatorBuilder: (context, index) => Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 6, horizontal: 20),
@@ -262,7 +277,9 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            "AS",
+                                            proProvider.referrals[i].name![0]
+                                                .toString()
+                                                .toUpperCase(),
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                           .brightness ==
@@ -285,10 +302,10 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            // profileProvider
-                                            //     .referralList[i].description
-                                            //     .toString(),
-                                            "Anshul Sharma",
+                                            proProvider.referrals[i].name
+                                                .toString(),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 color: Theme.of(context)
                                                             .brightness ==
@@ -301,10 +318,9 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                             height: 5,
                                           ),
                                           Text(
-                                              // profileProvider
-                                              //     .referralList[i].createdAt
-                                              //     .toString(),
-                                              "02 oct 2022",
+                                              formatDaate(proProvider
+                                                  .referrals[i].createdAt
+                                                  .toString()),
                                               style: TextStyle(
                                                   color: colors.lightTextColor,
                                                   fontSize: 12))
@@ -312,18 +328,18 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    // profileProvider.referralList[i].balance
-                                    //     .toString(),
-                                    "200",
-                                    style: TextStyle(
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  )
+                                  // Text(
+                                  //   // profileProvider.referralList[i].balance
+                                  //   //     .toString(),
+                                  //   "200",
+                                  //   style: TextStyle(
+                                  //       color: Theme.of(context).brightness ==
+                                  //               Brightness.dark
+                                  //           ? Colors.white
+                                  //           : Colors.black,
+                                  //       fontSize: 14,
+                                  //       fontWeight: FontWeight.bold),
+                                  // )
                                 ],
                               ),
                             ],

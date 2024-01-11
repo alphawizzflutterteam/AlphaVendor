@@ -154,6 +154,7 @@ class _OrderManagementState extends State<OrderManagement> {
                                         ),
                                         builder: (context, indx, item) {
                                           return OrderListTile(
+                                            orderPro: orderProvider,
                                             type: order.orderStatus[index].value
                                                 .toString(),
                                             order: order.orderList[indx],
@@ -252,6 +253,7 @@ class OrderListTile extends StatelessWidget {
   final String type;
   final bool isAlpha;
   final OrderData order;
+  final OrderManagementViewModel orderPro;
 
   const OrderListTile({
     super.key,
@@ -262,6 +264,7 @@ class OrderListTile extends StatelessWidget {
     required this.isAlpha,
     required this.order,
     required this.type,
+    required this.orderPro,
   });
 
   @override
@@ -345,7 +348,8 @@ class OrderListTile extends StatelessWidget {
                 ),
                 Spacer(),
                 type == 'Pending'
-                    ? pendOrderWidget(context: context, orderId: id)
+                    ? pendOrderWidget(
+                        context: context, orderId: id, orderProvider: orderPro)
                     : Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
@@ -388,10 +392,105 @@ Color getTextColor(String status) {
 }
 
 pendOrderWidget<Widget>(
-    {required BuildContext context, required String orderId}) {
+    {required BuildContext context,
+    required String orderId,
+    required OrderManagementViewModel orderProvider}) {
   return Row(
     children: [
       GestureDetector(
+        onTap: () => showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Container(
+              // height: height * .4,
+              // width: width * .75,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      Images.order,
+                      height: (MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          30,
+                      color: Colors.red,
+                    ),
+                    Text(
+                      'Do you want to cancel this order.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                    Text(
+                      'Cancel This Order',
+                      style: TextStyle(
+                        color: colors.greyText,
+                      ),
+                    ),
+                    Divider(color: Colors.transparent),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * .35,
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: colors.lightGrey, width: 2)),
+                            child: Text(
+                              'NO',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            orderProvider
+                                .cancelOrder(ctx: context, id: orderId)
+                                .then((value) =>
+                                    value ? Navigator.pop(context) : null);
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * .35,
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: colors.buttonColor,
+                            ),
+                            child: Text(
+                              'YES',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(

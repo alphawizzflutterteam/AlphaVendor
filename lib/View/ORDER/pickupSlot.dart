@@ -41,6 +41,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: SearchableList(
+                  autoFocusOnSearch: false,
                   initialList: provider.deliveryMans,
                   inputDecoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
@@ -163,12 +164,16 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                                     ),
                                   ),
                                   context: context,
-                                  builder: (context) => PickupBottomSheet(
+                                  builder: (ctx) => PickupBottomSheet(
                                       deliveryManId: provider
                                           .deliveryMans[index].id
                                           .toString(),
                                       orderId: widget.orderID),
-                                ),
+                                ).then((value) async {
+                                  await provider.getOrderList(
+                                      status: "pending");
+                                  Navigator.pop(context);
+                                }),
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * .3,
                                   alignment: Alignment.center,

@@ -90,4 +90,33 @@ class OrderManagementRepository {
       throw Exception(e);
     }
   }
+
+//Function to update order status
+  Future<Map<String, String>> orderStatusUpatePutRequest({
+    required String api,
+    required String token,
+  }) async {
+    try {
+      print(token);
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer $token'
+      };
+      var request = http.Request('PUT', Uri.parse(api));
+      request.bodyFields = {'order_status': 'canceled'};
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      print(ans);
+      if (response.statusCode == 200) {
+        return ans;
+      } else {
+        print(response.reasonPhrase);
+        return ans;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

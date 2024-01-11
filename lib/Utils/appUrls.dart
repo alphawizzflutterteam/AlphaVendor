@@ -96,4 +96,6 @@ class AppUrl {
   static const String getAdvert = '${baseURL}seller/get-advertisement';
   static const String getSupportQueries = '${baseURL}seller/support-ticket/get';
   static const String referral = '${baseURL}seller/get-referrals';
+  static const String orderStatusUpdate =
+      '${baseURL}seller/orders/order-detail-status/';
 }

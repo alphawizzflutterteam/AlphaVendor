@@ -11,7 +11,7 @@ class Utils {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       padding: const EdgeInsets.all(10),
       backgroundColor: colors.buttonColor,
-      flushbarPosition: FlushbarPosition.TOP,
+      flushbarPosition: FlushbarPosition.BOTTOM,
       reverseAnimationCurve: Curves.easeOutSine,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       positionOffset: 20,

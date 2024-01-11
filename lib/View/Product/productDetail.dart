@@ -255,53 +255,120 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               onTap: () => showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    backgroundColor: Colors.white,
+                                  return Dialog(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(10)),
-                                    title: const Text('Delete This Product'),
-                                    content: const Text(
-                                        'Do you want to delete this product.'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: const Text('No'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      ElevatedButton(
-                                        child: const Text(
-                                          'Yes',
-                                          style: TextStyle(color: Colors.white),
+                                            BorderRadius.circular(15)),
+                                    child: Container(
+                                      // height: height * .4,
+                                      // width: width * .75,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 16, horizontal: 10),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              Images.delete_icon,
+                                              height: (height / width) * 30,
+                                              color: Colors.red,
+                                            ),
+                                            Text(
+                                              'Do you want to delete this product.',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Delete This Product',
+                                              style: TextStyle(
+                                                color: colors.greyText,
+                                              ),
+                                            ),
+                                            Divider(color: Colors.transparent),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () =>
+                                                      Navigator.pop(context),
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        border: Border.all(
+                                                            color: colors
+                                                                .lightGrey,
+                                                            width: 2)),
+                                                    child: Text(
+                                                      'CANCEL',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  child: const Text(
+                                                    'DELETE',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  onPressed: () async {
+                                                    await productP
+                                                        .deleteProduct(
+                                                            id: productP
+                                                                .productDetail
+                                                                .first
+                                                                .id
+                                                                .toString())
+                                                        .then((value) =>
+                                                            AwesomeDialog(
+                                                              context: context,
+                                                              dialogType:
+                                                                  DialogType
+                                                                      .success,
+                                                              animType: AnimType
+                                                                  .scale,
+                                                              autoDismiss:
+                                                                  false,
+                                                              onDismissCallback:
+                                                                  (type) {},
+                                                              title:
+                                                                  "Product Deleted Successfully",
+                                                              btnOkOnPress: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            )..show());
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        onPressed: () async {
-                                          await productP
-                                              .deleteProduct(
-                                                  id: productP
-                                                      .productDetail.first.id
-                                                      .toString())
-                                              .then((value) => AwesomeDialog(
-                                                    context: context,
-                                                    dialogType:
-                                                        DialogType.success,
-                                                    animType: AnimType.scale,
-                                                    autoDismiss: false,
-                                                    onDismissCallback:
-                                                        (type) {},
-                                                    title:
-                                                        "Product Deleted Successfully",
-                                                    btnOkOnPress: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  )..show());
-                                          Navigator.pop(context, true);
-                                        },
                                       ),
-                                    ],
+                                    ),
                                   );
                                 },
-                              ).then((value) => Navigator.pop(context)),
+                              ),
                               child: Row(
                                 children: [
                                   ImageIcon(
@@ -496,3 +563,51 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 }
+
+
+// AlertDialog(
+//                                     backgroundColor: Colors.white,
+//                                     shape: RoundedRectangleBorder(
+//                                         borderRadius:
+//                                             BorderRadius.circular(10)),
+//                                     title: const Text('Delete This Product'),
+//                                     content: const Text(
+//                                         'Do you want to delete this product.'),
+//                                     actions: <Widget>[
+//                                       TextButton(
+//                                         child: const Text('No'),
+//                                         onPressed: () {
+//                                           Navigator.of(context).pop();
+//                                         },
+//                                       ),
+//                                       ElevatedButton(
+//                                         child: const Text(
+//                                           'Yes',
+//                                           style: TextStyle(color: Colors.white),
+//                                         ),
+//                                         onPressed: () async {
+//                                           await productP
+//                                               .deleteProduct(
+//                                                   id: productP
+//                                                       .productDetail.first.id
+//                                                       .toString())
+//                                               .then((value) => AwesomeDialog(
+//                                                     context: context,
+//                                                     dialogType:
+//                                                         DialogType.success,
+//                                                     animType: AnimType.scale,
+//                                                     autoDismiss: false,
+//                                                     onDismissCallback:
+//                                                         (type) {},
+//                                                     title:
+//                                                         "Product Deleted Successfully",
+//                                                     btnOkOnPress: () {
+//                                                       Navigator.pop(context);
+//                                                     },
+//                                                   )..show());
+//                                           Navigator.pop(context, true);
+//                                         },
+//                                       ),
+//                                     ],
+//                                   );
+                              

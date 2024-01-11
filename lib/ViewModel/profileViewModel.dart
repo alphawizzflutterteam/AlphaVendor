@@ -29,6 +29,7 @@ class ProfileViewModel with ChangeNotifier {
   Future<void> getvendorProfileData() async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     String phone = PreferenceUtils.getString(PrefKeys.mobile);
+    print(token);
     isLoading = true;
     await _myRepo
         .vendorProfileGetRequest(
