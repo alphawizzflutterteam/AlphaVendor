@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 
-class TermsAndConditionScreen extends StatefulWidget {
-  const TermsAndConditionScreen({super.key});
+class PrivacyPolicyScreen extends StatefulWidget {
+  const PrivacyPolicyScreen({super.key});
 
   @override
-  State<TermsAndConditionScreen> createState() =>
-      _TermsAndConditionScreenState();
+  State<PrivacyPolicyScreen> createState() => _PrivacyPolicyScreenState();
 }
 
-class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
+class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   late ProfileViewModel provider;
   @override
   void initState() {
@@ -27,13 +26,25 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
     provider = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommanAppbar(appbarTitle: "Terms and Condition"),
+      appBar: CommanAppbar(appbarTitle: "Privacy Policy"),
       body: provider.isLoading
           ? appLoader()
           : Padding(
               padding: const EdgeInsets.all(16),
-              child: Html(
-                data: provider.staticPageData.termsNConditions!.content,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Privacy Policy",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    Html(
+                      data: provider.staticPageData.privacyPolicy!.content,
+                    ),
+                  ],
+                ),
               ),
             ),
     );

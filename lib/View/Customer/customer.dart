@@ -4,6 +4,7 @@ import 'package:alpha_work/View/Customer/customerDetail.dart';
 import 'package:alpha_work/ViewModel/customerViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
+import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -88,9 +89,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Image.asset(
-                                        Images.profile,
-                                        fit: BoxFit.contain,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          provider.customers[index].image
+                                              .toString(),
+                                          fit: BoxFit.fill,
+                                          errorBuilder: (context, error,
+                                                  stackTrace) =>
+                                              ErrorImageWidget(height: height),
+                                        ),
                                       ),
                                     ),
                                     VerticalDivider(),

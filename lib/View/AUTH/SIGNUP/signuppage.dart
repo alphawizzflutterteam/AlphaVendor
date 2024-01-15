@@ -1,33 +1,29 @@
+import 'package:alpha_work/Model/cityModel.dart';
+import 'package:alpha_work/Model/countryModel.dart';
+import 'package:alpha_work/Model/stateModel.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
+import 'package:alpha_work/View/Profile/privacyPolicy/privacyPolicy.dart';
+import 'package:alpha_work/View/Profile/termsCondition/termsCondition.dart';
+import 'package:alpha_work/ViewModel/addressViewModel.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
+import 'package:alpha_work/Widget/DropdownDeco.dart';
+import 'package:alpha_work/Widget/appLoader.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-
-import 'package:easy_stepper/easy_stepper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../../Utils/color.dart';
-
-import '../../../Widget/CommonTextFromWidget/commontextform.dart';
 import '../../../Widget/CommonTextWidget/commontext.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
-
-//  import 'package:flutter_gen/l10n/app_localizations.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../Dashboard/Dashboad.dart';
-import 'signupservice.dart';
-
-// import 'package:/flutter_gen';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -62,10 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   //for address information
   TextEditingController addresscontroller = TextEditingController();
-  TextEditingController citynamecontroller = TextEditingController();
-  TextEditingController statacontroler = TextEditingController();
   TextEditingController postalcodecontroller = TextEditingController();
-  TextEditingController countryController = TextEditingController();
 
   // for banking information
   TextEditingController banknamecontroller = TextEditingController();
@@ -95,6 +88,29 @@ class _SignUpPageState extends State<SignUpPage> {
   ];
   late AuthViewModel auth;
   late String savedotp;
+  late AddressViewModel addressP;
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a password.';
+    }
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters.';
+    }
+    if (!value.contains(RegExp(r'[a-z]'))) {
+      return 'Password must contain at least one lowercase letter.';
+    }
+    if (!value.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter.';
+    }
+    if (!value.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number.';
+    }
+    if (!value.contains(RegExp(r'[!@#\$%^&*()_+{}|:<>?~]'))) {
+      return 'Password must contain at least one special character.';
+    }
+    return null;
+  }
+
   void getOtp() async {
     savedotp = PreferenceUtils.getString(PrefKeys.otp);
     print(savedotp);
@@ -107,6 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     auth = Provider.of<AuthViewModel>(context, listen: false);
+    addressP = Provider.of<AddressViewModel>(context, listen: false);
     super.initState();
   }
 
@@ -132,25 +149,38 @@ class _SignUpPageState extends State<SignUpPage> {
     ),
   );
   TextEditingController pinCtrl = TextEditingController();
+  List<Widget> progressItem = [];
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.signInToYourAccount),
+        title: Text(
+          "Registration Onboarding",
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        forceMaterialTransparency: true,
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
             if (activeStep != 0) {
-              setState(() {
-                activeStep--;
-              });
+              print(activeStep);
+              if (activeStep == 2) {
+                progressItem.removeLast();
+                setState(() {
+                  activeStep = activeStep - 2;
+                });
+              } else {
+                progressItem.removeLast();
+                setState(() {
+                  activeStep--;
+                });
+              }
             } else {
               Navigator.pop(context);
             }
@@ -172,7 +202,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 unselectedColor: Colors.grey,
                 roundedEdges: const Radius.circular(10),
               ),
-              Divider(color: Colors.transparent, height: height * .05),
+              SizedBox(
+                width: width,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  reverse: true,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: progressItem,
+                    ),
+                  ),
+                ),
+              ),
+              Divider(color: Colors.transparent, height: height * .02),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -202,6 +246,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 TextFormField(
                                   controller: mobilecontroller,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'\d+'))
+                                  ],
                                   decoration: InputDecoration()
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
@@ -241,7 +289,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         });
                                       },
                                     ),
-                                    const Column(
+                                    Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -251,13 +299,22 @@ class _SignUpPageState extends State<SignUpPage> {
                                         ),
                                         Row(
                                           children: [
-                                            Text(
-                                              "Term of Services",
-                                              style: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 16, 89, 132),
-                                                  decoration:
-                                                      TextDecoration.underline),
+                                            GestureDetector(
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      child:
+                                                          TermsAndConditionScreen(),
+                                                      type: PageTransitionType
+                                                          .rightToLeft)),
+                                              child: Text(
+                                                "Term of Services",
+                                                style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        255, 16, 89, 132),
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                              ),
                                             ),
                                             SizedBox(
                                               width: 3,
@@ -266,13 +323,22 @@ class _SignUpPageState extends State<SignUpPage> {
                                             SizedBox(
                                               width: 3,
                                             ),
-                                            Text(
-                                              "Privacy Policy",
-                                              style: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 16, 89, 132),
-                                                  decoration:
-                                                      TextDecoration.underline),
+                                            GestureDetector(
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      child:
+                                                          PrivacyPolicyScreen(),
+                                                      type: PageTransitionType
+                                                          .rightToLeft)),
+                                              child: Text(
+                                                "Privacy Policy",
+                                                style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        255, 16, 89, 132),
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -371,6 +437,26 @@ class _SignUpPageState extends State<SignUpPage> {
                               GestureDetector(
                                 onTap: () {
                                   if (pinCtrl.text == savedotp) {
+                                    progressItem.add(
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                              Icons
+                                                  .check_circle_outline_rounded,
+                                              size: 20,
+                                              color: Colors.black),
+                                          Text(
+                                            "Phone",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
+                                            width: 4,
+                                          ),
+                                        ],
+                                      ),
+                                    );
                                     setState(() {
                                       activeStep += 1;
                                     });
@@ -419,19 +505,28 @@ class _SignUpPageState extends State<SignUpPage> {
                                   width:
                                       MediaQuery.of(context).size.width - 100,
                                   height: 50,
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         "Didn`t receaved Otp? ",
                                         style: TextStyle(color: Colors.grey),
                                       ),
-                                      Text(
-                                        "Resend OTP",
-                                        style: TextStyle(
-                                          // fontWeight: FontWeight.bold,
-                                          color:
-                                              Color.fromARGB(255, 29, 104, 136),
+                                      GestureDetector(
+                                        onTap: () {
+                                          auth
+                                              .getRegistrarionOtp(
+                                                  phone: mobilecontroller.text
+                                                      .toString())
+                                              .then((value) => getOtp());
+                                        },
+                                        child: Text(
+                                          "Resend OTP",
+                                          style: TextStyle(
+                                            // fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(
+                                                255, 29, 104, 136),
+                                          ),
                                         ),
                                       )
                                     ],
@@ -459,23 +554,30 @@ class _SignUpPageState extends State<SignUpPage> {
                                 TextFormField(
                                   controller: namecontroller,
                                   keyboardType: TextInputType.name,
+                                  maxLength: 21,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "Enter your name";
+                                    } else if (value.length < 3) {
+                                      return "Enter a valid name";
                                     }
                                     return null;
                                   },
+                                  textCapitalization: TextCapitalization.words,
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration()
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
                                       .copyWith(
                                         labelText: "Full Name*",
+                                        counterText: "",
                                       ),
                                 ),
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   controller: emailcontroller,
+                                  textCapitalization: TextCapitalization.none,
+                                  inputFormatters: [RegexFormatter.email],
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration()
                                       .applyDefaults(Theme.of(context)
@@ -486,7 +588,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   textInputAction: TextInputAction.next,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "Enter your Email";
+                                      return "Please enter email";
+                                    } else if (!validator.email(value)) {
+                                      return "Please enter a valid email";
                                     }
                                     return null;
                                   },
@@ -494,14 +598,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   textInputAction: TextInputAction.next,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Enter your phone";
-                                    }
-                                    return null;
-                                  },
                                   maxLength: 10,
-                                  keyboardType: TextInputType.phone,
+                                  enabled: false,
                                   controller: mobilecontroller,
                                   decoration: InputDecoration()
                                       .applyDefaults(Theme.of(context)
@@ -528,6 +626,26 @@ class _SignUpPageState extends State<SignUpPage> {
                                 GestureDetector(
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
+                                      progressItem.add(
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                                Icons
+                                                    .check_circle_outline_rounded,
+                                                color: Colors.black,
+                                                size: 20),
+                                            Text(
+                                              "Personal Info",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            VerticalDivider(
+                                              color: Colors.transparent,
+                                              width: 4,
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                       setState(() {
                                         activeStep += 1;
                                       });
@@ -580,6 +698,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                     TextFormField(
                                       controller: businesemail,
                                       keyboardType: TextInputType.emailAddress,
+                                      textCapitalization:
+                                          TextCapitalization.none,
+                                      inputFormatters: [RegexFormatter.email],
                                       decoration: InputDecoration()
                                           .applyDefaults(Theme.of(context)
                                               .inputDecorationTheme)
@@ -589,7 +710,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                       textInputAction: TextInputAction.next,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return "Enter your Email";
+                                          return "Please enter email";
+                                        } else if (!validator.email(value)) {
+                                          return "Please enter a valid email";
                                         }
                                         return null;
                                       },
@@ -597,6 +720,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     const Divider(color: Colors.transparent),
                                     TextFormField(
                                       textInputAction: TextInputAction.next,
+                                      inputFormatters: [RegexFormatter.phone],
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return "Enter your phone";
@@ -617,6 +741,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     TextFormField(
                                       controller: companyname,
                                       keyboardType: TextInputType.name,
+                                      textCapitalization:
+                                          TextCapitalization.words,
                                       decoration: InputDecoration()
                                           .applyDefaults(Theme.of(context)
                                               .inputDecorationTheme)
@@ -636,6 +762,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     TextFormField(
                                       controller: busineType,
                                       keyboardType: TextInputType.name,
+                                      textCapitalization:
+                                          TextCapitalization.words,
                                       decoration: InputDecoration()
                                           .applyDefaults(Theme.of(context)
                                               .inputDecorationTheme)
@@ -653,13 +781,32 @@ class _SignUpPageState extends State<SignUpPage> {
                                     const Divider(color: Colors.transparent),
                                     TextFormField(
                                       controller: businesRegNo,
-                                      keyboardType: TextInputType.emailAddress,
+                                      keyboardType: TextInputType.text,
+                                      inputFormatters: [RegexFormatter.regNo],
+                                      textCapitalization:
+                                          TextCapitalization.characters,
+                                      maxLength: 21,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Enter Registration Number";
+                                        } else if (value.length != 21) {
+                                          return "Enter a valid registration number";
+                                        }
+                                        return null;
+                                      },
                                       decoration: InputDecoration()
                                           .applyDefaults(Theme.of(context)
                                               .inputDecorationTheme)
                                           .copyWith(
-                                            labelText:
-                                                "Registration Number (if applicable)",
+                                            hintText: "21 Digit Registration",
+                                            hintStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!
+                                                .copyWith(
+                                                  color: colors.greyText,
+                                                ),
+                                            counterText: "",
+                                            labelText: "Registration Number*",
                                           ),
                                       textInputAction: TextInputAction.next,
                                     ),
@@ -678,17 +825,24 @@ class _SignUpPageState extends State<SignUpPage> {
                                     const Divider(color: Colors.transparent),
                                     TextFormField(
                                       controller: businesTaxIDNM,
+                                      inputFormatters: [RegexFormatter.regNo],
+                                      maxLength: 10,
                                       decoration: InputDecoration()
                                           .applyDefaults(Theme.of(context)
                                               .inputDecorationTheme)
                                           .copyWith(
+                                            counterText: "",
                                             labelText:
-                                                "Tax Identification Number (TIN)*",
+                                                "Permanent Account Number (PAN)*",
                                           ),
                                       textInputAction: TextInputAction.next,
+                                      textCapitalization:
+                                          TextCapitalization.characters,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return "Enter Tax Identification Number (TIN)*";
+                                          return "Enter Permanent Account Number (PAN)*";
+                                        } else if (value.length != 10) {
+                                          return "Enter a valid PAN";
                                         }
                                         return null;
                                       },
@@ -709,6 +863,26 @@ class _SignUpPageState extends State<SignUpPage> {
                                     GestureDetector(
                                       onTap: () {
                                         if (_formKey.currentState!.validate()) {
+                                          progressItem.add(
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                    Icons
+                                                        .check_circle_outline_rounded,
+                                                    color: Colors.black,
+                                                    size: 20),
+                                                Text(
+                                                  "Business Info",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                VerticalDivider(
+                                                  color: Colors.transparent,
+                                                  width: 4,
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                           setState(() {
                                             activeStep += 1;
                                           });
@@ -783,10 +957,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   keyboardType: TextInputType.emailAddress,
                                   obscureText: visibility,
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Enter password";
-                                    }
-                                    return null;
+                                    return validatePassword(value);
                                   },
                                   textInputAction: TextInputAction.next,
                                 ),
@@ -828,6 +999,26 @@ class _SignUpPageState extends State<SignUpPage> {
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
                                       if (pass.text == pass1.text) {
+                                        progressItem.add(
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                  Icons
+                                                      .check_circle_outline_rounded,
+                                                  color: Colors.black,
+                                                  size: 20),
+                                              Text(
+                                                "Create Password",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              VerticalDivider(
+                                                color: Colors.transparent,
+                                                width: 4,
+                                              ),
+                                            ],
+                                          ),
+                                        );
                                         setState(() {
                                           activeStep += 1;
                                         });
@@ -881,6 +1072,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 TextFormField(
                                   controller: addresscontroller,
+                                  textCapitalization: TextCapitalization.words,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
@@ -893,67 +1085,165 @@ class _SignUpPageState extends State<SignUpPage> {
                                   },
                                   textInputAction: TextInputAction.next,
                                 ),
-                                const Divider(color: Colors.transparent),
-                                TextFormField(
-                                  controller: citynamecontroller,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: (const InputDecoration())
-                                      .applyDefaults(Theme.of(context)
-                                          .inputDecorationTheme)
-                                      .copyWith(labelText: "City*"),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter City*";
-                                    }
-                                    return null;
-                                  },
+                                const Divider(
+                                  color: Colors.transparent,
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: DropDownDeco(ctx: context),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12),
+                                    child: Consumer<AddressViewModel>(
+                                        builder: (context, val, _) {
+                                      if (addressP.countries.length == 0) {
+                                        addressP.getCountries();
+                                      }
+                                      return DropdownButton<CountyData>(
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        dropdownColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? colors.darkBG
+                                                : Colors.white,
+                                        value: val.selectedCountry,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            val.setCountry(value!);
+
+                                            val.getStates(
+                                                id: value.id.toString());
+                                          });
+                                        },
+                                        items: addressP.countries
+                                            .map((e) => DropdownMenuItem(
+                                                  child: Text(
+                                                    e.name.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  value: e,
+                                                ))
+                                            .toList(),
+                                        hint: Text('Select a country',
+                                            style: TextStyle(
+                                                color: colors.greyText,
+                                                fontWeight: FontWeight.normal)),
+                                      );
+                                    }),
+                                  ),
                                 ),
                                 const Divider(color: Colors.transparent),
-                                TextFormField(
-                                  controller: statacontroler,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: (const InputDecoration())
-                                      .applyDefaults(Theme.of(context)
-                                          .inputDecorationTheme)
-                                      .copyWith(labelText: "State/Province*"),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter State/Province*";
-                                    }
-                                    return null;
-                                  },
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: DropDownDeco(ctx: context),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12),
+                                    child: Consumer<AddressViewModel>(
+                                        builder: (context, val, _) {
+                                      return DropdownButton<StateData>(
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        dropdownColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? colors.darkBG
+                                                : Colors.white,
+                                        value: addressP.selectedState,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            val.set_State(value);
+
+                                            val.getCities(
+                                                id: value!.id.toString());
+                                          });
+                                        },
+                                        items: addressP.states
+                                            .map((e) => DropdownMenuItem(
+                                                  child: Text(
+                                                    e.name.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  value: e,
+                                                ))
+                                            .toList(),
+                                        hint: Text('Select State',
+                                            style: TextStyle(
+                                                color: colors.greyText,
+                                                fontWeight: FontWeight.normal)),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                const Divider(color: Colors.transparent),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: DropDownDeco(ctx: context),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12),
+                                    child: Consumer<AddressViewModel>(
+                                        builder: (context, val, _) {
+                                      return DropdownButton<CityData>(
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        dropdownColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? colors.darkBG
+                                                : Colors.white,
+                                        value: val.selectedCity,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            val.setCity(value);
+                                          });
+                                        },
+                                        items: addressP.cities
+                                            .map((e) => DropdownMenuItem(
+                                                  child: Text(
+                                                    e.name.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  value: e,
+                                                ))
+                                            .toList(),
+                                        hint: Text('Select City',
+                                            style: TextStyle(
+                                                color: colors.greyText,
+                                                fontWeight: FontWeight.normal)),
+                                      );
+                                    }),
+                                  ),
                                 ),
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   controller: postalcodecontroller,
-                                  textInputAction: TextInputAction.next,
+                                  textCapitalization: TextCapitalization.words,
+                                  textInputAction: TextInputAction.done,
+                                  maxLength: 6,
+                                  inputFormatters: [RegexFormatter.phone],
                                   keyboardType: TextInputType.number,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
                                       .copyWith(
-                                        labelText: "Postal/ZIP Code*",
-                                        counterText: "",
-                                      ),
-                                  maxLength: 6,
+                                          labelText: "Postal/zip code*",
+                                          counterText: ""),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return "Please enter Postal/ZIP Code";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const Divider(color: Colors.transparent),
-                                TextFormField(
-                                  controller: countryController,
-                                  textInputAction: TextInputAction.done,
-                                  decoration: (const InputDecoration())
-                                      .applyDefaults(Theme.of(context)
-                                          .inputDecorationTheme)
-                                      .copyWith(labelText: "Country*"),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter Country";
+                                      return "Please enter zip";
+                                    } else if (value.length != 6) {
+                                      return "Please enter a valid zip code";
                                     }
                                     return null;
                                   },
@@ -961,10 +1251,37 @@ class _SignUpPageState extends State<SignUpPage> {
                                 SizedBox(height: height * .07),
                                 GestureDetector(
                                   onTap: () {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (_formKey.currentState!.validate() &&
+                                        addressP.selectedCountry != null &&
+                                        addressP.selectedState != null &&
+                                        addressP.selectedCity != null) {
+                                      progressItem.add(
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                                Icons
+                                                    .check_circle_outline_rounded,
+                                                color: Colors.black,
+                                                size: 20),
+                                            Text(
+                                              "Address Info",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            VerticalDivider(
+                                              color: Colors.transparent,
+                                              width: 4,
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                       setState(() {
                                         activeStep += 1;
                                       });
+                                    } else {
+                                      Utils.showTost(
+                                          msg:
+                                              "Some fields are missing, please check.");
                                     }
                                   },
                                   child: Container(
@@ -1000,12 +1317,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                   "Enter your banking information to get started and manage your finances hassle-free.",
                                   style: TextStyle(color: colors.greyText),
                                 ),
-                                SizedBox(
-                                  height: height * .05,
-                                ),
+                                SizedBox(height: height * .02),
                                 TextFormField(
                                   textInputAction: TextInputAction.next,
                                   controller: banknamecontroller,
+                                  // inputFormatters: [],
+                                  textCapitalization: TextCapitalization.words,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
@@ -1021,6 +1338,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 TextFormField(
                                   textInputAction: TextInputAction.next,
                                   controller: bankbranchcontroller,
+                                  // inputFormatters: [RegexFormatter.bankName],
+                                  textCapitalization: TextCapitalization.words,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
@@ -1054,14 +1373,19 @@ class _SignUpPageState extends State<SignUpPage> {
                                   textCapitalization:
                                       TextCapitalization.characters,
                                   controller: micrController,
+                                  maxLength: 9,
                                   textInputAction: TextInputAction.next,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
-                                      .copyWith(labelText: " MICR code*"),
+                                      .copyWith(
+                                          labelText: " MICR code*",
+                                          counterText: ""),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "Please enter MICR code";
+                                    } else if (value.length != 9) {
+                                      return "Enter a valid MICR code";
                                     }
                                     return null;
                                   },
@@ -1070,6 +1394,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 TextFormField(
                                   textInputAction: TextInputAction.next,
                                   controller: bankaddresscontroler,
+                                  textCapitalization: TextCapitalization.words,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
@@ -1085,6 +1410,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 TextFormField(
                                   textInputAction: TextInputAction.next,
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [RegexFormatter.phone],
                                   controller: accountcontroller,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
@@ -1101,6 +1427,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 TextFormField(
                                   textCapitalization:
                                       TextCapitalization.characters,
+                                  inputFormatters: [RegexFormatter.regNo],
                                   controller: ifsccontroller,
                                   textInputAction: TextInputAction.done,
                                   decoration: (const InputDecoration())
@@ -1117,7 +1444,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                 const Divider(color: Colors.transparent),
                                 GestureDetector(
                                   onTap: () {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (_formKey.currentState!.validate() &&
+                                        addressP.selectedCountry != null &&
+                                        addressP.selectedState != null &&
+                                        addressP.selectedCity != null &&
+                                        selectedValue != null) {
                                       print(savedotp);
                                       print(namecontroller.text);
                                       print(emailcontroller.text);
@@ -1134,10 +1465,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                       print(pass.text);
                                       print(pass1.text);
                                       print(addresscontroller.text);
-                                      print(citynamecontroller.text);
-                                      print(statacontroler.text);
+                                      print(addressP.selectedCountry?.name);
+                                      print(addressP.selectedState?.name);
+                                      print(addressP.selectedCity?.name);
                                       print(postalcodecontroller.text);
-                                      print(countryController.text);
                                       print(banknamecontroller.text);
                                       print(bankbranchcontroller.text);
                                       print(selectedValue);
@@ -1145,6 +1476,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       print(bankaddresscontroler.text);
                                       print(accountcontroller.text);
                                       print(ifsccontroller.text);
+
                                       auth
                                           .registerUser(
                                         phone: mobilecontroller.text.toString(),
@@ -1174,13 +1506,14 @@ class _SignUpPageState extends State<SignUpPage> {
                                         password: pass.text.toString(),
                                         confirmPass: pass1.text.toString(),
                                         addr: addresscontroller.text.toString(),
-                                        city:
-                                            citynamecontroller.text.toString(),
-                                        state: statacontroler.text.toString(),
+                                        city: addressP.selectedCity!.name
+                                            .toString(),
+                                        state: addressP.selectedState!.name
+                                            .toString(),
                                         zip: postalcodecontroller.text
                                             .toString(),
-                                        country:
-                                            countryController.text.toString(),
+                                        country: addressP.selectedCountry!.name
+                                            .toString(),
                                         bankName:
                                             banknamecontroller.text.toString(),
                                         branch: bankbranchcontroller.text
@@ -1199,7 +1532,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                             context: context,
                                             builder: (dCtx) {
                                               Future.delayed(
-                                                  Duration(seconds: 5), () {
+                                                  Duration(seconds: 3), () {
                                                 Navigator.of(dCtx).pop(true);
                                               });
                                               return RegistrationSuccessDialog(
@@ -1224,6 +1557,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                           );
                                         }
                                       });
+                                    } else {
+                                      Utils.showTost(
+                                          msg: "Some fields are missing");
                                     }
                                   },
                                   child: Container(

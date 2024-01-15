@@ -160,7 +160,7 @@ class ProfileViewModel with ChangeNotifier {
     await _myRepo.staticPageGetRequest(api: AppUrl.staticPage).then((value) {
       staticPageData = value.data!;
       setLoading(false);
-    });
+    }).onError((error, stackTrace) => setLoading(false));
   }
 
 //Function to change password

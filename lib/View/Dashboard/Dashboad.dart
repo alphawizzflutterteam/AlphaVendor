@@ -1,6 +1,7 @@
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Customer/customer.dart';
 import 'package:alpha_work/View/Dashboard/notification.dart';
+import 'package:alpha_work/View/Dashboard/ratingReview.dart';
 import 'package:alpha_work/View/ORDER/ordermanagement.dart';
 import 'package:alpha_work/View/Payment/payment.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
@@ -567,53 +568,84 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             mainAxisSpacing: 15,
                                             crossAxisSpacing: 15),
                                     itemCount: items.length,
-                                    itemBuilder: (context, index) => Container(
-                                      height: height * .1,
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            height: height * .07,
-                                            width: height * .07,
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: items[index]['color'],
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
+                                    itemBuilder: (context, index) =>
+                                        GestureDetector(
+                                      onTap: () {
+                                        print(index);
+                                        switch (index) {
+                                          case 3:
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    child: CustomerScreen(),
+                                                    type: PageTransitionType
+                                                        .rightToLeft));
+
+                                            break;
+                                          case 5:
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    child:
+                                                        RatingAndRewiewScreen(),
+                                                    type: PageTransitionType
+                                                        .rightToLeft));
+
+                                            break;
+
+                                          default:
+                                            null;
+                                        }
+                                      },
+                                      child: Container(
+                                        height: height * .1,
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.center,
+                                              height: height * .07,
+                                              width: height * .07,
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: items[index]['color'],
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              child: Image.asset(
+                                                  items[index]['image']),
                                             ),
-                                            child: Image.asset(
-                                                items[index]['image']),
-                                          ),
-                                          Spacer(),
-                                          Text(
-                                            items[index]['name'],
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 16,
-                                              color: colors.greyText,
+                                            Spacer(),
+                                            Text(
+                                              items[index]['name'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 16,
+                                                color: colors.greyText,
+                                              ),
                                             ),
-                                          ),
-                                          AutoSizeText(
-                                            getCardVal(index),
-                                            maxFontSize: 28,
-                                            minFontSize: 22,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontFamily: 'Montreal',
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
+                                            AutoSizeText(
+                                              getCardVal(index),
+                                              maxFontSize: 28,
+                                              minFontSize: 22,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                fontFamily: 'Montreal',
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

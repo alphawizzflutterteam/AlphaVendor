@@ -173,10 +173,8 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                           onTap: () async {
                                             await Clipboard.setData(
                                                 ClipboardData(text: refCode));
-                                            Utils.showFlushBarWithMessage(
-                                                "Alert",
-                                                "Referral Code Copied.",
-                                                context);
+                                            Utils.showTost(
+                                                msg: "Referral Code Copied.");
                                           },
                                           child: Text(
                                             "Copy\nCode",

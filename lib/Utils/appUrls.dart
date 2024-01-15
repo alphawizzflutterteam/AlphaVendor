@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 class AppUrl {
   static const baseURL = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
-  static const baseURL1 = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
+  static const baseURL1 = "https://alpha-ecom.developmentalphawizz.com/api/v1/";
 
   static const apitoken = '';
 
@@ -98,4 +98,7 @@ class AppUrl {
   static const String referral = '${baseURL}seller/get-referrals';
   static const String orderStatusUpdate =
       '${baseURL}seller/orders/order-detail-status/';
+  static const String getCountries = '${baseURL1}countries';
+  static const String getStates = '${baseURL1}states';
+  static const String getCities = '${baseURL1}cities';
 }

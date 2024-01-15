@@ -1,5 +1,7 @@
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
+import 'package:alpha_work/View/Profile/settings/settings.dart';
+import 'package:alpha_work/ViewModel/addressViewModel.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:alpha_work/ViewModel/customerViewModel.dart';
 import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
@@ -24,6 +26,9 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ProfileViewModel>(
       create: (context) => ProfileViewModel(),
+    ),
+    ChangeNotifierProvider<AddressViewModel>(
+      create: (context) => AddressViewModel(),
     ),
     ChangeNotifierProvider<WalletViewMaodel>(
       create: (context) => WalletViewMaodel(),
@@ -106,7 +111,8 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide(color: colors.boxBorder, width: 1),
               borderRadius: BorderRadius.circular(10),
             ),
-            hintStyle: TextStyle(color: colors.greyText),
+            hintStyle:
+                TextStyle(color: colors.greyText, fontWeight: FontWeight.w400),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: colors.boxBorder, width: 1),
               borderRadius: BorderRadius.circular(10),
@@ -117,15 +123,23 @@ class MyApp extends StatelessWidget {
             ),
           ),
           textTheme: TextTheme(
-            titleLarge: TextStyle(
-              color: Theme.of(context).colorScheme.fontColor,
-              fontWeight: FontWeight.w600,
-            ),
-            titleMedium: TextStyle(
-              color: Theme.of(context).colorScheme.fontColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ).apply(
+              titleLarge: TextStyle(
+                color: Theme.of(context).colorScheme.fontColor,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'FuturaPT',
+                fontSize: 24,
+              ),
+              titleMedium: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontFamily: 'FuturaPT',
+                fontWeight: FontWeight.bold,
+              ),
+              bodySmall: TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              )).apply(
             bodyColor: Theme.of(context).colorScheme.fontColor,
           ),
         ),
@@ -217,7 +231,7 @@ class MyApp extends StatelessWidget {
         routes: {
           // When navigating to the "/" route, build the FirstScreen widget.
           '/': (context) => const SpalashScreen(),
-
+          '/setting': (context) => ProfileSettingScreen(),
           // SpalashScreen  DashboardScreen1
         },
         // home: Container(

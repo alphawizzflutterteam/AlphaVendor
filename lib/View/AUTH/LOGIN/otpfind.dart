@@ -1,14 +1,12 @@
-import 'package:alpha_work/Utils/appUrls.dart';
+import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/changePassword/changePassword.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Dashboard/Dashboad.dart';
 
@@ -23,10 +21,13 @@ class OtpCheckPage extends StatefulWidget {
 class _OtpCheckPageState extends State<OtpCheckPage> {
   TextEditingController pinCtrl = TextEditingController();
   late String savedotp;
+  late String mobile;
+  late AuthViewModel auth;
   void getOtp() async {
     savedotp = PreferenceUtils.getString(PrefKeys.otp);
+    mobile = PreferenceUtils.getString(PrefKeys.mobile);
     print(savedotp);
-
+    print(mobile);
     setState(() {
       pinCtrl.text = savedotp;
     });
@@ -34,7 +35,7 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    auth = Provider.of<AuthViewModel>(context, listen: false);
     getOtp();
 
     super.initState();
@@ -101,7 +102,10 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                   "Enter Verification Code",
                   style: TextStyle(fontSize: 22),
                 ),
-                // const Text("Enter the otp sent to +916266"),
+                Text(
+                  "Enter the otp sent to ${mobile.toString()}",
+                  style: TextStyle(fontSize: 14, color: colors.greyText),
+                ),
                 Divider(
                   color: Colors.transparent,
                   height: 30,
@@ -166,18 +170,25 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width - 100,
                     height: 50,
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Didn`t receaved Otp? ",
                           style: TextStyle(color: Colors.grey),
                         ),
-                        Text(
-                          "Resend OTP",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 29, 104, 136),
+                        GestureDetector(
+                          onTap: () async {
+                            await auth.loginwithPhone(
+                                phone: mobile, context: context, isPass: false);
+                            getOtp();
+                          },
+                          child: Text(
+                            "Resend OTP",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 29, 104, 136),
+                            ),
                           ),
                         )
                       ],

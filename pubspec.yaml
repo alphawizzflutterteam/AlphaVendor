@@ -35,12 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   contained_tab_bar_view: ^0.8.0
-  flutter_otp_text_field: ^1.1.1
   step_progress_indicator: ^1.0.2
   syncfusion_flutter_charts: ^23.2.7
   page_transition: ^2.1.0
   flutter_custom_tab_bar: ^1.2.1
-  easy_stepper: ^0.8.3
   dropdown_button2: ^2.3.9
   intl: ^0.18.0
   flutter_localization: ^0.1.14
@@ -50,9 +48,7 @@ dependencies:
   http: ^1.1.2
   provider: ^6.1.1
   loading_animation_widget: ^1.2.0+4
-  custom_searchable_dropdown: ^2.1.1
   shared_preferences: ^2.2.2
-  another_flushbar: ^1.12.30
   dotted_border: ^2.1.0
   flutter_html: ^3.0.0-beta.2
   fluttertoast: ^8.2.4
@@ -64,6 +60,8 @@ dependencies:
   expandable: ^5.0.1
   searchable_listview: ^2.10.0
   auto_size_text: ^3.0.0
+  regexed_validator: ^2.0.0+1
+  custom_rating_bar: ^2.0.5
   
   
   

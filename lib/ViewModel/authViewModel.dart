@@ -7,16 +7,13 @@ import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
-import 'package:alpha_work/View/AUTH/LOGIN/otpfind.dart';
 
 import 'package:alpha_work/View/Dashboard/Dashboad.dart';
 import 'package:alpha_work/repository/authRepository.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthViewModel with ChangeNotifier {
   final _myRepo = AuthRepository();
@@ -106,34 +103,29 @@ class AuthViewModel with ChangeNotifier {
       );
 
 //Function to login with phone
-  Future<void> loginwithPhone({
+  Future<bool> loginwithPhone({
     required String phone,
     required BuildContext context,
     required bool isPass,
   }) async {
+    bool val = false;
     await _myRepo
         .loginOtpPostRequest(api: AppUrl.loginOtp, phone: phone)
         .then((value) async {
       setLoading(false);
       print(value.token);
       print(value.otp);
-      Fluttertoast.showToast(
-          msg: value.message.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: colors.buttonColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      if (value.message == "OTP sent success") {
-        PreferenceUtils.setString(PrefKeys.mobile, phone);
-        PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
+      if (value.status!) {
+        Utils.showTost(msg: value.message.toString());
+        val = true;
         PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => OtpCheckPage(isPass: isPass),
-        ));
+        PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
+        PreferenceUtils.setString(PrefKeys.mobile, phone.toString());
+      } else {
+        Utils.showTost(msg: value.errors[0]['message'].toString());
       }
     });
+    return val;
   }
 
 //Function to login with phone
@@ -147,17 +139,14 @@ class AuthViewModel with ChangeNotifier {
       setLoading(false);
       print(value.token);
       print(value.otp);
-      Fluttertoast.showToast(
-          msg: value.message.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: colors.buttonColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      if (value.message == "OTP sent success") {
+      if (value.status!) {
+        Utils.showTost(msg: value.message.toString());
         val = true;
         PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
+        PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
+        PreferenceUtils.setString(PrefKeys.mobile, phone.toString());
+      } else {
+        Utils.showTost(msg: value.errors[0]['message'].toString());
       }
     });
     return val;

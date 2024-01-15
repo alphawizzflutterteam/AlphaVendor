@@ -1,11 +1,17 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/AUTH/ForgotPass/forgotpass.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/otpfind.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 import '../SIGNUP/signuppage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -148,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                   "Signup",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 29, 104, 136),
+                                      color: colors.buttonColor,
                                       decoration: TextDecoration.underline),
                                 )
                               ],
@@ -183,6 +189,7 @@ class PhoneLogin extends StatelessWidget {
             const Divider(color: Colors.transparent),
             TextFormField(
               controller: mobile,
+              inputFormatters: [RegexFormatter.phone],
               decoration: InputDecoration()
                   .applyDefaults(Theme.of(context).inputDecorationTheme)
                   .copyWith(
@@ -209,8 +216,15 @@ class PhoneLogin extends StatelessWidget {
               onTap: () {
                 if (_formKey.currentState!.validate()) {
                   print(mobile.text);
-                  auth.loginwithPhone(
-                      phone: mobile.text, context: context, isPass: false);
+                  auth
+                      .loginwithPhone(
+                          phone: mobile.text, context: context, isPass: false)
+                      .then((value) => Navigator.push(
+                          context,
+                          PageTransition(
+                            child: OtpCheckPage(isPass: false),
+                            type: PageTransitionType.rightToLeft,
+                          )));
                 }
               },
               child: Container(
@@ -287,6 +301,7 @@ class _EmailViewState extends State<EmailView> {
             TextFormField(
               controller: email,
               textInputAction: TextInputAction.next,
+              inputFormatters: [RegexFormatter.email],
               decoration: InputDecoration()
                   .applyDefaults(Theme.of(context).inputDecorationTheme)
                   .copyWith(
@@ -295,15 +310,12 @@ class _EmailViewState extends State<EmailView> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Please enter email";
+                } else if (!validator.email(value)) {
+                  return "Please enter a valid email";
                 }
                 return null;
               },
               keyboardType: TextInputType.emailAddress,
-              onChanged: (value) {
-                if (value.length == 10) {
-                  FocusScope.of(context).unfocus();
-                }
-              },
             ),
             const Divider(
               color: Colors.transparent,
@@ -373,13 +385,20 @@ class _EmailViewState extends State<EmailView> {
             const SizedBox(
               height: 10,
             ),
-            const Align(
+            Align(
                 alignment: Alignment.centerRight,
-                child: Text(
-                  "Forget Password?",
-                  style: TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline),
+                child: GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      PageTransition(
+                          child: ForgotPassForm(),
+                          type: PageTransitionType.rightToLeft)),
+                  child: Text(
+                    "Forget Password?",
+                    style: TextStyle(
+                        // fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
+                  ),
                 ))
           ],
         ),

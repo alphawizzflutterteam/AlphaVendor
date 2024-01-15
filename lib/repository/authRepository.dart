@@ -45,13 +45,7 @@ class AuthRepository {
         return LoginOtpModel.fromJson(ans);
       } else {
         print(response.reasonPhrase);
-        return LoginOtpModel(
-            status: false,
-            message: "Something went wrong",
-            token: null,
-            errors: [],
-            data: [],
-            otp: "");
+        return LoginOtpModel.fromJson(ans);
       }
     } catch (e) {
       throw Exception(e);
@@ -120,9 +114,11 @@ class AuthRepository {
         'otp': otp,
       };
       var url = Uri.parse(api);
+      print(url);
       final response = await http.post(url, body: body);
       print(body);
       var res = jsonDecode(response.body);
+      print(res);
       if (response.statusCode == 200) {
         print(res);
         return res['status'];

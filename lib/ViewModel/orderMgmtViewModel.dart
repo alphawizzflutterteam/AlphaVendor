@@ -95,12 +95,6 @@ class OrderManagementViewModel with ChangeNotifier {
         .orderStatusUpatePutRequest(
             api: "${AppUrl.orderStatusUpdate}$id", token: token)
         .then((value) {
-      Fluttertoast.showToast(
-        msg: value['message'].toString(),
-        backgroundColor: colors.buttonColor,
-        textColor: Colors.white,
-        gravity: ToastGravity.BOTTOM,
-      );
       val = value['status'].toString() == 'true' ? true : false;
     }).onError((error, stackTrace) => setLoading(false));
     return val;

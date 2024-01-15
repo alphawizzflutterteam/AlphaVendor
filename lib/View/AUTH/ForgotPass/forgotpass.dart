@@ -1,8 +1,11 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/otpfind.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPassForm extends StatefulWidget {
@@ -91,6 +94,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                       const Divider(color: Colors.transparent),
                       TextFormField(
                         controller: phoneCtrl,
+                        inputFormatters: [RegexFormatter.phone],
                         decoration: InputDecoration()
                             .applyDefaults(
                                 Theme.of(context).inputDecorationTheme)
@@ -117,10 +121,17 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               print(phoneCtrl.text);
-                              auth.loginwithPhone(
-                                  phone: phoneCtrl.text,
-                                  context: context,
-                                  isPass: true);
+                              auth
+                                  .loginwithPhone(
+                                      phone: phoneCtrl.text,
+                                      context: context,
+                                      isPass: true)
+                                  .then((value) => Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          child: OtpCheckPage(isPass: true),
+                                          type:
+                                              PageTransitionType.rightToLeft)));
                             }
                           },
                           style: ElevatedButton.styleFrom(

@@ -32,10 +32,14 @@ class CustomerDetailScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Image.network(
-                          data.image.toString(),
-                          errorBuilder: (context, error, stackTrace) =>
-                              ErrorImageWidget(height: height),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            data.image.toString(),
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                ErrorImageWidget(height: height),
+                          ),
                         )),
                     VerticalDivider(),
                     Column(
@@ -129,7 +133,7 @@ class CustomerDetailScreen extends StatelessWidget {
                 ),
                 const Divider(color: Colors.transparent),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.32,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   child: ListView.builder(
                     itemCount: data.products.length,
                     shrinkWrap: true,
@@ -137,7 +141,7 @@ class CustomerDetailScreen extends StatelessWidget {
                     itemBuilder: (context, index) => Container(
                       width: MediaQuery.of(context).size.width * 0.45,
                       margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.only(bottom: 16),
+                      // padding: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
                           // image: DecorationImage(image: NetworkImage(model.images.first)),
                           borderRadius:
@@ -165,115 +169,125 @@ class CustomerDetailScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.14,
-                            width: MediaQuery.of(context).size.width * 0.44,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: NetworkImage(
-                                    data.products[index].thumbnail.toString()),
-                                onError: (exception, stackTrace) =>
-                                    ErrorImageWidget(height: height),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              // height: MediaQuery.of(context).size.height * 0.14,
+                              // width: MediaQuery.of(context).size.width * 0.44,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                image: DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: NetworkImage(data
+                                      .products[index].thumbnail
+                                      .toString()),
+                                  onError: (exception, stackTrace) =>
+                                      ErrorImageWidget(height: height),
+                                ),
                               ),
                             ),
                           ),
-                          SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.0005),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "${data.products[index].discount.toString()} %",
-                                  style: const TextStyle(
-                                    color: Colors.orange,
-                                    fontSize: 12,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                  ),
+                                  child: Text(
+                                    "${data.products[index].discount.toString()} %",
+                                    style: const TextStyle(
+                                      color: Colors.orange,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                  ),
+                                  child: Expanded(
+                                    child: AutoSizeText(
+                                      data.products[index].name.toString(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxFontSize: 14,
+                                      style: TextStyle(
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          data.products[index].specialPrice
+                                              .toString(),
+                                          maxFontSize: 22,
+                                          // minFontSize: 18,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                            color: colors.buttonColor,
+                                            fontFamily: 'Montreal',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          data.products[index].unitPrice
+                                              .toString(),
+                                          maxFontSize: 16,
+                                          // minFontSize: 12,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                              color: colors.lightTextColor,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              fontSize: 14,
+                                              fontFamily: 'Montreal'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 3, horizontal: 5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.3),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Text(
+                                      "Delivered",
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                            ),
-                            child: Text(
-                              data.products[index].name.toString(),
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 5,
-                            ),
-                            child: SizedBox(
-                              width: width * .4,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  AutoSizeText(
-                                    data.products[index].specialPrice
-                                        .toString(),
-                                    maxFontSize: 22,
-                                    // minFontSize: 18,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                      color: colors.buttonColor,
-                                      fontFamily: 'Montreal',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  AutoSizeText(
-                                    data.products[index].unitPrice.toString(),
-                                    maxFontSize: 16,
-                                    // minFontSize: 12,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        color: colors.lightTextColor,
-                                        decoration: TextDecoration.lineThrough,
-                                        fontSize: 14,
-                                        fontFamily: 'Montreal'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 3, horizontal: 5),
-                              decoration: BoxDecoration(
-                                  color: Colors.green.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Text(
-                                "Delivered",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
