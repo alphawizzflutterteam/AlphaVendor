@@ -36,9 +36,12 @@ class ProductManagementRepository {
       required String type,
       required String? cat,
       required String? subcat,
+      required String? stockType,
       required bool isCat}) async {
+    print("Stock type: $stockType $type");
     final queryParameters = {
       'status': type,
+      'type': stockType,
     };
     final queryParameterscat = {
       'status': type,

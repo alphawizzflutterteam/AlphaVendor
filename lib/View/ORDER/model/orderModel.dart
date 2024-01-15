@@ -95,8 +95,8 @@ class IngAddressData {
     required this.isBilling,
   });
 
-  final int? id;
-  final int? customerId;
+  final String? id;
+  final String? customerId;
   final String? contactPersonName;
   final String? addressType;
   final String? address;
@@ -104,14 +104,14 @@ class IngAddressData {
   final String? city;
   final String? zip;
   final String? phone;
-  final dynamic altPhone;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final dynamic state;
+  final String? altPhone;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? state;
   final String? country;
-  final dynamic latitude;
-  final dynamic longitude;
-  final int? isBilling;
+  final String? latitude;
+  final String? longitude;
+  final String? isBilling;
 
   factory IngAddressData.fromJson(Map<String, dynamic> json) {
     return IngAddressData(
@@ -125,8 +125,8 @@ class IngAddressData {
       zip: json["zip"],
       phone: json["phone"],
       altPhone: json["alt_phone"],
-      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
+      createdAt: json["created_at"],
+      updatedAt: json["updated_at"],
       state: json["state"],
       country: json["country"],
       latitude: json["latitude"],
@@ -205,7 +205,7 @@ class Detail {
   final String? name;
   final String? slug;
   final List<String> images;
-  final List<ColorImage> colorImage;
+  final List<dynamic> colorImage;
   final String? thumbnail;
   final int? brandId;
   final String? unit;
@@ -213,9 +213,9 @@ class Detail {
   final int? featured;
   final String? refundable;
   final int? variantProduct;
-  final List<int> attributes;
-  final List<ChoiceOption> choiceOptions;
-  final List<Variation> variation;
+  final List<dynamic> attributes;
+  final List<dynamic> choiceOptions;
+  final List<dynamic> variation;
   final String? weight;
   final int? published;
   final String? unitPrice;
@@ -242,12 +242,12 @@ class Detail {
   final int? multiplyQty;
   final String? code;
   final int? reviewsCount;
-  final List<dynamic> rating;
-  final List<Tag> tags;
+  final List<Rating> rating;
+  final List<dynamic> tags;
   final List<dynamic> translations;
   final String? shareLink;
-  final List<dynamic> reviews;
-  final List<ColorsFormatted> colorsFormatted;
+  final List<Review> reviews;
+  final List<dynamic> colorsFormatted;
   final bool? isFavorite;
   final bool? isCart;
   final int? cartId;
@@ -273,8 +273,7 @@ class Detail {
           : List<String>.from(json["images"]!.map((x) => x)),
       colorImage: json["color_image"] == null
           ? []
-          : List<ColorImage>.from(
-              json["color_image"]!.map((x) => ColorImage.fromJson(x))),
+          : List<dynamic>.from(json["color_image"]!.map((x) => x)),
       thumbnail: json["thumbnail"],
       brandId: json["brand_id"],
       unit: json["unit"],
@@ -284,15 +283,13 @@ class Detail {
       variantProduct: json["variant_product"],
       attributes: json["attributes"] == null
           ? []
-          : List<int>.from(json["attributes"]!.map((x) => x)),
+          : List<dynamic>.from(json["attributes"]!.map((x) => x)),
       choiceOptions: json["choice_options"] == null
           ? []
-          : List<ChoiceOption>.from(
-              json["choice_options"]!.map((x) => ChoiceOption.fromJson(x))),
+          : List<dynamic>.from(json["choice_options"]!.map((x) => x)),
       variation: json["variation"] == null
           ? []
-          : List<Variation>.from(
-              json["variation"]!.map((x) => Variation.fromJson(x))),
+          : List<dynamic>.from(json["variation"]!.map((x) => x)),
       weight: json["weight"],
       published: json["published"],
       unitPrice: json["unit_price"],
@@ -321,21 +318,20 @@ class Detail {
       reviewsCount: json["reviews_count"],
       rating: json["rating"] == null
           ? []
-          : List<dynamic>.from(json["rating"]!.map((x) => x)),
+          : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
       tags: json["tags"] == null
           ? []
-          : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
+          : List<dynamic>.from(json["tags"]!.map((x) => x)),
       translations: json["translations"] == null
           ? []
           : List<dynamic>.from(json["translations"]!.map((x) => x)),
       shareLink: json["share_link"],
       reviews: json["reviews"] == null
           ? []
-          : List<dynamic>.from(json["reviews"]!.map((x) => x)),
+          : List<Review>.from(json["reviews"]!.map((x) => Review.fromJson(x))),
       colorsFormatted: json["colors_formatted"] == null
           ? []
-          : List<ColorsFormatted>.from(json["colors_formatted"]!
-              .map((x) => ColorsFormatted.fromJson(x))),
+          : List<dynamic>.from(json["colors_formatted"]!.map((x) => x)),
       isFavorite: json["is_favorite"],
       isCart: json["is_cart"],
       cartId: json["cart_id"],
@@ -365,58 +361,92 @@ class CategoryId {
   }
 }
 
-class ChoiceOption {
-  ChoiceOption({
-    required this.name,
-    required this.title,
-    required this.options,
+class Rating {
+  Rating({
+    required this.average,
+    required this.productId,
   });
 
-  final String? name;
-  final String? title;
-  final List<String> options;
+  final String? average;
+  final int? productId;
 
-  factory ChoiceOption.fromJson(Map<String, dynamic> json) {
-    return ChoiceOption(
-      name: json["name"],
-      title: json["title"],
-      options: json["options"] == null
+  factory Rating.fromJson(Map<String, dynamic> json) {
+    return Rating(
+      average: json["average"],
+      productId: json["product_id"],
+    );
+  }
+}
+
+class Review {
+  Review({
+    required this.id,
+    required this.productId,
+    required this.customerId,
+    required this.deliveryManId,
+    required this.orderId,
+    required this.comment,
+    required this.attachment,
+    required this.rating,
+    required this.status,
+    required this.isSaved,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.customer,
+  });
+
+  final int? id;
+  final int? productId;
+  final int? customerId;
+  final String? deliveryManId;
+  final String? orderId;
+  final String? comment;
+  final List<dynamic> attachment;
+  final int? rating;
+  final int? status;
+  final int? isSaved;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final Customer? customer;
+
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      id: json["id"],
+      productId: json["product_id"],
+      customerId: json["customer_id"],
+      deliveryManId: json["delivery_man_id"],
+      orderId: json["order_id"],
+      comment: json["comment"],
+      attachment: json["attachment"] == null
           ? []
-          : List<String>.from(json["options"]!.map((x) => x)),
+          : List<dynamic>.from(json["attachment"]!.map((x) => x)),
+      rating: json["rating"],
+      status: json["status"],
+      isSaved: json["is_saved"],
+      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
+      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
+      customer:
+          json["customer"] == null ? null : Customer.fromJson(json["customer"]),
     );
   }
 }
 
-class ColorImage {
-  ColorImage({
-    required this.color,
-    required this.imageName,
-  });
-
-  final String? color;
-  final String? imageName;
-
-  factory ColorImage.fromJson(Map<String, dynamic> json) {
-    return ColorImage(
-      color: json["color"],
-      imageName: json["image_name"],
-    );
-  }
-}
-
-class ColorsFormatted {
-  ColorsFormatted({
+class Customer {
+  Customer({
+    required this.id,
     required this.name,
-    required this.code,
+    required this.image,
   });
 
+  final int? id;
   final String? name;
-  final String? code;
+  final String? image;
 
-  factory ColorsFormatted.fromJson(Map<String, dynamic> json) {
-    return ColorsFormatted(
+  factory Customer.fromJson(Map<String, dynamic> json) {
+    return Customer(
+      id: json["id"],
       name: json["name"],
-      code: json["code"],
+      image: json["image"],
     );
   }
 }
@@ -485,75 +515,6 @@ class Shop {
       isVerified: json["is_verified"],
       isFollowing: json["is_following"],
       banner: json["banner"],
-    );
-  }
-}
-
-class Tag {
-  Tag({
-    required this.id,
-    required this.tag,
-    required this.visitCount,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.pivot,
-  });
-
-  final int? id;
-  final String? tag;
-  final int? visitCount;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final Pivot? pivot;
-
-  factory Tag.fromJson(Map<String, dynamic> json) {
-    return Tag(
-      id: json["id"],
-      tag: json["tag"],
-      visitCount: json["visit_count"],
-      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
-      pivot: json["pivot"] == null ? null : Pivot.fromJson(json["pivot"]),
-    );
-  }
-}
-
-class Pivot {
-  Pivot({
-    required this.productId,
-    required this.tagId,
-  });
-
-  final int? productId;
-  final int? tagId;
-
-  factory Pivot.fromJson(Map<String, dynamic> json) {
-    return Pivot(
-      productId: json["product_id"],
-      tagId: json["tag_id"],
-    );
-  }
-}
-
-class Variation {
-  Variation({
-    required this.type,
-    required this.price,
-    required this.sku,
-    required this.qty,
-  });
-
-  final String? type;
-  final String? price;
-  final String? sku;
-  final int? qty;
-
-  factory Variation.fromJson(Map<String, dynamic> json) {
-    return Variation(
-      type: json["type"],
-      price: json["price"],
-      sku: json["sku"],
-      qty: json["qty"],
     );
   }
 }

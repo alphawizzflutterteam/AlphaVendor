@@ -4,6 +4,7 @@ import 'package:alpha_work/View/Profile/support/queryDetail.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
+import 'package:alpha_work/Widget/dateFormatter.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,14 +20,6 @@ class QueryListScreen extends StatefulWidget {
 
 class _QueryListScreenState extends State<QueryListScreen> {
   late ProfileViewModel profileP;
-  String formatDaate(String dateString) {
-    // Parse the date string
-    DateTime dateTime = DateTime.parse(dateString);
-
-    // Format the date
-    String formattedDate = DateFormat('dd MMM yyyy, h:mm a').format(dateTime);
-    return formattedDate;
-  }
 
   @override
   void initState() {
@@ -51,7 +44,8 @@ class _QueryListScreenState extends State<QueryListScreen> {
                   onTap: () => Navigator.push(
                     context,
                     PageTransition(
-                        child: QueryDetailScreen(),
+                        child: QueryDetailScreen(
+                            queryDetails: profileP.queries[index]),
                         type: PageTransitionType.rightToLeft),
                   ),
                   child: Container(
@@ -111,7 +105,8 @@ class _QueryListScreenState extends State<QueryListScreen> {
                                       color: colors.greyText),
                                 ),
                                 Text(
-                                  formatDaate(profileP.queries[index].createdAt
+                                  CustomDateFormat.formatDaate(profileP
+                                      .queries[index].createdAt
                                       .toString()),
                                   style: TextStyle(
                                       fontSize: 14,

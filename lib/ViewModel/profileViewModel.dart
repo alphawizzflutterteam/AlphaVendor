@@ -2,10 +2,12 @@ import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
 import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
 import 'package:alpha_work/View/Profile/support/model/customerSupportModel.dart';
+import 'package:alpha_work/View/Profile/support/model/supportChatModel.dart';
 import 'package:alpha_work/repository/profileRepository.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +20,7 @@ class ProfileViewModel with ChangeNotifier {
   List<Monthly> monthly = [];
   List<AdvertData> adverts = [];
   List<SupportData> queries = [];
+  List<ChatData> supportChats = [];
   bool isLoading = true;
   bool get loading => isLoading;
   setLoading(bool value) {
@@ -268,6 +271,44 @@ class ProfileViewModel with ChangeNotifier {
       queries = value.data;
       print(queries.length);
       setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get Support Query Chat Data
+  Future<void> getSupportQueryChats({required String TicketId}) async {
+    // isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print(token);
+    print(TicketId);
+    await _myRepo
+        .supportChatGetRequest(
+            api: "${AppUrl.supportChat}$TicketId", token: token)
+        .then((value) {
+      if (value.status == true) {
+        supportChats = value.data;
+        print(supportChats.length);
+        setLoading(false);
+      } else {
+        Utils.showTost(msg: "Something went Wrong");
+      }
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get Support Query Chat Data
+  Future<void> postSupportQueryChats({
+    required String TicketId,
+    required String chat,
+  }) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print(token);
+    print(TicketId);
+    await _myRepo
+        .supportChatPostRequest(
+            api: "${AppUrl.supportChatReply}$TicketId",
+            token: token,
+            chat: chat)
+        .then((value) {
+      getSupportQueryChats(TicketId: TicketId);
     }).onError((error, stackTrace) => setLoading(false));
   }
 

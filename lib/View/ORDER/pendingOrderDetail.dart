@@ -327,27 +327,27 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                             ],
                           ),
                           const SizedBox(height: 5),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Pickup Address",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: colors.greyText,
-                                ),
-                              ),
-                              Text(
-                                widget.order.billingAddressData!.address
-                                    .toString(),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
+                          // Column(
+                          //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //   children: [
+                          //     Text(
+                          //       "Pickup Address",
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //         color: colors.greyText,
+                          //       ),
+                          //     ),
+                          //     Text(
+                          //       widget.order.billingAddressData!.address
+                          //           .toString(),
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //         color: Colors.black,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // const SizedBox(height: 5),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

@@ -43,6 +43,7 @@ class WalletViewMaodel with ChangeNotifier {
         .transactionGetRequest(api: AppUrl.transactions, token: token)
         .then((value) {
       transaction = value;
+      // print(transaction!.withdrawalAmount.toString());
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

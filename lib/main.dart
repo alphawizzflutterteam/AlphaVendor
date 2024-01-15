@@ -9,6 +9,7 @@ import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/ViewModel/walletViewModel.dart';
+import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/noInternet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -23,6 +24,16 @@ import 'ViewModel/languageViewModel.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferenceUtils.init();
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    print(details.exception.toString());
+    print(details.library.toString());
+    print(details.exceptionAsString().toString());
+    print(details.stack.toString());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(body: appLoader()),
+    );
+  };
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ProfileViewModel>(
       create: (context) => ProfileViewModel(),

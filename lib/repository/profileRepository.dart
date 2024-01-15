@@ -7,6 +7,7 @@ import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
 import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
 import 'package:alpha_work/View/Profile/support/model/customerSupportModel.dart';
+import 'package:alpha_work/View/Profile/support/model/supportChatModel.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileRepository {
@@ -339,6 +340,55 @@ class ProfileRepository {
       } else {
         print(res.reasonPhrase);
         return CustomerSupportModel(status: null, message: null, data: []);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to get Customer Support Chat
+  Future<SupportChatModel> supportChatGetRequest({
+    required String api,
+    required String token,
+  }) async {
+    try {
+      var url = Uri.parse(api);
+      http.Response response =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        print(ans);
+        return SupportChatModel.fromJson(ans);
+      } else {
+        print(response.reasonPhrase);
+        return SupportChatModel.fromJson(ans);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to send chat
+  Future<void> supportChatPostRequest({
+    required String api,
+    required String token,
+    required String chat,
+  }) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer $token'
+      };
+      var request = http.Request('POST', Uri.parse(api));
+      request.bodyFields = {'message': chat};
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        print(await response.stream.bytesToString());
+      } else {
+        print(response.reasonPhrase);
       }
     } catch (e) {
       throw Exception(e);

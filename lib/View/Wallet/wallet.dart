@@ -25,15 +25,20 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   void initState() {
     provider = Provider.of<WalletViewMaodel>(context, listen: false);
-    provider.transactionList();
+    getData();
     super.initState();
+  }
+
+  getData() async {
+    await provider.transactionList();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    provider = Provider.of<WalletViewMaodel>(context);
+    // provider = Provider.of<WalletViewMaodel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommanAppbar(appbarTitle: "Wallet"),

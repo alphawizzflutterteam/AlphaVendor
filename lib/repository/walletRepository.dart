@@ -41,6 +41,7 @@ class WalletRepository {
         'Authorization': 'Bearer $token',
       });
       var ans = jsonDecode(res.body);
+      print(ans);
       if (res.statusCode == 200) {
         return TransactionModel.fromJson(ans);
       } else {

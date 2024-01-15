@@ -1,7 +1,9 @@
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Customer/customer.dart';
+import 'package:alpha_work/View/Dashboard/TotalDelivery/totalDelivery.dart';
 import 'package:alpha_work/View/Dashboard/notification.dart';
 import 'package:alpha_work/View/Dashboard/ratingReview.dart';
+import 'package:alpha_work/View/Dashboard/stockMgmt/stockMgmt.dart';
 import 'package:alpha_work/View/ORDER/ordermanagement.dart';
 import 'package:alpha_work/View/Payment/payment.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
@@ -58,6 +60,12 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
   late TooltipBehavior _tooltipBehavior1;
   // late TabController _tabController;
 
+  final List<ChartData> chartData = [
+    ChartData('David', 25),
+    ChartData('Steve', 38),
+    ChartData('Jack', 34),
+    ChartData('Others', 52)
+  ];
   List items = [
     {
       'id': 0,
@@ -95,12 +103,6 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
       'image': Images.rating_image,
       'color': Color(0xFFEDB900).withOpacity(0.3),
     },
-  ];
-  final List<ChartData> chartData = [
-    ChartData('David', 25),
-    ChartData('Steve', 38),
-    ChartData('Jack', 34),
-    ChartData('Others', 52)
   ];
 
   final navigator = NavigateToRouter();
@@ -389,7 +391,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   AppBar(
-                                    backgroundColor: Colors.transparent,
+                                    forceMaterialTransparency: true,
                                     centerTitle: true,
                                     title: const Text(
                                       "Seller Dashboard",
@@ -591,6 +593,24 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                                     type: PageTransitionType
                                                         .rightToLeft));
 
+                                            break;
+                                          case 2:
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    child:
+                                                        StockManagementScreen(),
+                                                    type: PageTransitionType
+                                                        .rightToLeft));
+                                            break;
+                                          case 4:
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    child:
+                                                        TotalDeliveredProductScreen(),
+                                                    type: PageTransitionType
+                                                        .rightToLeft));
                                             break;
 
                                           default:

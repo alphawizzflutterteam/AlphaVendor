@@ -203,14 +203,11 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
         .toString()
         .replaceAll(RegExp('[^A-Za-z0-9]'), '');
     descCtrl.text = removeHtmlTags(widget.productDetail.details.toString());
-    PurchaceCtrl.text = widget.productDetail.purchasePrice
-        .toString()
-        .replaceAll(RegExp('[^A-Za-z0-9]'), '');
+    PurchaceCtrl.text =
+        widget.productDetail.purchasePrice!.substring(1).toString();
     minQtyCtrl.text = widget.productDetail.minimumOrderQty.toString();
     warrantyCtrl.text = widget.productDetail.warranty.toString();
-    priceCtrl.text = widget.productDetail.unitPrice
-        .toString()
-        .replaceAll(RegExp('[^A-Za-z0-9]'), '');
+    priceCtrl.text = widget.productDetail.unitPrice!.substring(1).toString();
     discountPriceCtrl.text = widget.productDetail.discount
         .toString()
         .replaceAll(RegExp('[^A-Za-z0-9]'), '');
@@ -219,6 +216,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     selectedDiscount = widget.productDetail.discountType.toString();
     selectedUnit = widget.productDetail.unit.toString();
     selectedPtype = widget.productDetail.productType.toString();
+    print("namamjdhf${priceCtrl.text}");
     productProvider =
         Provider.of<ProductManagementViewModel>(context, listen: false);
     getData();
@@ -697,114 +695,114 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   ),
                                 ],
                               ),
-                              const Divider(color: Colors.transparent),
-                              Row(
-                                children: [
-                                  DottedBorder(
-                                    color: colors.buttonColor,
-                                    strokeWidth: 1,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFD5F6F6),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              Images.selectImage,
-                                              height: 30,
-                                              width: 30,
-                                              fit: BoxFit.fitHeight,
-                                            ),
-                                            Text(
-                                              "Other Image",
-                                              style: TextStyle(
-                                                color: colors.buttonColor,
-                                                fontSize: 12,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  VerticalDivider(color: Colors.transparent),
-                                  Container(
-                                    height: height * .1,
-                                    width: width * .25,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: colors.lightGrey,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Text(
-                                      "Image\nContainer",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Divider(color: Colors.transparent),
-                              Row(
-                                children: [
-                                  DottedBorder(
-                                    color: colors.buttonColor,
-                                    strokeWidth: 1,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        width: width * .24,
-                                        padding: const EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFD5F6F6),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Column(
-                                          children: [
-                                            Icon(
-                                                Icons
-                                                    .play_circle_outline_rounded,
-                                                color: colors.buttonColor,
-                                                size: 25),
-                                            Text(
-                                              "Video",
-                                              style: TextStyle(
-                                                color: colors.buttonColor,
-                                                fontSize: 12,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  VerticalDivider(color: Colors.transparent),
-                                  Container(
-                                    height: height * .1,
-                                    width: width * .25,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: colors.lightGrey,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Text(
-                                      "Video\nContainer",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // const Divider(color: Colors.transparent),
+                              // Row(
+                              //   children: [
+                              //     DottedBorder(
+                              //       color: colors.buttonColor,
+                              //       strokeWidth: 1,
+                              //       child: ClipRRect(
+                              //         borderRadius: BorderRadius.circular(10),
+                              //         child: Container(
+                              //           padding: const EdgeInsets.all(15),
+                              //           decoration: BoxDecoration(
+                              //               color: Color(0xFFD5F6F6),
+                              //               borderRadius:
+                              //                   BorderRadius.circular(10)),
+                              //           child: Column(
+                              //             children: [
+                              //               Image.asset(
+                              //                 Images.selectImage,
+                              //                 height: 30,
+                              //                 width: 30,
+                              //                 fit: BoxFit.fitHeight,
+                              //               ),
+                              //               Text(
+                              //                 "Other Image",
+                              //                 style: TextStyle(
+                              //                   color: colors.buttonColor,
+                              //                   fontSize: 12,
+                              //                 ),
+                              //               )
+                              //             ],
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     VerticalDivider(color: Colors.transparent),
+                              //     Container(
+                              //       height: height * .1,
+                              //       width: width * .25,
+                              //       alignment: Alignment.center,
+                              //       decoration: BoxDecoration(
+                              //           color: colors.lightGrey,
+                              //           borderRadius:
+                              //               BorderRadius.circular(10)),
+                              //       child: Text(
+                              //         "Image\nContainer",
+                              //         textAlign: TextAlign.center,
+                              //         style: TextStyle(
+                              //           color: Colors.black,
+                              //           fontSize: 12,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // const Divider(color: Colors.transparent),
+                              // Row(
+                              //   children: [
+                              //     DottedBorder(
+                              //       color: colors.buttonColor,
+                              //       strokeWidth: 1,
+                              //       child: ClipRRect(
+                              //         borderRadius: BorderRadius.circular(10),
+                              //         child: Container(
+                              //           width: width * .24,
+                              //           padding: const EdgeInsets.all(15),
+                              //           decoration: BoxDecoration(
+                              //               color: Color(0xFFD5F6F6),
+                              //               borderRadius:
+                              //                   BorderRadius.circular(10)),
+                              //           child: Column(
+                              //             children: [
+                              //               Icon(
+                              //                   Icons
+                              //                       .play_circle_outline_rounded,
+                              //                   color: colors.buttonColor,
+                              //                   size: 25),
+                              //               Text(
+                              //                 "Video",
+                              //                 style: TextStyle(
+                              //                   color: colors.buttonColor,
+                              //                   fontSize: 12,
+                              //                 ),
+                              //               )
+                              //             ],
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     VerticalDivider(color: Colors.transparent),
+                              //     Container(
+                              //       height: height * .1,
+                              //       width: width * .25,
+                              //       alignment: Alignment.center,
+                              //       decoration: BoxDecoration(
+                              //           color: colors.lightGrey,
+                              //           borderRadius:
+                              //               BorderRadius.circular(10)),
+                              //       child: Text(
+                              //         "Video\nContainer",
+                              //         textAlign: TextAlign.center,
+                              //         style: TextStyle(
+                              //           color: Colors.black,
+                              //           fontSize: 12,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               const Divider(color: Colors.transparent),
                               // Row(
                               //   children: [
@@ -835,7 +833,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                     .copyWith(
                                         contentPadding:
                                             EdgeInsets.only(right: 10)),
-                                hint: Text("Type of product & Price",
+                                hint: Text("Simple Product",
                                     style: TextStyle(
                                         color: colors.greyText,
                                         fontWeight: FontWeight.normal)),

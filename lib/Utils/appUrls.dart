@@ -101,4 +101,7 @@ class AppUrl {
   static const String getCountries = '${baseURL1}countries';
   static const String getStates = '${baseURL1}states';
   static const String getCities = '${baseURL1}cities';
+  static const String supportChat = '${baseURL}seller/support-ticket/conv/';
+  static const String supportChatReply =
+      '${baseURL}seller/support-ticket/reply/';
 }

@@ -20,6 +20,8 @@ class ProductManagementViewModel extends ChangeNotifier {
   List<CategoryData> subsubcategories = [];
   List<BrandData> brandList = [];
   List<Product> productDetail = [];
+  List<ProductData> lowStock = [];
+  List<ProductData> outOfStock = [];
   bool isLoading = true;
   CategoryData? selectedCat;
   CategoryData? selectedSubCat;
@@ -67,20 +69,33 @@ class ProductManagementViewModel extends ChangeNotifier {
   }
 
 //Function to get Product list based on status (Active,Inactive,All)
-  Future<void> getProductsListWithStatus({required String Type}) async {
+  Future<void> getProductsListWithStatus({
+    required String Type,
+    required String? stockType,
+  }) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-    print(Type);
+
     isLoading = true;
     await _myRepo.ProductListRequest(
             api: AppUrl.productList,
             bearerToken: token,
             type: Type,
             cat: null,
+            stockType: stockType,
             subcat: null,
             isCat: false)
         .then((value) {
-      productList = value.data!;
-      print("Product list length ${productList.length}");
+      if (stockType == "low_stock") {
+        lowStock = value.data;
+        print("Low list length ${lowStock.length}");
+      } else if (stockType == "out_of_stock") {
+        outOfStock = value.data;
+        print("out list length ${outOfStock.length}");
+      } else {
+        productList = value.data;
+        print("Product list length ${productList.length}");
+      }
+
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }
@@ -99,6 +114,7 @@ class ProductManagementViewModel extends ChangeNotifier {
             bearerToken: token,
             cat: catId,
             subcat: subcatId,
+            stockType: null,
             type: Type,
             isCat: true)
         .then((value) {

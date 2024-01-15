@@ -8,6 +8,7 @@ import 'package:alpha_work/View/Product/model/productListModel.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/comman_header.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:page_transition/page_transition.dart';
@@ -336,12 +337,13 @@ class OrderListTile extends StatelessWidget {
             ),
             Row(
               children: [
-                Text(
+                AutoSizeText(
                   price,
                   maxLines: 1,
+                  maxFontSize: 24,
+                  minFontSize: 16,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 24,
                     fontFamily: 'Montreal',
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -399,6 +401,7 @@ class PendingOrderListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
           onTap: () => showDialog(

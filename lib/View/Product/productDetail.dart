@@ -129,37 +129,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               ),
                               Divider(color: Colors.transparent, height: 5),
-                              ConstrainedBox(
-                                constraints:
-                                    BoxConstraints(maxWidth: width * .5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    AutoSizeText(
-                                      productP.productDetail.first.specialPrice
+                              AutoSizeText.rich(
+                                maxFontSize: 18,
+                                minFontSize: 14,
+                                style: TextStyle(fontFamily: 'Montreal'),
+                                TextSpan(children: [
+                                  TextSpan(
+                                      text: productP
+                                          .productDetail.first.specialPrice
                                           .toString(),
-                                      maxFontSize: 24,
-                                      minFontSize: 20,
                                       style: TextStyle(
                                           color: colors.buttonColor,
-                                          fontFamily: 'Montreal',
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    VerticalDivider(
-                                        color: Colors.transparent, width: 5),
-                                    AutoSizeText(
-                                      productP.productDetail.first.unitPrice
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  TextSpan(text: ' '),
+                                  TextSpan(
+                                      text: productP
+                                          .productDetail.first.unitPrice
                                           .toString(),
-                                      maxFontSize: 16,
-                                      minFontSize: 14,
                                       style: TextStyle(
                                         color: colors.greyText,
-                                        fontFamily: 'Montreal',
                                         decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                      )),
+                                ]),
                               ),
                             ],
                           ),
@@ -217,14 +209,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             Spacer(),
                             GestureDetector(
-                              onTap: () => Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          child: EditProdutScreen(
-                                              productDetail:
-                                                  productP.productDetail.first),
-                                          type: PageTransitionType.rightToLeft))
-                                  .then((value) => getData()),
+                              onTap: () {
+                                print(
+                                    "${productP.productDetail.first.unitPrice}jjjjjjj");
+                                Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: EditProdutScreen(
+                                                productDetail: productP
+                                                    .productDetail.first),
+                                            type:
+                                                PageTransitionType.rightToLeft))
+                                    .then((value) => getData());
+                              },
                               child: Row(
                                 children: [
                                   ImageIcon(
