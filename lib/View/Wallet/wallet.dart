@@ -5,6 +5,7 @@ import 'package:alpha_work/ViewModel/walletViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,7 @@ class _WalletScreenState extends State<WalletScreen> {
     setState(() {});
   }
 
+  final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -98,7 +100,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 )),
                                 context: context,
                                 builder: (ctx) => Container(
-                                  height: height * .32,
+                                  height: height * .37,
                                   width: width,
                                   padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
@@ -127,22 +129,51 @@ class _WalletScreenState extends State<WalletScreen> {
                                         ),
                                       ),
                                       Spacer(),
-                                      TextField(
-                                        keyboardType: TextInputType.number,
-                                        controller: amountCtrl,
-                                        decoration: InputDecoration()
-                                            .applyDefaults(Theme.of(context)
-                                                .inputDecorationTheme)
-                                            .copyWith(
-                                                hintText: "Enter Amount",
-                                                hintStyle: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                )),
+                                      Form(
+                                        key: _key,
+                                        child: TextFormField(
+                                          keyboardType: TextInputType.number,
+                                          controller: amountCtrl,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
+                                          decoration: InputDecoration()
+                                              .applyDefaults(Theme.of(context)
+                                                  .inputDecorationTheme)
+                                              .copyWith(
+                                                  hintText: "Enter Amount",
+                                                  hintStyle: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                  )),
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "Please enter amount";
+                                            } else if (double.parse(amountCtrl
+                                                    .text
+                                                    .toString()) <=
+                                                0) {
+                                              return "Enter a valid amount";
+                                            } else if (double.parse(amountCtrl
+                                                    .text
+                                                    .toString()) >
+                                                double.parse(provider
+                                                    .transaction!
+                                                    .withdrawalAmount
+                                                    .toString()
+                                                    .substring(1))) {
+                                              return "Withdraw amount can't be greater than balance";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                        ),
                                       ),
                                       Spacer(),
                                       ElevatedButton(
                                           onPressed: () {
-                                            if (amountCtrl.text.isNotEmpty) {
+                                            if (_key.currentState!.validate()) {
                                               provider
                                                   .withdrawMoney(
                                                       amount: amountCtrl.text
