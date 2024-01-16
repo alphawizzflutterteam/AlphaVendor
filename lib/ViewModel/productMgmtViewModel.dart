@@ -2,6 +2,7 @@ import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Product/model/brandModel.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
 import 'package:alpha_work/View/Product/model/productDetailModel.dart';
@@ -360,5 +361,25 @@ class ProductManagementViewModel extends ChangeNotifier {
           ),
         )
         .then((value) => setLoading(false));
+  }
+
+//Function to update product Stock
+  Future<bool> updateStock({
+    required quantity,
+    required productId,
+  }) async {
+    bool val = false;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .updateStockGetRequest(
+            token: token,
+            api: "${AppUrl.updateStock}$productId",
+            quantity: quantity)
+        .then((value) {
+      Utils.showTost(msg: value['message'].toString());
+      val = value['status'];
+      setLoading(false);
+    });
+    return val;
   }
 }

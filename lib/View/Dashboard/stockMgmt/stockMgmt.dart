@@ -119,13 +119,15 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                                     itemBuilder: (context, index) =>
                                         GestureDetector(
                                       onTap: () => Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: UpdateStockScreen(
-                                                  Pdata:
-                                                      productP.lowStock[index]),
-                                              type: PageTransitionType
-                                                  .rightToLeft)),
+                                              context,
+                                              PageTransition(
+                                                  child: UpdateStockScreen(
+                                                      Pdata: productP
+                                                          .lowStock[index]),
+                                                  type: PageTransitionType
+                                                      .rightToLeft))
+                                          .then((value) =>
+                                              value ? initState() : null),
                                       child: Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
@@ -323,104 +325,120 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                               : Container(
                                   child: ListView.builder(
                                     itemCount: productP.outOfStock.length,
-                                    itemBuilder: (context, index) => Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: colors.lightGrey),
-                                      margin: EdgeInsets.only(bottom: 10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                height: height * .1,
-                                                width: height * .1,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.white,
-                                                ),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: Image.network(
-                                                    productP.outOfStock[index]
-                                                        .thumbnail
-                                                        .toString(),
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder:
-                                                        (context, url, error) =>
-                                                            ErrorImageWidget(
-                                                                height: null),
+                                    itemBuilder: (context, index) =>
+                                        GestureDetector(
+                                      onTap: () => Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  child: UpdateStockScreen(
+                                                      Pdata: productP
+                                                          .lowStock[index]),
+                                                  type: PageTransitionType
+                                                      .rightToLeft))
+                                          .then((value) =>
+                                              value ? initState() : null),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: colors.lightGrey),
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  height: height * .1,
+                                                  width: height * .1,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: Colors.white,
                                                   ),
-                                                ),
-                                              ),
-                                              VerticalDivider(
-                                                  color: Colors.transparent,
-                                                  width: 12),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  AutoSizeText(
-                                                    productP
-                                                        .outOfStock[index].name
-                                                        .toString(),
-                                                    maxLines: 1,
-                                                    maxFontSize: 18,
-                                                    minFontSize: 16,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Image.network(
+                                                      productP.outOfStock[index]
+                                                          .thumbnail
+                                                          .toString(),
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (context,
+                                                              url, error) =>
+                                                          ErrorImageWidget(
+                                                              height: null),
                                                     ),
                                                   ),
-                                                  Divider(
-                                                      color: Colors.transparent,
-                                                      height: 4),
-                                                  SizedBox(
-                                                    width: width * .55,
-                                                    child: AutoSizeText.rich(
+                                                ),
+                                                VerticalDivider(
+                                                    color: Colors.transparent,
+                                                    width: 12),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    AutoSizeText(
+                                                      productP.outOfStock[index]
+                                                          .name
+                                                          .toString(),
                                                       maxLines: 1,
-                                                      maxFontSize: 14,
-                                                      minFontSize: 12,
+                                                      maxFontSize: 18,
+                                                      minFontSize: 16,
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      TextSpan(children: [
-                                                        TextSpan(
-                                                            text: "SKU ID-",
-                                                            style: TextStyle(
-                                                              color: colors
-                                                                  .greyText,
-                                                            )),
-                                                        TextSpan(text: " "),
-                                                        TextSpan(
-                                                            text: productP
-                                                                .outOfStock[
-                                                                    index]
-                                                                .slug
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                            )),
-                                                      ]),
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                                    Divider(
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 4),
+                                                    SizedBox(
+                                                      width: width * .55,
+                                                      child: AutoSizeText.rich(
+                                                        maxLines: 1,
+                                                        maxFontSize: 14,
+                                                        minFontSize: 12,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        TextSpan(children: [
+                                                          TextSpan(
+                                                              text: "SKU ID-",
+                                                              style: TextStyle(
+                                                                color: colors
+                                                                    .greyText,
+                                                              )),
+                                                          TextSpan(text: " "),
+                                                          TextSpan(
+                                                              text: productP
+                                                                  .outOfStock[
+                                                                      index]
+                                                                  .slug
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                              )),
+                                                        ]),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

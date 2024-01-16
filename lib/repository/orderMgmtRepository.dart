@@ -21,17 +21,17 @@ class OrderManagementRepository {
       });
       print(res.statusCode);
       print(url);
-
+      var jsonData = jsonDecode(res.body);
       if (res.statusCode == 200) {
         print(res.body);
-        var jsonData = jsonDecode(res.body);
+
         return OrderModel.fromJson(jsonData);
       } else {
         print(res.body);
-        return OrderModel(
-            status: null, message: null, data: [], orderStatus: []);
+        return OrderModel.fromJson(jsonData);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print(stackTrace.toString());
       throw Exception(e);
     }
   }

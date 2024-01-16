@@ -3,6 +3,10 @@ import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/Dashboard/RatingnReview/ratingNreviewModel.dart';
+import 'package:alpha_work/View/Dashboard/RatingnReview/reviewDetailModel.dart';
+import 'package:alpha_work/View/Product/model/productDetailModel.dart';
+import 'package:alpha_work/View/Product/model/productListModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
 import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
@@ -21,6 +25,9 @@ class ProfileViewModel with ChangeNotifier {
   List<AdvertData> adverts = [];
   List<SupportData> queries = [];
   List<ChatData> supportChats = [];
+
+  late ReviewModel reviewData;
+  late ReviewDetailModel reviewDetailData;
   bool isLoading = true;
   bool get loading => isLoading;
   setLoading(bool value) {
@@ -33,6 +40,7 @@ class ProfileViewModel with ChangeNotifier {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     String phone = PreferenceUtils.getString(PrefKeys.mobile);
     print(token);
+    print(phone);
     isLoading = true;
     await _myRepo
         .vendorProfileGetRequest(
@@ -323,6 +331,32 @@ class ProfileViewModel with ChangeNotifier {
         .then((value) {
       referrals = value.data;
       print(referrals.length);
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get referral Data
+  Future<void> ratingReviewData() async {
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+
+    await _myRepo
+        .ratingReviewGetRequest(api: AppUrl.ratingReview, token: token)
+        .then((value) {
+      reviewData = value;
+      setLoading(false);
+    }).onError((error, stackTrace) => setLoading(false));
+  }
+
+//Function to get review Detail Data
+  Future<void> ReviewDetailData({required String product_id}) async {
+    isLoading = true;
+    print(product_id);
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo.ReviewDetailGetRequest(
+            api: AppUrl.ReviewDetail, token: token, id: product_id)
+        .then((value) {
+      reviewDetailData = value;
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

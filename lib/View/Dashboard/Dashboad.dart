@@ -1,8 +1,8 @@
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Customer/customer.dart';
+import 'package:alpha_work/View/Dashboard/RatingnReview/ratingReview.dart';
 import 'package:alpha_work/View/Dashboard/TotalDelivery/totalDelivery.dart';
 import 'package:alpha_work/View/Dashboard/notification.dart';
-import 'package:alpha_work/View/Dashboard/ratingReview.dart';
 import 'package:alpha_work/View/Dashboard/stockMgmt/stockMgmt.dart';
 import 'package:alpha_work/View/ORDER/ordermanagement.dart';
 import 'package:alpha_work/View/Payment/payment.dart';
@@ -93,20 +93,19 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
     },
     {
       'id': 4,
-      'name': 'Total Deleviry',
+      'name': 'Total Deliveries',
       'image': Images.delivery_image,
       'color': Color(0xFF0C77C8).withOpacity(0.3),
     },
     {
       'id': 5,
-      'name': 'Reating Review',
+      'name': 'Rating Review',
       'image': Images.rating_image,
       'color': Color(0xFFEDB900).withOpacity(0.3),
     },
   ];
 
   final navigator = NavigateToRouter();
-  final _sellerdata = [];
   String getCardVal(int index) {
     switch (index) {
       case 0:
@@ -501,24 +500,35 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             thickness: 2,
                                           ),
                                         ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              "Total Products",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: colors.lightGrey),
-                                            ),
-                                            Text(
-                                              dashProvider.dashData.totalProduct
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
+                                        GestureDetector(
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductManagementScreen(),
+                                              )),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                "Total Products",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: colors.lightGrey),
+                                              ),
+                                              Text(
+                                                dashProvider
+                                                    .dashData.totalProduct
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 28,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         SizedBox(
                                           height: height * .04,
@@ -589,7 +599,16 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                                 context,
                                                 PageTransition(
                                                     child:
-                                                        RatingAndRewiewScreen(),
+                                                        RatingAndRewiewScreen(
+                                                            image:
+                                                                vendorProvider
+                                                                    .vendorData
+                                                                    .image
+                                                                    .toString(),
+                                                            name: vendorProvider
+                                                                .vendorData
+                                                                .fName
+                                                                .toString()),
                                                     type: PageTransitionType
                                                         .rightToLeft));
 

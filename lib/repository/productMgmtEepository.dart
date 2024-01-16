@@ -402,4 +402,29 @@ class ProductManagementRepository {
       throw Exception(e);
     }
   }
+
+//Function to update product Stock
+  Future<Map<String, dynamic>> updateStockGetRequest({
+    required String token,
+    required String api,
+    required String quantity,
+  }) async {
+    try {
+      var url = Uri.parse(api).replace(queryParameters: {'quantity': quantity});
+      print(url);
+      print(token);
+      http.Response res =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        print(res);
+        return ans;
+      } else {
+        print(res.reasonPhrase);
+        return ans;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

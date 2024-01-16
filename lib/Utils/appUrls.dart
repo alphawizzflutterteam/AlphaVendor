@@ -104,4 +104,7 @@ class AppUrl {
   static const String supportChat = '${baseURL}seller/support-ticket/conv/';
   static const String supportChatReply =
       '${baseURL}seller/support-ticket/reply/';
+  static const String updateStock = '${baseURL}seller/products/update-stock/';
+  static const String ratingReview = '${baseURL}seller/rating_n_reviews';
+  static const String ReviewDetail = '${baseURL}seller/review_details';
 }

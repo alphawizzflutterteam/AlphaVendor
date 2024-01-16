@@ -3,6 +3,8 @@ import 'dart:ffi';
 
 import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
+import 'package:alpha_work/View/Dashboard/RatingnReview/ratingNreviewModel.dart';
+import 'package:alpha_work/View/Dashboard/RatingnReview/reviewDetailModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
 import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
@@ -25,7 +27,7 @@ class ProfileRepository {
 
       http.StreamedResponse response = await request.send();
       var res = await jsonDecode(await response.stream.bytesToString());
-      // print(res);
+      print(res);
       if (response.statusCode == 200) {
         return VendorProfileModel.fromJson(res);
       } else {
@@ -410,6 +412,64 @@ class ProfileRepository {
       } else {
         print(res.reasonPhrase);
         return ReferralModel(status: null, message: null, data: [], wallet: "");
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to get rewiews
+  Future<ReviewModel> ratingReviewGetRequest({
+    required String token,
+    required String api,
+  }) async {
+    try {
+      var url = Uri.parse(api);
+
+      var res =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        print(ans);
+        return ReviewModel.fromJson(ans);
+      } else {
+        print(res.reasonPhrase);
+        return ReviewModel(
+            status: null,
+            message: "",
+            avgRating: null,
+            ratingCount: null,
+            products: []);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to get rewiews details
+  Future<ReviewDetailModel> ReviewDetailGetRequest({
+    required String token,
+    required String api,
+    required String id,
+  }) async {
+    try {
+      var url = Uri.parse(api).replace(queryParameters: {'product_id': id});
+      var res =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        print(ans);
+        return ReviewDetailModel.fromJson(ans);
+      } else {
+        print(res.reasonPhrase);
+        return ReviewDetailModel(
+          status: null,
+          message: "",
+          averageRating: "",
+          rating: [],
+          reviews: [],
+          totalReviews: 0,
+        );
       }
     } catch (e) {
       throw Exception(e);

@@ -32,7 +32,7 @@ class OrderManagementViewModel with ChangeNotifier {
             api: AppUrl.orderList, token: token, status: status)
         .then((value) {
       print(value.data.length);
-      if (orderStatus.isEmpty) {
+      if (orderStatus.length == 0) {
         orderStatus = value.orderStatus;
         notifyListeners();
         print(orderStatus.length);
@@ -40,7 +40,10 @@ class OrderManagementViewModel with ChangeNotifier {
       orderList = value.data;
       print(orderList.first.detail!.name);
       setLoading(false);
-    }).onError((error, stackTrace) => setLoading(false));
+    }).onError((error, stackTrace) {
+      print(stackTrace.toString());
+      setLoading(false);
+    });
   }
 
 //Function to fetch delivery man list

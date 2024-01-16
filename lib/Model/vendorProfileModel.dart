@@ -76,7 +76,7 @@ class VendorData {
   final String? gst;
   final String? cmFirebaseToken;
   final int? posStatus;
-  final int? rating;
+  final double? rating;
   final int? ratingCount;
   final Shop? shop;
 
