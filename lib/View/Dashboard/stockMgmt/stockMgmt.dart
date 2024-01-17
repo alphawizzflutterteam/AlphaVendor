@@ -199,20 +199,26 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                                                           MainAxisAlignment
                                                               .spaceEvenly,
                                                       children: [
-                                                        AutoSizeText(
-                                                          productP
-                                                              .lowStock[index]
-                                                              .name
-                                                              .toString(),
-                                                          maxLines: 1,
-                                                          maxFontSize: 18,
-                                                          minFontSize: 16,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                        SizedBox(
+                                                          width: width * .55,
+                                                          child: AutoSizeText(
+                                                            productP
+                                                                .lowStock[index]
+                                                                .name
+                                                                .toString(),
+                                                            maxLines: 2,
+                                                            maxFontSize: 18,
+                                                            minFontSize: 16,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                           ),
                                                         ),
                                                         Divider(
@@ -385,19 +391,23 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                                                       MainAxisAlignment
                                                           .spaceEvenly,
                                                   children: [
-                                                    AutoSizeText(
-                                                      productP.outOfStock[index]
-                                                          .name
-                                                          .toString(),
-                                                      maxLines: 1,
-                                                      maxFontSize: 18,
-                                                      minFontSize: 16,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                    SizedBox(
+                                                      width: width * .55,
+                                                      child: AutoSizeText(
+                                                        productP
+                                                            .outOfStock[index]
+                                                            .name
+                                                            .toString(),
+                                                        maxLines: 2,
+                                                        maxFontSize: 18,
+                                                        minFontSize: 16,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
                                                     ),
                                                     Divider(

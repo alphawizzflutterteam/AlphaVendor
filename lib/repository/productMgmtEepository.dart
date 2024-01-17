@@ -38,7 +38,7 @@ class ProductManagementRepository {
       required String? subcat,
       required String? stockType,
       required bool isCat}) async {
-    print("Stock type: $stockType $type");
+    print("Stock type: $stockType $type $isCat $cat $subcat $bearerToken");
     final queryParameters = {
       'status': type,
       'type': stockType,
@@ -55,10 +55,11 @@ class ProductManagementRepository {
       final http.Response res = await http.get(url, headers: {
         'Authorization': 'Bearer $bearerToken',
       });
+      var jsonData = jsonDecode(res.body);
       print(res.statusCode);
       print(url);
+      print(jsonData);
       if (res.statusCode == 200) {
-        var jsonData = jsonDecode(res.body);
         return ProductListModel.fromJson(jsonData);
       } else {
         Fluttertoast.showToast(

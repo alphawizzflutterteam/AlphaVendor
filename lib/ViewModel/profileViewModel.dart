@@ -5,8 +5,6 @@ import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingNreviewModel.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/reviewDetailModel.dart';
-import 'package:alpha_work/View/Product/model/productDetailModel.dart';
-import 'package:alpha_work/View/Product/model/productListModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
 import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
@@ -380,5 +378,25 @@ class ProfileViewModel with ChangeNotifier {
       return msg;
     });
     return msg;
+  }
+
+//Function to buy Advert
+  Future<bool> buyAdvert({
+    required String adId,
+    required String paymentId,
+  }) async {
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    print("Im Herekkkkkkkk");
+    await _myRepo
+        .buyAdvertPostRequest(
+            api: AppUrl.buyAdvert,
+            token: token,
+            adId: adId,
+            paymentId: paymentId)
+        .then((value) {
+      if (value['message'] == "Advertisement Purchased Success") {}
+    }).onError((error, stackTrace) => setLoading(false));
+    return true;
   }
 }

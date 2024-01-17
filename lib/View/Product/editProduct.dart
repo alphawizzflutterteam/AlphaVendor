@@ -198,11 +198,11 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     qtyInStockCtrl.text = widget.productDetail.currentStock.toString();
     skuIdCtrl.text = widget.productDetail.code.toString();
     TaxCtrl.text = widget.productDetail.tax.toString();
-    descCtrl.text = widget.productDetail.details.toString();
     shippingCtrl.text = widget.productDetail.shippingCost
         .toString()
         .replaceAll(RegExp('[^A-Za-z0-9]'), '');
-    descCtrl.text = removeHtmlTags(widget.productDetail.details.toString());
+    descCtrl.text =
+        removeHtmlTags(widget.productDetail.details.toString()).toString();
     PurchaceCtrl.text =
         widget.productDetail.purchasePrice!.substring(1).toString();
     minQtyCtrl.text = widget.productDetail.minimumOrderQty.toString();
@@ -937,6 +937,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                             print(priceCtrl.text);
                             print(selectedDiscount);
                             print(discountPriceCtrl.text);
+                            print(descCtrl.text.toString());
                             productProvider
                                 .updateProduct(
                               productId: widget.productDetail.id.toString(),

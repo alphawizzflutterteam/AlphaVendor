@@ -75,15 +75,18 @@ class _UpdateStockScreenState extends State<UpdateStockScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        AutoSizeText(
-                          widget.Pdata.name.toString(),
-                          maxLines: 1,
-                          maxFontSize: 18,
-                          minFontSize: 16,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                        SizedBox(
+                          width: width * .65,
+                          child: AutoSizeText(
+                            widget.Pdata.name.toString(),
+                            maxLines: 2,
+                            maxFontSize: 18,
+                            minFontSize: 16,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Divider(color: Colors.transparent, height: 4),
@@ -120,59 +123,64 @@ class _UpdateStockScreenState extends State<UpdateStockScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "SKU ID",
-                          style: TextStyle(color: colors.greyText),
-                        ),
-                        Text(widget.Pdata.slug.toString(),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "SKU ID",
+                            style: TextStyle(color: colors.greyText),
+                          ),
+                          Text(widget.Pdata.slug.toString(),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14)),
+                          Text(
+                            "Reorder Point",
+                            style: TextStyle(color: colors.greyText),
+                          ),
+                          Text(widget.Pdata.minimumOrderQty.toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Current Stock",
+                            style: TextStyle(color: colors.greyText),
+                          ),
+                          Text(widget.Pdata.currentStock.toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontWeight: FontWeight.bold)),
+                          Text(
+                            "Last Restock Date",
                             maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                    fontWeight: FontWeight.bold, fontSize: 14)),
-                        Text(
-                          "Reorder Point",
-                          style: TextStyle(color: colors.greyText),
-                        ),
-                        Text(widget.Pdata.minimumOrderQty.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold)),
-                      ],
+                            style: TextStyle(color: colors.greyText),
+                          ),
+                          Text(
+                              CustomDateFormat.formatDateOnly(
+                                  widget.Pdata.updatedAt.toString()),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                     ),
-                    Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Current Stock",
-                          style: TextStyle(color: colors.greyText),
-                        ),
-                        Text(widget.Pdata.currentStock.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold)),
-                        Text(
-                          "Last Restock Date",
-                          style: TextStyle(color: colors.greyText),
-                        ),
-                        Text(
-                            CustomDateFormat.formatDateOnly(
-                                widget.Pdata.updatedAt.toString()),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    Spacer(),
                   ],
                 ),
               ),

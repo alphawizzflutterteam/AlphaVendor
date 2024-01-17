@@ -3,11 +3,13 @@ import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Customer/customerDetail.dart';
 import 'package:alpha_work/ViewModel/customerViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/Placeholders/NoSearch.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 
 class CustomerScreen extends StatefulWidget {
   const CustomerScreen({super.key});
@@ -39,38 +41,33 @@ class _CustomerScreenState extends State<CustomerScreen> {
             ? appLoader()
             : Column(
                 children: [
-                  SizedBox(
-                    height: 45,
-                    child: TextFormField(
-                      // controller: searchcontroller,
-                      onChanged: (String? value) {},
-                      decoration: InputDecoration(
-                        filled: true,
-                        // fillColor: const Color.fromARGB(255, 233, 233, 253),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(width: 0, color: Colors.grey)),
-                        hintText: "Search ",
-                        hintStyle: TextStyle(
-                            fontWeight: FontWeight.normal, color: Colors.grey),
-                        prefixIcon: const Icon(Icons.search),
-                        prefixIconColor: Colors.grey,
-                      ),
-                      style: const TextStyle(),
-                    ),
-                  ),
-                  const Divider(color: Colors.transparent),
                   Expanded(
                     child: SizedBox(
-                      child: ListView.builder(
-                        itemCount: provider.customers.length,
-                        itemBuilder: (context, index) => GestureDetector(
+                      child: SearchableList(
+                        initialList: provider.customers,
+                        inputDecoration: (const InputDecoration())
+                            .applyDefaults(
+                                Theme.of(context).inputDecorationTheme)
+                            .copyWith(
+                              hintText: "Search by Name",
+                              hintStyle: TextStyle(
+                                  color: colors.greyText,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                        autoFocusOnSearch: false,
+                        emptyWidget: NoSearch(),
+                        filter: (query) => provider.customers
+                            .where((ele) => ele.fName
+                                .toString()
+                                .toLowerCase()
+                                .contains(query))
+                            .toList(),
+                        builder: (displayedList, index, item) =>
+                            GestureDetector(
                           onTap: () => Navigator.push(
                               context,
                               PageTransition(
-                                  child: CustomerDetailScreen(
-                                      data: provider.customers[index]),
+                                  child: CustomerDetailScreen(data: item),
                                   type: PageTransitionType.rightToLeft)),
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
@@ -92,8 +89,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
-                                          provider.customers[index].image
-                                              .toString(),
+                                          item.image.toString(),
                                           fit: BoxFit.fill,
                                           errorBuilder: (context, error,
                                                   stackTrace) =>
@@ -107,8 +103,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          provider.customers[index].fName
-                                              .toString(),
+                                          item.fName.toString(),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -117,8 +112,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          provider.customers[index].phone
-                                              .toString(),
+                                          item.phone.toString(),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -144,8 +138,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           fontWeight: FontWeight.normal),
                                     ),
                                     Text(
-                                      provider.customers[index].email
-                                          .toString(),
+                                      item.email.toString(),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -168,7 +161,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           fontWeight: FontWeight.normal),
                                     ),
                                     Text(
-                                      "${provider.customers[index].streetAddress.toString()} ${provider.customers[index].city.toString()} ${provider.customers[index].state.toString()} ${provider.customers[index].country.toString()}",
+                                      "${item.streetAddress.toString()} ${item.city.toString()} ${item.state.toString()} ${item.country.toString()}",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(

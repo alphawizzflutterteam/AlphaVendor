@@ -115,7 +115,7 @@ class ProductManagementViewModel extends ChangeNotifier {
             bearerToken: token,
             cat: catId,
             subcat: subcatId,
-            stockType: null,
+            stockType: "",
             type: Type,
             isCat: true)
         .then((value) {

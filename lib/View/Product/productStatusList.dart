@@ -55,10 +55,11 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   child: SearchableList(
+                    autoFocusOnSearch: false,
                     inputDecoration: (const InputDecoration())
                         .applyDefaults(Theme.of(context).inputDecorationTheme)
                         .copyWith(
-                          hintText: "Search",
+                          hintText: "Search by Product Name",
                           hintStyle: TextStyle(
                               color: colors.greyText,
                               fontWeight: FontWeight.normal),
@@ -100,8 +101,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                               context,
                               PageTransition(
                                   child: ProductDetailScreen(
-                                      id: productstatusP.productList[index].id
-                                          .toString()),
+                                      id: item.id.toString()),
                                   type: PageTransitionType.rightToLeft))
                           .then((value) => initState()),
                       child: Container(
@@ -124,8 +124,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.network(
-                                  productstatusP.productList[index].thumbnail
-                                      .toString(),
+                                  item.thumbnail.toString(),
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, url, error) =>
                                       ErrorImageWidget(height: null),
@@ -139,10 +138,9 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 SizedBox(
-                                  width: width * .6,
+                                  width: width * .5,
                                   child: AutoSizeText(
-                                    productstatusP.productList[index].name
-                                        .toString(),
+                                    item.name.toString(),
                                     maxLines: 1,
                                     maxFontSize: 16,
                                     minFontSize: 14,
@@ -154,7 +152,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: width * .5,
+                                  width: width * .4,
                                   child: RichText(
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -167,9 +165,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                           )),
                                       TextSpan(text: " "),
                                       TextSpan(
-                                          text: productstatusP
-                                              .productList[index].slug
-                                              .toString(),
+                                          text: item.slug.toString(),
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
@@ -178,7 +174,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                   ),
                                 ),
                                 AutoSizeText.rich(
-                                  maxFontSize: 18,
+                                  maxFontSize: 16,
                                   minFontSize: 14,
                                   style: TextStyle(fontFamily: 'Montreal'),
                                   TextSpan(children: [
@@ -204,29 +200,19 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                 ),
                               ],
                             ),
-                            Spacer(),
                             widget.appBartitle == "All Products"
                                 ? Container(
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
-                                        color: productstatusP.productList[index]
-                                                    .status ==
-                                                1
+                                        color: item.status == 1
                                             ? Colors.green.withOpacity(0.3)
                                             : Colors.red.withOpacity(0.3)),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 5, vertical: 3),
                                     child: Text(
-                                      productstatusP
-                                                  .productList[index].status ==
-                                              1
-                                          ? "Active"
-                                          : "Inactive",
+                                      item.status == 1 ? "Active" : "Inactive",
                                       style: TextStyle(
-                                          color: productstatusP
-                                                      .productList[index]
-                                                      .status ==
-                                                  1
+                                          color: item.status == 1
                                               ? Colors.green
                                               : Colors.redAccent),
                                     ),

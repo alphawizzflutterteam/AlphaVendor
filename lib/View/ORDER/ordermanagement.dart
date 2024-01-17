@@ -4,14 +4,13 @@ import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/View/ORDER/pendingOrderDetail.dart';
 import 'package:alpha_work/View/ORDER/pickupSlot.dart';
-import 'package:alpha_work/View/Product/model/productListModel.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/comman_header.dart';
 import 'package:alpha_work/Widget/Placeholders/NoOrder.dart';
+import 'package:alpha_work/Widget/Placeholders/NoSearch.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'package:flutter_custom_tab_bar/library.dart';
@@ -111,6 +110,7 @@ class _OrderManagementState extends State<OrderManagement> {
                                     ? NoOrderFound(height: 100)
                                     : SearchableList(
                                         autoFocusOnSearch: false,
+                                        textInputType: TextInputType.number,
                                         filter: (query) => order.orderList
                                             .where((ele) => ele.orderId
                                                 .toString()
@@ -128,51 +128,18 @@ class _OrderManagementState extends State<OrderManagement> {
                                                           FontWeight.normal),
                                                 ),
                                         initialList: order.orderList,
-                                        emptyWidget: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Image.asset(
-                                                  Images.emptySearch,
-                                                  height: 200,
-                                                  width: 200,
-                                                  fit: BoxFit.contain),
-                                            ),
-                                            Text(
-                                              "Nothing Found",
-                                              style: TextStyle(
-                                                fontSize: 28,
-                                                fontWeight: FontWeight.w600,
-                                                color: colors.buttonColor,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                        emptyWidget: NoSearch(),
                                         builder: (context, indx, item) {
                                           return OrderListTile(
                                             orderPro: orderProvider,
                                             type: order.orderStatus[index].value
                                                 .toString(),
-                                            order: order.orderList[indx],
-                                            title: order
-                                                .orderList[indx].detail!.name
-                                                .toString(),
-                                            id: order.orderList[indx].orderId
-                                                .toString(),
-                                            date: order
-                                                .orderList[indx].orderDate
-                                                .toString(),
-                                            price: order
-                                                .orderList[indx].orderAmount
-                                                .toString(),
-                                            isAlpha: order.orderList[indx]
-                                                .isAlphaDelivery!,
+                                            order: item,
+                                            title: item.detail!.name.toString(),
+                                            id: item.orderId.toString(),
+                                            date: item.orderDate.toString(),
+                                            price: item.orderAmount.toString(),
+                                            isAlpha: item.isAlphaDelivery!,
                                           );
                                         });
                           }),

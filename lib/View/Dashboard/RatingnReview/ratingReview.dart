@@ -133,7 +133,7 @@ class _RatingAndRewiewScreenState extends State<RatingAndRewiewScreen> {
                                                 .toString()),
                                         type: PageTransitionType.rightToLeft)),
                         child: Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(10),
                           margin: const EdgeInsets.only(bottom: 10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -150,8 +150,8 @@ class _RatingAndRewiewScreenState extends State<RatingAndRewiewScreen> {
                                 child: Image.network(
                                   reviewPro.reviewData.products[index].thumbnail
                                       .toString(),
-                                  height: height * .1,
-                                  width: height * .1,
+                                  height: height * .07,
+                                  width: height * .07,
                                   fit: BoxFit.fitHeight,
                                   errorBuilder: (context, error, stackTrace) =>
                                       ErrorImageWidget(height: height),
@@ -161,11 +161,17 @@ class _RatingAndRewiewScreenState extends State<RatingAndRewiewScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    reviewPro.reviewData.products[index].name
-                                        .toString(),
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                  SizedBox(
+                                    width: width * .38,
+                                    child: AutoSizeText(
+                                      reviewPro.reviewData.products[index].name
+                                          .toString(),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
                                   ),
                                   RatingBar.readOnly(
                                     size: 20,

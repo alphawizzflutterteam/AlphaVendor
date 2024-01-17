@@ -315,7 +315,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
         onPressed: () => Navigator.push(
             context,
             PageTransition(
-                child: AddProdutScreen(),
+                child: AddProdutScreen(isFromHome: false),
                 type: PageTransitionType.rightToLeft)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         backgroundColor: colors.buttonColor,

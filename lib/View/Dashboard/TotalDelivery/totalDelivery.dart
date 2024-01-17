@@ -1,5 +1,6 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
+import 'package:alpha_work/View/Product/productDetail.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/Placeholders/NoOrder.dart';
@@ -7,6 +8,7 @@ import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/dateFormatter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class TotalDeliveredProductScreen extends StatefulWidget {
@@ -132,53 +134,67 @@ class _TotalDeliveredProductScreenState
                                         borderRadius: BorderRadius.circular(10),
                                         color: colors.lightGrey,
                                       ),
-                                      child: ListTile(
-                                        title: Text(
-                                          NormalOrdrs[index]
-                                              .detail!
-                                              .name
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              NormalOrdrs[index]
-                                                  .orderId
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: colors.greyText),
-                                            ),
-                                            Text(
-                                              CustomDateFormat.formatDateOnly(
-                                                  NormalOrdrs[index]
-                                                      .detail!
-                                                      .updatedAt
-                                                      .toString()),
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: colors.greyText),
-                                            ),
-                                          ],
-                                        ),
-                                        trailing: AutoSizeText(
-                                          NormalOrdrs[index]
-                                              .detail!
-                                              .unitPrice
-                                              .toString(),
-                                          maxFontSize: 18,
-                                          minFontSize: 16,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              // fontSize: 18,
-                                              fontFamily: 'Montreal',
-                                              fontWeight: FontWeight.w500),
+                                      child: GestureDetector(
+                                        onTap: () => Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                child: ProductDetailScreen(
+                                                    id: AlphaOrdrs[index]
+                                                        .detail!
+                                                        .id
+                                                        .toString()),
+                                                type: PageTransitionType
+                                                    .rightToLeft)),
+                                        child: ListTile(
+                                          title: Text(
+                                            NormalOrdrs[index]
+                                                .detail!
+                                                .name
+                                                .toString(),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                NormalOrdrs[index]
+                                                    .orderId
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: colors.greyText),
+                                              ),
+                                              Text(
+                                                CustomDateFormat.formatDateOnly(
+                                                    NormalOrdrs[index]
+                                                        .detail!
+                                                        .updatedAt
+                                                        .toString()),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: colors.greyText),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: AutoSizeText(
+                                            NormalOrdrs[index]
+                                                .detail!
+                                                .unitPrice
+                                                .toString(),
+                                            maxFontSize: 18,
+                                            minFontSize: 16,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                // fontSize: 18,
+                                                fontFamily: 'Montreal',
+                                                fontWeight: FontWeight.w500),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -198,53 +214,67 @@ class _TotalDeliveredProductScreenState
                                         borderRadius: BorderRadius.circular(10),
                                         color: colors.lightGrey,
                                       ),
-                                      child: ListTile(
-                                        title: Text(
-                                          AlphaOrdrs[index]
-                                              .detail!
-                                              .name
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              AlphaOrdrs[index]
-                                                  .orderId
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: colors.greyText),
-                                            ),
-                                            Text(
-                                              CustomDateFormat.formatDateOnly(
-                                                  AlphaOrdrs[index]
-                                                      .detail!
-                                                      .updatedAt
-                                                      .toString()),
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: colors.greyText),
-                                            ),
-                                          ],
-                                        ),
-                                        trailing: AutoSizeText(
-                                          AlphaOrdrs[index]
-                                              .detail!
-                                              .unitPrice
-                                              .toString(),
-                                          maxFontSize: 18,
-                                          minFontSize: 16,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              // fontSize: 18,
-                                              fontFamily: 'Montreal',
-                                              fontWeight: FontWeight.w500),
+                                      child: GestureDetector(
+                                        onTap: () => Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                child: ProductDetailScreen(
+                                                    id: AlphaOrdrs[index]
+                                                        .detail!
+                                                        .id
+                                                        .toString()),
+                                                type: PageTransitionType
+                                                    .rightToLeft)),
+                                        child: ListTile(
+                                          title: Text(
+                                            AlphaOrdrs[index]
+                                                .detail!
+                                                .name
+                                                .toString(),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                AlphaOrdrs[index]
+                                                    .orderId
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: colors.greyText),
+                                              ),
+                                              Text(
+                                                CustomDateFormat.formatDateOnly(
+                                                    AlphaOrdrs[index]
+                                                        .detail!
+                                                        .updatedAt
+                                                        .toString()),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: colors.greyText),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: AutoSizeText(
+                                            AlphaOrdrs[index]
+                                                .detail!
+                                                .unitPrice
+                                                .toString(),
+                                            maxFontSize: 18,
+                                            minFontSize: 16,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                // fontSize: 18,
+                                                fontFamily: 'Montreal',
+                                                fontWeight: FontWeight.w500),
+                                          ),
                                         ),
                                       ),
                                     ),

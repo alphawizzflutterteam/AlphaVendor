@@ -1,14 +1,25 @@
+import 'dart:io';
+
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/Dashboard/Dashboad.dart';
+import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class SelectPaymentScreen extends StatefulWidget {
   final String amount;
+  final String adId;
   final String heading;
-  SelectPaymentScreen({super.key, required this.amount, required this.heading});
+  SelectPaymentScreen(
+      {super.key,
+      required this.amount,
+      required this.heading,
+      required this.adId});
 
   @override
   State<SelectPaymentScreen> createState() => _SelectPaymentScreenState();
@@ -18,7 +29,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
   bool Selected = true;
   Razorpay? _razorpay;
   int? pricerazorpayy;
-
+  late ProfileViewModel provider;
   @override
   void initState() {
     super.initState();
@@ -26,6 +37,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
     _razorpay?.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay?.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay?.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    provider = Provider.of<ProfileViewModel>(context, listen: false);
   }
 
   void openCheckout(amount) async {
@@ -46,10 +58,28 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
     }
   }
 
-  Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
+  Future<void> _handlePaymentSuccess(
+    PaymentSuccessResponse response,
+  ) async {
+    print("transaction id${response.paymentId!}");
     Utils.showTost(msg: "Payment successfull.");
-//HIT API HERE
-    print(response.paymentId!);
+    await provider
+        .buyAdvert(adId: widget.adId, paymentId: response.paymentId!)
+        .then((value) => showDialog(
+              context: context,
+              builder: (ctx) {
+                Future.delayed(Duration(seconds: 3)).then((value) {
+                  Navigator.pop(ctx);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      PageTransition(
+                          child: DashboardScreen1(),
+                          type: PageTransitionType.rightToLeft),
+                      (route) => false);
+                });
+                return AdSuccessDialog();
+              },
+            ));
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -160,6 +190,56 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             "CONTINUE",
             style: TextStyle(color: Colors.white),
           )),
+    );
+  }
+}
+
+class AdSuccessDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      color: colors.buttonColor,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Image(
+                height: 100, width: 150, image: AssetImage(Images.tickSquare)),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "Thank You for Advertising",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: colors.lightTextColor,
+                  fontSize: Platform.isAndroid ? 14 : 16),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "",
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: colors.lightTextColor,
+                  fontSize: Platform.isAndroid ? 14 : 16),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

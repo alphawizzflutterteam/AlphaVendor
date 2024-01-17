@@ -32,6 +32,7 @@ class _categoryProductScreenState extends State<categoryProductScreen> {
   void initState() {
     productstatusP =
         Provider.of<ProductManagementViewModel>(context, listen: false);
+    print("id's- ${widget.catId}, ${widget.subCatID}");
     productstatusP.getProductsListWithCategory(
         Type: widget.type, catId: widget.catId, subcatId: widget.subCatID);
     super.initState();
@@ -214,27 +215,6 @@ class _categoryProductScreenState extends State<categoryProductScreen> {
                                                     )),
                                               ]),
                                             ),
-                                            productstatusP.productList[index]
-                                                        .currentStock
-                                                        .toInt() ==
-                                                    0
-                                                ? Text(
-                                                    "Sold Out",
-                                                    style: TextStyle(
-                                                        color: Colors.red),
-                                                  )
-                                                : productstatusP
-                                                            .productList[index]
-                                                            .currentStock
-                                                            .toInt() <=
-                                                        5
-                                                    ? Text(
-                                                        "Low in stock",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.orange),
-                                                      )
-                                                    : Container(),
                                           ],
                                         ),
                                       ),

@@ -28,11 +28,19 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
     DropdownMenuItem(
         child: Text(
           "Saving Account",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ),
         ),
         value: "Saving Account"),
     DropdownMenuItem(
         child: Text(
           "Current Account",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ),
         ),
         value: "Current Account"),
   ];
@@ -45,6 +53,7 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
     addrCtrl.text = widget.vendorData.bankAddress.toString();
     accNoCtrl.text = widget.vendorData.accountNo.toString();
     ifscCtrl.text = widget.vendorData.ifscCode.toString();
+    selectedVal = widget.vendorData.accountType.toString();
     profilePro = Provider.of<ProfileViewModel>(context, listen: false);
     super.initState();
   }
@@ -190,6 +199,8 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
                       gravity: ToastGravity.BOTTOM,
                     ),
                   );
+              Navigator.pop(context);
+              Navigator.pop(context);
             }
           },
           style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),

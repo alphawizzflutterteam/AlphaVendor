@@ -119,181 +119,159 @@ class CustomerDetailScreen extends StatelessWidget {
           ),
           const Divider(color: colors.lightGrey, height: 2),
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Product Purchased",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                const Divider(color: Colors.transparent),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: ListView.builder(
-                    itemCount: data.products.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: const EdgeInsets.only(right: 10),
-                      // padding: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                          // image: DecorationImage(image: NetworkImage(model.images.first)),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          gradient: LinearGradient(
-                            colors:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? [
-                                        colors.boxGradient1.withOpacity(1),
-                                        Colors.transparent,
-                                      ]
-                                    : [
-                                        Colors.grey.withOpacity(0.2),
-                                        Colors.transparent,
-                                      ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              "Product Purchased",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.3,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: ListView.builder(
+              itemCount: data.products.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                    // image: DecorationImage(image: NetworkImage(model.images.first)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    gradient: LinearGradient(
+                      colors: Theme.of(context).brightness == Brightness.dark
+                          ? [
+                              colors.boxGradient1.withOpacity(1),
+                              Colors.transparent,
+                            ]
+                          : [
+                              Colors.grey.withOpacity(0.2),
+                              Colors.transparent,
+                            ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    border: Border.all(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? colors.boxBorder
+                            : colors.lightBorder)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
                           ),
-                          border: Border.all(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? colors.boxBorder
-                                  : colors.lightBorder)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                                data.products[index].thumbnail.toString()),
+                            onError: (exception, stackTrace) =>
+                                ErrorImageWidget(height: height),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              // height: MediaQuery.of(context).size.height * 0.14,
-                              // width: MediaQuery.of(context).size.width * 0.44,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: NetworkImage(data
-                                      .products[index].thumbnail
-                                      .toString()),
-                                  onError: (exception, stackTrace) =>
-                                      ErrorImageWidget(height: height),
-                                ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            child: Text(
+                              "${data.products[index].discount.toString()} %",
+                              style: const TextStyle(
+                                color: Colors.orange,
+                                fontSize: 12,
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            child: AutoSizeText(
+                              data.products[index].name.toString(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              maxFontSize: 14,
+                              style: TextStyle(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
+                                AutoSizeText(
+                                  data.products[index].specialPrice.toString(),
+                                  maxFontSize: 22,
+                                  // minFontSize: 18,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    color: colors.buttonColor,
+                                    fontFamily: 'Montreal',
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  child: Text(
-                                    "${data.products[index].discount.toString()} %",
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    data.products[index].unitPrice.toString(),
+                                    maxFontSize: 16,
+                                    // minFontSize: 12,
+                                    maxLines: 1,
                                     style: const TextStyle(
-                                      color: Colors.orange,
-                                      fontSize: 12,
-                                    ),
+                                        color: colors.lightTextColor,
+                                        decoration: TextDecoration.lineThrough,
+                                        fontSize: 14,
+                                        fontFamily: 'Montreal'),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  child: Expanded(
-                                    child: AutoSizeText(
-                                      data.products[index].name.toString(),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxFontSize: 14,
-                                      style: TextStyle(
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Expanded(
-                                        child: AutoSizeText(
-                                          data.products[index].specialPrice
-                                              .toString(),
-                                          maxFontSize: 22,
-                                          // minFontSize: 18,
-                                          maxLines: 1,
-                                          style: const TextStyle(
-                                            color: colors.buttonColor,
-                                            fontFamily: 'Montreal',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Expanded(
-                                        child: AutoSizeText(
-                                          data.products[index].unitPrice
-                                              .toString(),
-                                          maxFontSize: 16,
-                                          // minFontSize: 12,
-                                          maxLines: 1,
-                                          style: const TextStyle(
-                                              color: colors.lightTextColor,
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              fontSize: 14,
-                                              fontFamily: 'Montreal'),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 3, horizontal: 5),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.3),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Text(
-                                      "Delivered",
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                )
                               ],
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 3, horizontal: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.green.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                "Delivered",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           const Divider(color: colors.lightGrey, height: 2),

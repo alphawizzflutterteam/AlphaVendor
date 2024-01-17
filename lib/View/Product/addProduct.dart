@@ -5,6 +5,7 @@ import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
+import 'package:alpha_work/View/Product/productManagement.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -12,11 +13,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class AddProdutScreen extends StatefulWidget {
-  const AddProdutScreen({super.key});
-
+  const AddProdutScreen({super.key, required this.isFromHome});
+  final bool isFromHome;
   @override
   State<AddProdutScreen> createState() => _AddProdutScreenState();
 }
@@ -1015,10 +1017,25 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                 dialogType: DialogType.success,
                                 animType: AnimType.scale,
                                 autoDismiss: false,
+                                dismissOnBackKeyPress: false,
+                                dismissOnTouchOutside: false,
                                 onDismissCallback: (type) {},
                                 title: "Product Added Successfully",
                                 btnOkOnPress: () {
-                                  Navigator.pop(context);
+                                  print(widget.isFromHome);
+                                  if (widget.isFromHome) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: ProductManagementScreen(),
+                                            type: PageTransitionType
+                                                .rightToLeft));
+                                  } else {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
                                 },
                               )..show();
                             } else {

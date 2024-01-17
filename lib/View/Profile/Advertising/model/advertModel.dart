@@ -32,6 +32,7 @@ class AdvertData {
     required this.amount,
     required this.createdAt,
     required this.updatedAt,
+    required this.amountWithCurrency,
   });
 
   final int? id;
@@ -43,6 +44,7 @@ class AdvertData {
   final String? amount;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? amountWithCurrency;
 
   factory AdvertData.fromJson(Map<String, dynamic> json) {
     return AdvertData(
@@ -55,6 +57,7 @@ class AdvertData {
       amount: json["amount"],
       createdAt: DateTime.tryParse(json["created_at"] ?? ""),
       updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
+      amountWithCurrency: json["amount_with_currency"],
     );
   }
 }

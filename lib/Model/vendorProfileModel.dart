@@ -76,8 +76,8 @@ class VendorData {
   final String? gst;
   final String? cmFirebaseToken;
   final int? posStatus;
-  final double? rating;
-  final int? ratingCount;
+  final String? rating;
+  final String? ratingCount;
   final Shop? shop;
 
   factory VendorData.fromJson(Map<String, dynamic> json) {

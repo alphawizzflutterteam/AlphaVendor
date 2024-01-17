@@ -46,6 +46,7 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
                           child: SelectPaymentScreen(
                             amount: profilePro.adverts[index].amount!,
                             heading: profilePro.adverts[index].title!,
+                            adId: profilePro.adverts[index].id.toString(),
                           ),
                           type: PageTransitionType.rightToLeft)),
                   child: Container(
@@ -83,7 +84,8 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
                               ),
                               Spacer(),
                               Text(
-                                profilePro.adverts[index].amount.toString(),
+                                profilePro.adverts[index].amountWithCurrency
+                                    .toString(),
                                 style: TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,

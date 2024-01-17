@@ -102,23 +102,29 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      isYearlyTabSelected
-                                          ? subscriptionProvider
-                                              .yearly[index].title
-                                              .toString()
-                                          : subscriptionProvider
-                                              .monthly[index].title
-                                              .toString(),
-                                      style: TextStyle(
-                                        fontSize:
-                                            20, // Adjust the size as needed
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors
-                                                .black, // Customize the color
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .5,
+                                      child: Text(
+                                        isYearlyTabSelected
+                                            ? subscriptionProvider
+                                                .yearly[index].title
+                                                .toString()
+                                            : subscriptionProvider
+                                                .monthly[index].title
+                                                .toString(),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize:
+                                              14, // Adjust the size as needed
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors
+                                                  .black, // Customize the color
+                                        ),
                                       ),
                                     ),
                                     SizedBox(
@@ -128,7 +134,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                       TextSpan(
                                         style: TextStyle(
                                           fontSize:
-                                              18, // Adjust the size as needed
+                                              14, // Adjust the size as needed
+                                          fontFamily: "Montreal",
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).brightness ==
                                                   Brightness.dark
@@ -147,7 +154,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                     .toString(),
                                             style: TextStyle(
                                               fontSize:
-                                                  24, // Adjust the size as needed
+                                                  16, // Adjust the size as needed
                                               fontWeight: FontWeight.bold,
                                               color: Theme.of(context)
                                                           .brightness ==
@@ -163,7 +170,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                 : ' / month',
                                             style: TextStyle(
                                               fontSize:
-                                                  18, // Adjust the size as needed
+                                                  14, // Adjust the size as needed
                                               fontWeight: FontWeight.normal,
                                               color: Theme.of(context)
                                                           .brightness ==
@@ -317,11 +324,12 @@ class _SubscribeBtnState extends State<SubscribeBtn> {
           openCheckout(widget.amount);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-        ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            backgroundColor: Colors.white,
+            fixedSize: Size(double.infinity, 40)),
         child: Text(
           "Subscribe Now",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontSize: 12),
         ));
   }
 }
@@ -341,7 +349,7 @@ class CurrentPlanText extends StatelessWidget {
         ),
         Text(
           "Current Plan",
-          style: TextStyle(fontSize: 16, color: Colors.white),
+          style: TextStyle(fontSize: 14, color: Colors.white),
         )
       ],
     );

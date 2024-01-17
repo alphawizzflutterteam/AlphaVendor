@@ -50,7 +50,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
     dashProvider = Provider.of<DashboardViewModel>(context, listen: false);
     vendorProvider = Provider.of<ProfileViewModel>(context, listen: false);
     getData();
-    ProfileViewModel().getvendorProfileData();
+
     _tooltipBehavior = TooltipBehavior(enable: true);
     _tooltipBehavior1 = TooltipBehavior(enable: true);
     //  _tabController =  TabController(length: 2, vsync: true);
@@ -141,7 +141,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
             semanticsValue: 'Refresh',
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2));
-              await dashProvider.getDashboardData();
+              await getData();
             },
             child: Scaffold(
               backgroundColor: Colors.blue[50],
@@ -783,7 +783,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                 onPressed: () => Navigator.push(
                     context,
                     PageTransition(
-                        child: AddProdutScreen(),
+                        child: AddProdutScreen(isFromHome: true),
                         type: PageTransitionType.rightToLeft)),
                 backgroundColor: colors.buttonColor,
                 child: Icon(

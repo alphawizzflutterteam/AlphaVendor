@@ -167,6 +167,7 @@ class Detail {
     required this.taxAmount,
     required this.discount,
     required this.discountType,
+    required this.discountString,
     required this.currentStock,
     required this.minimumOrderQty,
     required this.freeShipping,
@@ -227,6 +228,7 @@ class Detail {
   final String? taxAmount;
   final int? discount;
   final String? discountType;
+  final String? discountString;
   final int? currentStock;
   final int? minimumOrderQty;
   final int? freeShipping;
@@ -301,6 +303,7 @@ class Detail {
       taxAmount: json["tax_amount"],
       discount: json["discount"],
       discountType: json["discount_type"],
+      discountString: json["discount_string"],
       currentStock: json["current_stock"],
       minimumOrderQty: json["minimum_order_qty"],
       freeShipping: json["free_shipping"],

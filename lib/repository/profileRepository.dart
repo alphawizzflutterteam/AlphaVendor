@@ -503,4 +503,31 @@ class ProfileRepository {
       throw Exception(e);
     }
   }
+
+//Function to buy Advert
+  Future<Map<String, String>> buyAdvertPostRequest({
+    required String api,
+    required String token,
+    required String adId,
+    required String paymentId,
+  }) async {
+    try {
+      var headers = {'Authorization': 'Bearer $token'};
+      var request = http.MultipartRequest('POST', Uri.parse(api));
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200) {
+        print(ans);
+        return ans;
+      } else {
+        print(response.reasonPhrase);
+        return ans;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }
