@@ -1,11 +1,63 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-class SelectPaymentScreen extends StatelessWidget {
-  SelectPaymentScreen({super.key});
-  bool Selected = false;
+class SelectPaymentScreen extends StatefulWidget {
+  final String amount;
+  final String heading;
+  SelectPaymentScreen({super.key, required this.amount, required this.heading});
+
+  @override
+  State<SelectPaymentScreen> createState() => _SelectPaymentScreenState();
+}
+
+class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
+  bool Selected = true;
+  Razorpay? _razorpay;
+  int? pricerazorpayy;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay?.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay?.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay?.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void openCheckout(amount) async {
+    double res = double.parse(amount.toString());
+    pricerazorpayy = int.parse(res.toStringAsFixed(0)) * 100;
+    // Navigator.of(context).pop();
+    var options = {
+      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'amount': "$pricerazorpayy",
+      'name': 'Advertising',
+      'image': 'assets/images/alpha_logo-light.png',
+      'description': 'Advertising',
+    };
+    try {
+      _razorpay?.open(options);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    Utils.showTost(msg: "Payment successfull.");
+//HIT API HERE
+    print(response.paymentId!);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Utils.showTost(msg: "Payment cancelled by user");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {}
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -38,7 +90,7 @@ class SelectPaymentScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Banner Adverting",
+                    widget.heading,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -46,7 +98,7 @@ class SelectPaymentScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "\$120.00",
+                    widget.amount,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -69,15 +121,15 @@ class SelectPaymentScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Image.asset(
-                    Images.visa,
-                    height: 25,
+                    "assets/images/razorpay.png",
+                    height: 50,
                   ),
                   const VerticalDivider(
                     color: Colors.transparent,
                     width: 5,
                   ),
                   Text(
-                    "Visa",
+                    "Razor pay",
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.black,
@@ -95,125 +147,14 @@ class SelectPaymentScreen extends StatelessWidget {
               ),
             ),
             const Divider(color: Colors.transparent),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: colors.lightGrey,
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Image.asset(
-                    Images.phonePay,
-                    height: 25,
-                  ),
-                  const VerticalDivider(
-                    color: Colors.transparent,
-                    width: 5,
-                  ),
-                  Text(
-                    "Phone Pay",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Radio(
-                    value: true,
-                    groupValue: false,
-                    activeColor: colors.buttonColor,
-                    onChanged: (value) => {},
-                  ),
-                ],
-              ),
-            ),
-            const Divider(color: Colors.transparent),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: colors.lightGrey,
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Image.asset(
-                    Images.upi,
-                    height: 25,
-                  ),
-                  const VerticalDivider(
-                    color: Colors.transparent,
-                    width: 5,
-                  ),
-                  Text(
-                    "UPI",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Radio(
-                    value: true,
-                    groupValue: false,
-                    activeColor: colors.buttonColor,
-                    onChanged: (value) => {},
-                  ),
-                ],
-              ),
-            ),
-            const Divider(color: Colors.transparent),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: colors.lightGrey,
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Image.asset(
-                    Images.google,
-                    height: 40,
-                  ),
-                  const VerticalDivider(
-                    color: Colors.transparent,
-                    width: 5,
-                  ),
-                  Text(
-                    "Google Pay",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Radio(
-                    value: true,
-                    groupValue: false,
-                    activeColor: colors.buttonColor,
-                    onChanged: (value) => {},
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            openCheckout(widget.amount);
+          },
           style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
           child: Text(
             "CONTINUE",

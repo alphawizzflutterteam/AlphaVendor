@@ -1,3 +1,4 @@
+import 'package:alpha_work/Utils/fcm_helper.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/View/Profile/settings/settings.dart';
@@ -11,6 +12,7 @@ import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/ViewModel/walletViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/noInternet.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_no_internet_widget/flutter_no_internet_widget.dart';
@@ -21,9 +23,16 @@ import 'package:provider/provider.dart';
 import 'ViewModel/currencyViewModel.dart';
 import 'ViewModel/languageViewModel.dart';
 
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  FCMHelper.shared.listenNotificationInBackground(message);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await PreferenceUtils.init();
+  await FCMHelper.shared.intializeFirebase();
+
   ErrorWidget.builder = (FlutterErrorDetails details) {
     print(details.exception.toString());
     print(details.library.toString());
@@ -65,8 +74,45 @@ void main() async {
   ], child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    firebaseSetup();
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    print("_handleMessage : ${message.data}");
+  }
+
+  firebaseSetup() async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.data}');
+        await FirebaseMessaging.instance
+            .setForegroundNotificationPresentationOptions(
+          alert: true, // Required to display a heads up notification
+          badge: true,
+          sound: true,
+        );
+      }
+    });
+  }
 
   // This widget is the root of your application.
   @override
