@@ -7,6 +7,7 @@ import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/otpfind.dart';
 
 import 'package:alpha_work/View/Dashboard/Dashboad.dart';
 import 'package:alpha_work/repository/authRepository.dart';
@@ -14,6 +15,7 @@ import 'package:crypto/crypto.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:page_transition/page_transition.dart';
 
 class AuthViewModel with ChangeNotifier {
   final _myRepo = AuthRepository();
@@ -121,8 +123,14 @@ class AuthViewModel with ChangeNotifier {
         PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
         PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
         PreferenceUtils.setString(PrefKeys.mobile, phone.toString());
+        Navigator.push(
+            context,
+            PageTransition(
+              child: OtpCheckPage(isPass: false),
+              type: PageTransitionType.rightToLeft,
+            ));
       } else {
-        Utils.showTost(msg: value.errors[0]['message'].toString());
+        Utils.showTost(msg: value.message.toString());
       }
     });
     return val;

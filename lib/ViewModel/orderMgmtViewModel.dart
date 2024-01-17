@@ -98,8 +98,13 @@ class OrderManagementViewModel with ChangeNotifier {
         .orderStatusUpatePutRequest(
             api: "${AppUrl.orderStatusUpdate}$id", token: token)
         .then((value) {
-      val = value['status'].toString() == 'true' ? true : false;
-    }).onError((error, stackTrace) => setLoading(false));
+      print(value.toString());
+      val = value['status'] == true ? true : false;
+      print(val.toString() + "VALLUE");
+    }).onError((error, stackTrace) {
+      print(stackTrace.toString());
+      setLoading(false);
+    });
     return val;
   }
 }

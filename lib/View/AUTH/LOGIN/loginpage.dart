@@ -183,7 +183,7 @@ class PhoneLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Form(
-        key: _formKey,
+        //key: _formKey,
         child: Column(
           children: [
             const Divider(color: Colors.transparent),
@@ -205,7 +205,7 @@ class PhoneLogin extends StatelessWidget {
               maxLength: 10,
               onChanged: (value) {
                 if (value.length == 10) {
-                  FocusScope.of(context).unfocus();
+                  // FocusScope.of(context).unfocus();
                 }
               },
             ),
@@ -214,17 +214,18 @@ class PhoneLogin extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                if (_formKey.currentState!.validate()) {
+                // if (_formKey.currentState!.validate()) {
+                FocusScope.of(context).unfocus();
+
+                if (mobile.text == "") {
+                  Utils.showTost(msg: "Please enter valid mobile number.");
+                } else {
                   print(mobile.text);
                   auth
                       .loginwithPhone(
                           phone: mobile.text, context: context, isPass: false)
-                      .then((value) => Navigator.push(
-                          context,
-                          PageTransition(
-                            child: OtpCheckPage(isPass: false),
-                            type: PageTransitionType.rightToLeft,
-                          )));
+                      .then((value) {});
+                  // }
                 }
               },
               child: Container(

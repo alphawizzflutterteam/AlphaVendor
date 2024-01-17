@@ -5,7 +5,6 @@ import 'package:alpha_work/View/Profile/aboutUs/aboutus.dart';
 import 'package:alpha_work/View/Profile/referEarn/referEarn.dart';
 import 'package:alpha_work/View/Profile/subscription/subscription.dart';
 import 'package:alpha_work/View/Profile/support/queryList.dart';
-import 'package:alpha_work/View/Profile/support/support.dart';
 import 'package:alpha_work/View/Profile/termsCondition/termsCondition.dart';
 import 'package:alpha_work/View/changePassword/changePassword.dart';
 
