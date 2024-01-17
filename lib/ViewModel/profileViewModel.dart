@@ -360,4 +360,25 @@ class ProfileViewModel with ChangeNotifier {
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }
+
+  Future<String> alphaSubscription(
+      {required String transaction_id, required String planId}) async {
+    isLoading = true;
+    String msg = '';
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .subscribeAlpha(
+      api: AppUrl.purchasePlan,
+      token: token,
+      transaction_id: transaction_id,
+      plan_id: planId,
+    )
+        .then((value) {
+      msg = value;
+      print(value.toString());
+      setLoading(false);
+      return msg;
+    });
+    return msg;
+  }
 }

@@ -55,23 +55,22 @@ class SubscriptionData {
 }
 
 class Monthly {
-  Monthly({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.type,
-    required this.time,
-    required this.userType,
-    required this.image,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.timeText,
-    required this.isPurchased,
-    required this.priceWithCurrency,
-    required this.translations,
-  });
+  Monthly(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.price,
+      required this.type,
+      required this.time,
+      required this.userType,
+      required this.image,
+      required this.status,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.timeText,
+      required this.isPurchased,
+      required this.translations,
+      required this.price_symbol});
 
   final int? id;
   final String? title;
@@ -86,29 +85,28 @@ class Monthly {
   final DateTime? updatedAt;
   final String? timeText;
   final bool isPurchased;
-  final String? priceWithCurrency;
   final List<dynamic> translations;
+  final String? price_symbol;
 
   factory Monthly.fromJson(Map<String, dynamic> json) {
     return Monthly(
-      id: json["id"],
-      title: json["title"],
-      description: json["description"],
-      price: json["price"],
-      type: json["type"],
-      time: json["time"],
-      userType: json["user_type"],
-      image: json["image"],
-      status: json["status"],
-      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
-      timeText: json["time_text"],
-      isPurchased: json["is_purchased"],
-      priceWithCurrency: json["price_with_currency"],
-      translations: json["translations"] == null
-          ? []
-          : List<dynamic>.from(json["translations"]!.map((x) => x)),
-    );
+        id: json["id"],
+        title: json["title"],
+        description: json["description"],
+        price: json["price"],
+        type: json["type"],
+        time: json["time"],
+        userType: json["user_type"],
+        image: json["image"],
+        status: json["status"],
+        createdAt: DateTime.tryParse(json["created_at"] ?? ""),
+        updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
+        timeText: json["time_text"],
+        isPurchased: json["is_purchased"],
+        translations: json["translations"] == null
+            ? []
+            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+        price_symbol: json["price_symbol"] ?? '');
   }
 
   Map<String, dynamic> toJson() => {
@@ -125,7 +123,7 @@ class Monthly {
         "updated_at": updatedAt?.toIso8601String(),
         "time_text": timeText,
         "is_purchased": isPurchased,
-        "price_with_currency": priceWithCurrency,
         "translations": translations.map((x) => x).toList(),
+        "price_symbol": price_symbol
       };
 }

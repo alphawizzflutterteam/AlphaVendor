@@ -475,4 +475,32 @@ class ProfileRepository {
       throw Exception(e);
     }
   }
+
+  Future<String> subscribeAlpha({
+    required String api,
+    required String token,
+    required String transaction_id,
+    required String plan_id,
+  }) async {
+    try {
+      var url = Uri.parse(api).replace(queryParameters: {
+        'transaction_id': transaction_id,
+        'plan_id': plan_id
+      });
+      var res = await http.post(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      var ans = jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        print(ans);
+        return ans['message'];
+      } else {
+        print(res.reasonPhrase);
+        return ans['message'];
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

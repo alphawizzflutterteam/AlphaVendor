@@ -1,4 +1,5 @@
 import 'package:alpha_work/Utils/color.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/parser.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -32,6 +34,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     subscriptionProvider =
         Provider.of<ProfileViewModel>(context, listen: false);
     subscriptionProvider.getSubscriptions();
+
     super.initState();
   }
 
@@ -137,10 +140,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                           TextSpan(
                                             text: isYearlyTabSelected
                                                 ? subscriptionProvider
-                                                    .yearly[index].price
+                                                    .yearly[index].price_symbol
                                                     .toString()
                                                 : subscriptionProvider
-                                                    .monthly[index].price
+                                                    .monthly[index].price_symbol
                                                     .toString(),
                                             style: TextStyle(
                                               fontSize:
@@ -179,11 +182,25 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                     ? subscriptionProvider
                                             .yearly[index].isPurchased
                                         ? CurrentPlanText()
-                                        : SubscribeBtn()
+                                        : SubscribeBtn(
+                                            amount: subscriptionProvider
+                                                .yearly[index].price
+                                                .toString(),
+                                            planId: subscriptionProvider
+                                                .yearly[index].id
+                                                .toString(),
+                                          )
                                     : subscriptionProvider
                                             .monthly[index].isPurchased
                                         ? CurrentPlanText()
-                                        : SubscribeBtn(),
+                                        : SubscribeBtn(
+                                            amount: subscriptionProvider
+                                                .monthly[index].price
+                                                .toString(),
+                                            planId: subscriptionProvider
+                                                .monthly[index].id
+                                                .toString(),
+                                          ),
                               ],
                             ),
                             Divider(
@@ -233,15 +250,72 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 }
 
-class SubscribeBtn extends StatelessWidget {
+class SubscribeBtn extends StatefulWidget {
+  final String amount;
+  final String planId;
   const SubscribeBtn({
     super.key,
+    required this.amount,
+    required this.planId,
   });
+
+  @override
+  State<SubscribeBtn> createState() => _SubscribeBtnState();
+}
+
+class _SubscribeBtnState extends State<SubscribeBtn> {
+  Razorpay? _razorpay;
+  int? pricerazorpayy;
+  late ProfileViewModel provider;
+
+  @override
+  void initState() {
+    super.initState();
+    provider = Provider.of<ProfileViewModel>(context, listen: false);
+    _razorpay = Razorpay();
+    _razorpay?.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay?.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay?.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void openCheckout(amount) async {
+    double res = double.parse(amount.toString());
+    pricerazorpayy = int.parse(res.toStringAsFixed(0)) * 100;
+    // Navigator.of(context).pop();
+    var options = {
+      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'amount': "$pricerazorpayy",
+      'name': 'Subscription',
+      'image': 'assets/images/alpha_logo-light.png',
+      'description': 'Subscription',
+    };
+    try {
+      _razorpay?.open(options);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    Utils.showTost(msg: "Payment successfull.");
+    provider.alphaSubscription(
+        planId: widget.planId, transaction_id: response.paymentId!.toString());
+//HIT API HERE
+    print(response.paymentId!);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Utils.showTost(msg: "Payment cancelled by user");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {}
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          openCheckout(widget.amount);
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
         ),

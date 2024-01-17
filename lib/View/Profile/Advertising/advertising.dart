@@ -43,7 +43,10 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
                   onTap: () => Navigator.push(
                       context,
                       PageTransition(
-                          child: SelectPaymentScreen(),
+                          child: SelectPaymentScreen(
+                            amount: profilePro.adverts[index].amount!,
+                            heading: profilePro.adverts[index].title!,
+                          ),
                           type: PageTransitionType.rightToLeft)),
                   child: Container(
                     // height: height * .3,
