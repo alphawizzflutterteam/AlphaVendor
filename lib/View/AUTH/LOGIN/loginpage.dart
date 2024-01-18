@@ -223,7 +223,10 @@ class PhoneLogin extends StatelessWidget {
                   print(mobile.text);
                   auth
                       .loginwithPhone(
-                          phone: mobile.text, context: context, isPass: false)
+                          phone: mobile.text,
+                          context: context,
+                          isPass: false,
+                          resend: false)
                       .then((value) {});
                   // }
                 }

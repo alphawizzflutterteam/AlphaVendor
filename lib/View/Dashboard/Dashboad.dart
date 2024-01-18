@@ -18,6 +18,7 @@ import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -128,6 +129,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
   @override
   Widget build(BuildContext context) {
     dashProvider = Provider.of<DashboardViewModel>(context);
+    vendorProvider = Provider.of<ProfileViewModel>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return dashProvider.isLoading
@@ -165,7 +167,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                           child: ListTile(
                             leading: CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(
+                              backgroundImage: CachedNetworkImageProvider(
                                   vendorProvider.vendorData.image.toString()),
                               onBackgroundImageError: (exception, stackTrace) =>
                                   ErrorImageWidget(height: height * .09),
@@ -182,8 +184,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ProfileScreen(
-                                        vendorData: vendorProvider.vendorData),
+                                    builder: (context) => ProfileScreen(),
                                   )),
                               child: Text(
                                 "View Profile",
@@ -585,6 +586,15 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                       onTap: () {
                                         print(index);
                                         switch (index) {
+                                          case 1:
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    child: OrderManagement(),
+                                                    type: PageTransitionType
+                                                        .rightToLeft));
+
+                                            break;
                                           case 3:
                                             Navigator.push(
                                                 context,

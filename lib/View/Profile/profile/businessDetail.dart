@@ -1,12 +1,12 @@
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
-import 'package:alpha_work/View/Product/model/categoryModel.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 
 class EditBusinessDetailScreen extends StatefulWidget {
   final VendorData vendorData;
@@ -55,6 +55,7 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
               children: [
                 TextFormField(
                   controller: emailCtrl,
+                  inputFormatters: [RegexFormatter.email],
                   textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
@@ -62,6 +63,8 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Enter Email ID";
+                    } else if (!validator.email(value)) {
+                      return "Please enter a valid email";
                     }
                     return null;
                   },
@@ -97,10 +100,13 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                 const Divider(color: Colors.transparent),
                 TextFormField(
                   controller: gstinCtrl,
+                  inputFormatters: [RegexFormatter.regNo],
+                  textCapitalization: TextCapitalization.characters,
+                  maxLength: 15,
                   textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "Enter GSTIN*"),
+                      .copyWith(labelText: "Enter GSTIN*", counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter GSTIN";
@@ -112,64 +118,80 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                 TextFormField(
                   controller: regCtrl,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [RegexFormatter.regNo],
+                  textCapitalization: TextCapitalization.characters,
+                  maxLength: 21,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
                           labelText:
-                              "Business Registration Number (if applicable)"),
+                              "Business Registration Number (if applicable)",
+                          counterText: ""),
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
                   controller: tinCtrl,
                   textInputAction: TextInputAction.done,
+                  inputFormatters: [RegexFormatter.regNo],
+                  textCapitalization: TextCapitalization.characters,
+                  maxLength: 11,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "Tax Identification Number (TIN)*"),
+                      .copyWith(
+                          labelText: "Permanent Account Number (PAN)*",
+                          counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter Tax Identification Number";
+                      return "Please enter Permanent Account Number";
                     }
                     return null;
                   },
                 ),
-                const Divider(color: Colors.transparent),
+                SizedBox(
+                  height: height * .24,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        profilePro
+                            .updateBusinessDetail(
+                              bussiness_email_id: emailCtrl.text.toString(),
+                              bussiness_type: typeCtrl.text.toString(),
+                              company_name: nameCtrl.text.toString(),
+                              gst_in: gstinCtrl.text.toString().toUpperCase(),
+                              bussiness_registeration_number:
+                                  regCtrl.text.toString().toUpperCase(),
+                              tax_identification_number:
+                                  tinCtrl.text.toString().toUpperCase(),
+                            )
+                            .then(
+                              (value) => Fluttertoast.showToast(
+                                msg: value['msg'],
+                                backgroundColor: colors.buttonColor,
+                                textColor: Colors.white,
+                                gravity: ToastGravity.BOTTOM,
+                              ),
+                            );
+                        await profilePro
+                            .getvendorProfileData()
+                            .then((value) => Navigator.pop(context));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(width * .9, 50)),
+                    child: Text(
+                      "SAVE",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              profilePro
-                  .updateBusinessDetail(
-                    bussiness_email_id: emailCtrl.text.toString(),
-                    bussiness_type: typeCtrl.text.toString(),
-                    company_name: nameCtrl.text.toString(),
-                    gst_in: gstinCtrl.text.toString(),
-                    bussiness_registeration_number: regCtrl.text.toString(),
-                    tax_identification_number: tinCtrl.text.toString(),
-                  )
-                  .then(
-                    (value) => Fluttertoast.showToast(
-                      msg: value['msg'],
-                      backgroundColor: colors.buttonColor,
-                      textColor: Colors.white,
-                      gravity: ToastGravity.BOTTOM,
-                    ),
-                  );
-            }
-          },
-          style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
-          child: Text(
-            "SAVE",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
     );
   }
 }

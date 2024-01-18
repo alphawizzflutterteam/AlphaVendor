@@ -44,7 +44,6 @@ dependencies:
   flutter_localization: ^0.1.14
   flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^9.0.0
   http: ^1.1.2
   provider: ^6.1.1
   loading_animation_widget: ^1.2.0+4
@@ -67,6 +66,8 @@ dependencies:
   firebase_core: ^2.24.2
   firebase_messaging: ^14.6.4
   razorpay_flutter: ^1.1.1
+  cached_network_image: ^3.3.1
+  html_editor_enhanced: ^2.5.1
 
   # intl: ^0.18.0
 

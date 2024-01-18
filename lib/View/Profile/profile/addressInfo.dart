@@ -234,7 +234,7 @@ class _EditAddressDetailScreenState extends State<EditAddressDetailScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState!.validate() &&
                 addressP.selectedCountry != null &&
                 addressP.selectedState != null &&
@@ -265,12 +265,10 @@ class _EditAddressDetailScreenState extends State<EditAddressDetailScreen> {
                       textColor: Colors.white,
                       gravity: ToastGravity.BOTTOM,
                     ),
-                  )
-                  .then((value) {
-                profilePro.getvendorProfileData();
-                Navigator.pop(context);
-                Navigator.pop(context);
-              });
+                  );
+              await profilePro
+                  .getvendorProfileData()
+                  .then((value) => Navigator.pop(context));
             }
           },
           style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),

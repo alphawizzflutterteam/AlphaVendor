@@ -7,6 +7,7 @@ import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/model/OtpModel.dart';
 import 'package:alpha_work/View/AUTH/LOGIN/otpfind.dart';
 
 import 'package:alpha_work/View/Dashboard/Dashboad.dart';
@@ -109,6 +110,7 @@ class AuthViewModel with ChangeNotifier {
     required String phone,
     required BuildContext context,
     required bool isPass,
+    required bool resend,
   }) async {
     bool val = false;
     await _myRepo
@@ -123,12 +125,14 @@ class AuthViewModel with ChangeNotifier {
         PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
         PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
         PreferenceUtils.setString(PrefKeys.mobile, phone.toString());
-        Navigator.push(
-            context,
-            PageTransition(
-              child: OtpCheckPage(isPass: false),
-              type: PageTransitionType.rightToLeft,
-            ));
+        if (!resend) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: OtpCheckPage(isPass: false),
+                type: PageTransitionType.rightToLeft,
+              ));
+        }
       } else {
         Utils.showTost(msg: value.message.toString());
       }
@@ -161,7 +165,7 @@ class AuthViewModel with ChangeNotifier {
   }
 
 //Function to register vendor
-  Future<bool> registerUser({
+  Future<LoginOtpModel> registerUser({
     required String phone,
     required String otp,
     required String name,
@@ -190,7 +194,13 @@ class AuthViewModel with ChangeNotifier {
     required String accNo,
     required String ifsc,
   }) async {
-    bool val = false;
+    LoginOtpModel val = LoginOtpModel(
+        status: false,
+        message: "Something Went wrong! Please try again",
+        token: null,
+        errors: [],
+        data: [],
+        otp: otp);
     await _myRepo
         .registerVendorPostRequest(
       api: AppUrl.register,
@@ -239,14 +249,9 @@ class AuthViewModel with ChangeNotifier {
         .loginEmailPostRequest(
             api: AppUrl.loginWithEmailPassword, email: email, pass: pass)
         .then((value) {
-      Fluttertoast.showToast(
-          msg: value.message.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: colors.buttonColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      if (value.errors.isNotEmpty) {
+        Utils.showTost(msg: value.errors[0]["message"]);
+      }
       if (value.status == true) {
         PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
         PreferenceUtils.setString(PrefKeys.isLoggedIn, "true");

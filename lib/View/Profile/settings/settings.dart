@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:alpha_work/Model/profileModel.dart';
+import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/Profile/Chat/chat.dart';
 import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/widgets/currencySheet.dart';
@@ -22,8 +26,10 @@ class ProfileSettingScreen extends StatefulWidget {
 class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
   late ProfileViewModel profilePro;
   getData() async {
-    await profilePro.getvendorProfileData();
+    profilePro.vendorData = VendorData.fromJson(
+        jsonDecode(PreferenceUtils.getString(PrefKeys.userDetails)));
     await profilePro.getStaticPageData();
+    print("Vendor Details: ${profilePro.vendorData.image}");
   }
 
   @override
@@ -171,8 +177,7 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             onTap: () => Navigator.push(
                                 context,
                                 PageTransition(
-                                    child: ProfileScreen(
-                                        vendorData: profilePro.vendorData),
+                                    child: ProfileScreen(),
                                     type: PageTransitionType.rightToLeft)),
                             child: Image.asset(
                               Images.edit_button,

@@ -2,8 +2,10 @@ import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -75,6 +77,7 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
               children: [
                 TextFormField(
                   controller: nameCtrl,
+                  textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
@@ -120,12 +123,18 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
                 TextFormField(
                   controller: micrrl,
                   textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  maxLength: 9,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: " MICR code*"),
+                      .copyWith(labelText: " MICR code*", counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter MICR code";
+                    }
+                    if (value.length < 9) {
+                      return "Please enter valid MICR code";
                     }
                     return null;
                   },
@@ -148,6 +157,8 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
                 TextFormField(
                   controller: accNoCtrl,
                   textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "Account Number*"),
@@ -162,6 +173,8 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
                 TextFormField(
                   controller: ifscCtrl,
                   textInputAction: TextInputAction.done,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [RegexFormatter.regNo],
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(labelText: "IFSC Code*"),
@@ -172,46 +185,49 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
                     return null;
                   },
                 ),
-                const Divider(color: Colors.transparent),
+                SizedBox(
+                  height: height * .17,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        profilePro
+                            .updateBankDetail(
+                                bank_name: nameCtrl.text.toString(),
+                                branch_name: branchCtrl.text.toString(),
+                                account_type: selectedVal.toString(),
+                                micr_code: micrrl.text.toString(),
+                                bank_address: addrCtrl.text.toString(),
+                                account_number: accNoCtrl.text.toString(),
+                                ifsc_code: ifscCtrl.text.toString())
+                            .then(
+                              (value) => Fluttertoast.showToast(
+                                msg: value['msg'],
+                                backgroundColor: colors.buttonColor,
+                                textColor: Colors.white,
+                                gravity: ToastGravity.BOTTOM,
+                              ),
+                            );
+                        await profilePro
+                            .getvendorProfileData()
+                            .then((value) => Navigator.pop(context));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(width * .9, 50)),
+                    child: Text(
+                      "SAVE",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              profilePro
-                  .updateBankDetail(
-                      bank_name: nameCtrl.text.toString(),
-                      branch_name: branchCtrl.text.toString(),
-                      account_type: selectedVal.toString(),
-                      micr_code: micrrl.text.toString(),
-                      bank_address: addrCtrl.text.toString(),
-                      account_number: accNoCtrl.text.toString(),
-                      ifsc_code: ifscCtrl.text.toString())
-                  .then(
-                    (value) => Fluttertoast.showToast(
-                      msg: value['msg'],
-                      backgroundColor: colors.buttonColor,
-                      textColor: Colors.white,
-                      gravity: ToastGravity.BOTTOM,
-                    ),
-                  );
-              Navigator.pop(context);
-              Navigator.pop(context);
-            }
-          },
-          style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
-          child: Text(
-            "SAVE",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
-import 'package:alpha_work/View/changePassword/changePassword.dart';
+import 'package:alpha_work/View/Profile/changePassword/changePassword.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -179,9 +179,13 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            await auth.loginwithPhone(
-                                phone: mobile, context: context, isPass: false);
-                            getOtp();
+                            await auth
+                                .loginwithPhone(
+                                    phone: mobile,
+                                    context: context,
+                                    isPass: false,
+                                    resend: true)
+                                .then((value) => getOtp());
                           },
                           child: Text(
                             "Resend OTP",

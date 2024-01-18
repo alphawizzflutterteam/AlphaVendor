@@ -30,6 +30,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   getData() async {
     productP = Provider.of<ProductManagementViewModel>(context, listen: false);
     await productP.getProductDetail(id: widget.id);
+    print("statusssss: ${productP.productDetail.first.name.toString()}");
     switchVal =
         productP.productDetail.first.status.toString() == "1" ? true : false;
   }

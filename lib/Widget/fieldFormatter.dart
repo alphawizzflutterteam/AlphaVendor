@@ -6,8 +6,7 @@ class RegexFormatter extends FilteringTextInputFormatter {
       FilteringTextInputFormatter.deny(RegExp(r'[^a-zA-Z0-9.@]'));
   static FilteringTextInputFormatter phone =
       FilteringTextInputFormatter.allow(RegExp(r'\d+'));
-  static FilteringTextInputFormatter bankName =
-      FilteringTextInputFormatter.allow(RegExp(r'[^a-zA-Z]'));
+
   static FilteringTextInputFormatter regNo =
       FilteringTextInputFormatter.deny(RegExp(r'[^a-zA-Z0-9]'));
 }

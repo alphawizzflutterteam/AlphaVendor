@@ -5,18 +5,33 @@ import 'package:alpha_work/View/Profile/profile/addressInfo.dart';
 import 'package:alpha_work/View/Profile/profile/bankingInfo.dart';
 import 'package:alpha_work/View/Profile/profile/businessDetail.dart';
 import 'package:alpha_work/View/Profile/profile/editProfile.dart';
+import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final VendorData vendorData;
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
-  const ProfileScreen({super.key, required this.vendorData});
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late ProfileViewModel pro;
+  @override
+  void initState() {
+    pro = Provider.of<ProfileViewModel>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    pro = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -71,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
                                 context,
                                 PageTransition(
                                     child: EditProfileScreen(
-                                        vendorData: vendorData),
+                                        vendorData: pro.vendorData),
                                     type: PageTransitionType.rightToLeft)),
                             child: Image.asset(
                               Images.edit_button,
@@ -95,14 +110,14 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: (height / width) * 25,
-                        backgroundImage: NetworkImage(
-                          vendorData.image.toString(),
+                        backgroundImage: CachedNetworkImageProvider(
+                          pro.vendorData.image.toString(),
                         ),
                         onBackgroundImageError: (exception, stackTrace) =>
                             ErrorImageWidget(height: 90),
                       ),
                       Text(
-                        "${vendorData.fName.toString().toUpperCase()} ${vendorData.lName.toString().toUpperCase()}",
+                        "${pro.vendorData.fName.toString().toUpperCase()} ${pro.vendorData.lName.toString().toUpperCase()}",
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
@@ -113,16 +128,16 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.email_rounded,
-                            color: colors.lightTextColor,
+                            color: colors.lightGrey,
                             size: 14,
                           ),
                           const VerticalDivider(
                               color: Colors.transparent, width: 2),
                           Text(
-                            vendorData.email.toString(),
+                            pro.vendorData.email.toString(),
                             style: TextStyle(
                               fontSize: 14,
-                              color: colors.lightTextColor,
+                              color: colors.lightGrey,
                             ),
                           ),
                         ],
@@ -132,16 +147,16 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.phone,
-                            color: colors.lightTextColor,
+                            color: colors.lightGrey,
                             size: 14,
                           ),
                           const VerticalDivider(
                               color: Colors.transparent, width: 2),
                           Text(
-                            vendorData.phone.toString(),
+                            pro.vendorData.phone.toString(),
                             style: TextStyle(
                               fontSize: 14,
-                              color: colors.lightTextColor,
+                              color: colors.lightGrey,
                             ),
                           ),
                         ],
@@ -157,7 +172,7 @@ class ProfileScreen extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 PageTransition(
-                    child: EditBusinessDetailScreen(vendorData: vendorData),
+                    child: EditBusinessDetailScreen(vendorData: pro.vendorData),
                     type: PageTransitionType.rightToLeft)),
             child: ListTile(
               dense: true,
@@ -184,7 +199,7 @@ class ProfileScreen extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 PageTransition(
-                    child: EditAddressDetailScreen(vendorData: vendorData),
+                    child: EditAddressDetailScreen(vendorData: pro.vendorData),
                     type: PageTransitionType.rightToLeft)),
             child: ListTile(
               dense: true,
@@ -211,7 +226,7 @@ class ProfileScreen extends StatelessWidget {
             onTap: () => Navigator.push(
                 context,
                 PageTransition(
-                    child: EditBankingDetailScreen(vendorData: vendorData),
+                    child: EditBankingDetailScreen(vendorData: pro.vendorData),
                     type: PageTransitionType.rightToLeft)),
             child: ListTile(
               dense: true,

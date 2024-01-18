@@ -3,14 +3,17 @@ import 'dart:io';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 
 class EditStoreDetailScreen extends StatefulWidget {
   EditStoreDetailScreen({super.key, required this.vendor});
@@ -154,9 +157,13 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                 TextFormField(
                   controller: reg,
                   textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [RegexFormatter.regNo],
+                  maxLength: 21,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "Registration Number*"),
+                      .copyWith(
+                          labelText: "Registration Number*", counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enterRegistration Number";
@@ -168,9 +175,12 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                 TextFormField(
                   controller: gstin,
                   textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [RegexFormatter.regNo],
+                  maxLength: 15,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "GSTIN*"),
+                      .copyWith(labelText: "GSTIN*", counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter GSTIN";
@@ -181,10 +191,14 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                 const Divider(color: Colors.transparent),
                 TextFormField(
                   controller: taxid,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [RegexFormatter.regNo],
+                  maxLength: 11,
                   textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "Tax Identification*"),
+                      .copyWith(
+                          labelText: "Tax Identification*", counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter TIN";
@@ -203,6 +217,8 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter Email ID";
+                    } else if (!validator.email(value)) {
+                      return "Enter a valid email";
                     }
                     return null;
                   },
@@ -230,26 +246,23 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                         print(image);
                         profilePro
                             .updateStoreDetail(
-                              isFromFile: isFromFile,
-                              name: name.text.toString(),
-                              email: email.text.toString(),
-                              desc: desc.text.toString(),
-                              imageUrl: image.toString(),
-                              type: type.text.toString(),
-                              reg: reg.text.toString(),
-                              gst: gstin.text.toString(),
-                              tax: taxid.text.toString(),
-                              website: website.text.toString(),
-                              social: social.text.toString(),
-                            )
-                            .then(
-                              (value) => Fluttertoast.showToast(
-                                msg: value['msg'],
-                                backgroundColor: colors.buttonColor,
-                                textColor: Colors.white,
-                                gravity: ToastGravity.BOTTOM,
-                              ),
-                            );
+                          isFromFile: isFromFile,
+                          name: name.text.toString(),
+                          email: email.text.toString(),
+                          desc: desc.text.toString(),
+                          imageUrl: image.toString(),
+                          type: type.text.toString(),
+                          reg: reg.text.toString(),
+                          gst: gstin.text.toString(),
+                          tax: taxid.text.toString(),
+                          website: website.text.toString(),
+                          social: social.text.toString(),
+                        )
+                            .then((value) async {
+                          Utils.showTost(msg: value['msg']);
+                          await profilePro.getvendorProfileData();
+                          Navigator.pop(context);
+                        });
                       }
                     },
                     style: ElevatedButton.styleFrom(

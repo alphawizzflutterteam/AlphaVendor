@@ -239,8 +239,9 @@ class ProductManagementRepository {
       res = await http.get(url, headers: {
         'Authorization': 'Bearer $bearerToken',
       });
+      var ans = jsonDecode(res.body);
+      print(ans);
       if (res.statusCode == 200) {
-        var ans = jsonDecode(res.body);
         return ProductDetailModel.fromJson(ans);
       } else {
         showTost();
@@ -357,16 +358,18 @@ class ProductManagementRepository {
         'purchase_price': purchase_price,
       };
       final http.Response response;
+      print("Body: $body");
       response = await http.put(url, headers: headers, body: body);
       var ans = jsonDecode(response.body);
-      print(ans);
+      print(response.body);
       print(response.statusCode);
       if (response.statusCode == 200 && ans['status'] == true) {
         return true;
       } else {
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print(stackTrace);
       throw Exception(e);
     }
   }

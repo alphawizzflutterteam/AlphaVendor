@@ -953,7 +953,9 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                               discount: discountPriceCtrl.text.toString(),
                               tax: TaxCtrl.text.toString(),
                               tax_type: selectedTax.toString(),
-                              unit_price: priceCtrl.text.toString(),
+                              unit_price: priceCtrl.text
+                                  .toString()
+                                  .replaceAll(RegExp('[^A-Za-z0-9.]'), ""),
                               shipping_cost: shippingCtrl.text.toString(),
                               skuId: skuIdCtrl.text.toString(),
                               minimum_order_qty: minQtyCtrl.text.toString(),
@@ -961,7 +963,9 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   productProvider.selectedBrand!.id.toString(),
                               quantity: qtyInStockCtrl.text.toString(),
                               description: descCtrl.text.toString(),
-                              purchase_price: PurchaceCtrl.text.toString(),
+                              purchase_price: PurchaceCtrl.text
+                                  .toString()
+                                  .replaceAll(RegExp('[^A-Za-z0-9.]'), ""),
                             )
                                 .then((value) {
                               if (value) {
@@ -973,6 +977,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   onDismissCallback: (type) {},
                                   title: "Product Updated Successfully",
                                   btnOkOnPress: () {
+                                    Navigator.pop(context);
                                     Navigator.pop(context);
                                   },
                                 )..show();

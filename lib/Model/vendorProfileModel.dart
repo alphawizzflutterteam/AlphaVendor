@@ -19,6 +19,12 @@ class VendorProfileModel {
               json["data"]!.map((x) => VendorData.fromJson(x))),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "message": message,
+        "data": data.map((x) => x?.toJson()).toList(),
+      };
 }
 
 class VendorData {
@@ -111,6 +117,36 @@ class VendorData {
       shop: json["shop"] == null ? null : Shop.fromJson(json["shop"]),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "f_name": fName,
+        "l_name": lName,
+        "phone": phone,
+        "image": image,
+        "email": email,
+        "password": password,
+        "status": status,
+        "remember_token": rememberToken,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "bank_name": bankName,
+        "branch": branch,
+        "account_no": accountNo,
+        "holder_name": holderName,
+        "account_type": accountType,
+        "micr_code": micrCode,
+        "bank_address": bankAddress,
+        "ifsc_code": ifscCode,
+        "auth_token": authToken,
+        "sales_commission_percentage": salesCommissionPercentage,
+        "gst": gst,
+        "cm_firebase_token": cmFirebaseToken,
+        "pos_status": posStatus,
+        "rating": rating,
+        "rating_count": ratingCount,
+        "shop": shop?.toJson(),
+      };
 }
 
 class Shop {
@@ -140,10 +176,10 @@ class Shop {
     required this.state,
     required this.pincode,
     required this.country,
-    required this.details,
-    required this.socialLink,
     required this.refferral,
     required this.friendsCode,
+    required this.details,
+    required this.socialLink,
   });
 
   final int? id;
@@ -171,10 +207,10 @@ class Shop {
   final String? state;
   final String? pincode;
   final String? country;
-  final String? details;
-  final String? socialLink;
   final String? refferral;
   final String? friendsCode;
+  final String? details;
+  final String? socialLink;
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
@@ -203,10 +239,42 @@ class Shop {
       state: json["state"],
       pincode: json["pincode"],
       country: json["country"],
-      details: json["details"],
-      socialLink: json["social_link"],
       refferral: json["refferral"],
       friendsCode: json["friends_code"],
+      details: json["details"],
+      socialLink: json["social_link"],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "seller_id": sellerId,
+        "name": name,
+        "address": address,
+        "contact": contact,
+        "email": email,
+        "image": image,
+        "bottom_banner": bottomBanner,
+        "vacation_start_date": vacationStartDate,
+        "vacation_end_date": vacationEndDate,
+        "vacation_note": vacationNote,
+        "vacation_status": vacationStatus,
+        "temporary_close": temporaryClose,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "banner": banner,
+        "bussiness_type": bussinessType,
+        "registeration_number": registerationNumber,
+        "gst_in": gstIn,
+        "tax_identification_number": taxIdentificationNumber,
+        "website_link": websiteLink,
+        "city": city,
+        "state": state,
+        "pincode": pincode,
+        "country": country,
+        "refferral": refferral,
+        "friends_code": friendsCode,
+        "details": details,
+        "social_link": socialLink,
+      };
 }

@@ -6,10 +6,12 @@ import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 
 class EditProfileScreen extends StatefulWidget {
   EditProfileScreen({super.key, required this.vendorData});
@@ -123,6 +125,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter Personal Email ID";
+                    } else if (!validator.email(value)) {
+                      return "Please enter valid email id";
                     }
                     return null;
                   },
@@ -131,6 +135,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 TextFormField(
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.number,
+                  enabled: false,
+                  inputFormatters: [RegexFormatter.phone],
                   maxLength: 10,
                   controller: phoneCtrl,
                   decoration: (const InputDecoration())
@@ -152,7 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState!.validate()) {
               print(image);
               profilePro
@@ -170,6 +176,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       gravity: ToastGravity.BOTTOM,
                     ),
                   );
+              await profilePro
+                  .getvendorProfileData()
+                  .then((value) => Navigator.pop(context));
             }
           },
           style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),

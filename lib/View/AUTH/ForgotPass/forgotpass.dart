@@ -101,7 +101,9 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                             .copyWith(
                                 label: Text("Mobile No."), counterText: ""),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value.length < 10) {
                             return "Enter a valid number";
                           }
                           return null;
@@ -125,6 +127,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                                   .loginwithPhone(
                                       phone: phoneCtrl.text,
                                       context: context,
+                                      resend: false,
                                       isPass: true)
                                   .then((value) => Navigator.push(
                                       context,

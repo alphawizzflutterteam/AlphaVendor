@@ -34,9 +34,9 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
 
   @override
   void initState() {
-    refCode = PreferenceUtils.getString('ref');
     proProvider = Provider.of<ProfileViewModel>(context, listen: false);
     proProvider.getReferralData();
+    refCode = proProvider.vendorData.shop!.refferral.toString();
     super.initState();
   }
 

@@ -249,6 +249,7 @@ class ProductManagementViewModel extends ChangeNotifier {
 //Funtion to get product details
   Future<void> getProductDetail({required String id}) async {
     isLoading = true;
+    productDetail.clear();
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo
         .productDetailGetRequest(

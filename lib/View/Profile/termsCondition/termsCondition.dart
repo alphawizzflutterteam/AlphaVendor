@@ -32,8 +32,10 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
           ? appLoader()
           : Padding(
               padding: const EdgeInsets.all(16),
-              child: Html(
-                data: provider.staticPageData.termsNConditions!.content,
+              child: SingleChildScrollView(
+                child: Html(
+                  data: provider.staticPageData.termsNConditions!.content,
+                ),
               ),
             ),
     );

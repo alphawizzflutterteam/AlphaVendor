@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
@@ -46,7 +48,8 @@ class ProfileViewModel with ChangeNotifier {
         .then((value) {
       print(value.data.first.fName);
       vendorData = value.data.first;
-      PreferenceUtils.setString("ref", vendorData.shop!.refferral.toString());
+      PreferenceUtils.setString(
+          PrefKeys.userDetails, jsonEncode(vendorData.toJson()));
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

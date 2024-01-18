@@ -53,7 +53,7 @@ class AuthRepository {
   }
 
   //Function to register vendor
-  Future<bool> registerVendorPostRequest({
+  Future<LoginOtpModel> registerVendorPostRequest({
     required String api,
     required String phone,
     required String otp,
@@ -121,11 +121,11 @@ class AuthRepository {
       print(res);
       if (response.statusCode == 200) {
         print(res);
-        return res['status'];
+        return LoginOtpModel.fromJson(res);
       } else {
         print(response.reasonPhrase);
         print(res);
-        return res['status'];
+        return LoginOtpModel.fromJson(res);
       }
     } catch (e) {
       throw Exception(e);

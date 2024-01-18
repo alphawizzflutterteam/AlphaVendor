@@ -6,7 +6,7 @@ import 'package:alpha_work/View/Profile/referEarn/referEarn.dart';
 import 'package:alpha_work/View/Profile/subscription/subscription.dart';
 import 'package:alpha_work/View/Profile/support/queryList.dart';
 import 'package:alpha_work/View/Profile/termsCondition/termsCondition.dart';
-import 'package:alpha_work/View/changePassword/changePassword.dart';
+import 'package:alpha_work/View/Profile/changePassword/changePassword.dart';
 
 class ProfileList {
   String profileIcon;
