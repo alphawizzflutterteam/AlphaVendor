@@ -39,9 +39,11 @@ class DashboardScreen1 extends StatefulWidget {
 class _DashboardScreen1State extends State<DashboardScreen1> {
   late DashboardViewModel dashProvider;
   late ProfileViewModel vendorProvider;
+  final ScrollController _controller = ScrollController();
+
   getData() async {
     await vendorProvider.getvendorProfileData();
-    await dashProvider.getDashboardData();
+    await dashProvider.getDashboardData("WeekEarn");
   }
 
   @override
@@ -61,12 +63,6 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
   late TooltipBehavior _tooltipBehavior1;
   // late TabController _tabController;
 
-  final List<ChartData> chartData = [
-    ChartData('David', 25),
-    ChartData('Steve', 38),
-    ChartData('Jack', 34),
-    ChartData('Others', 52)
-  ];
   List items = [
     {
       'id': 0,
@@ -124,6 +120,14 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
       default:
         return " ";
     }
+  }
+
+  void _scrollDown() {
+    _controller.animateTo(
+      _controller.position.maxScrollExtent - 100,
+      duration: Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   @override
@@ -538,24 +542,37 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             thickness: 2,
                                           ),
                                         ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              "Total Order",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: colors.lightGrey),
-                                            ),
-                                            Text(
-                                              dashProvider.dashData.totalOrders
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .rightToLeft,
+                                                    child: OrderManagement()));
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                "Total Order",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: colors.lightGrey),
+                                              ),
+                                              Text(
+                                                dashProvider
+                                                    .dashData.totalOrders
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 28,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -567,6 +584,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                         ),
                         Expanded(
                           child: SingleChildScrollView(
+                            controller: _controller,
                             child: Column(
                               children: [
                                 Padding(
@@ -586,6 +604,8 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                       onTap: () {
                                         print(index);
                                         switch (index) {
+                                          case 0:
+                                            _scrollDown();
                                           case 1:
                                             Navigator.push(
                                                 context,
@@ -705,9 +725,9 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   height: 300,
                                   child: ContainedTabBarView(
                                     tabs: const [
-                                      Text('Daily'),
-                                      Text('Weakly'),
-                                      Text('Montly'),
+                                      Text('Week'),
+                                      Text('Month'),
+                                      Text('Year'),
                                     ],
                                     tabBarProperties: TabBarProperties(
                                       background: Container(
@@ -732,7 +752,18 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                       _Views(),
                                       _Views(),
                                     ],
-                                    onChange: (index) {},
+                                    onChange: (index) {
+                                      if (index == 0) {
+                                        dashProvider
+                                            .getDashboardData("WeekEarn");
+                                      } else if (index == 1) {
+                                        dashProvider
+                                            .getDashboardData("MonthEarn");
+                                      } else {
+                                        dashProvider
+                                            .getDashboardData("yearEarn");
+                                      }
+                                    },
                                   ),
                                 ),
                                 const Divider(color: Colors.transparent),
@@ -760,14 +791,14 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             // Render pie chart
 
                                             PieSeries<ChartData, String>(
-                                                dataSource: [
-                                                  // Bind data source
-                                                  ChartData('Product1', 35),
-                                                  ChartData('Product2', 28),
-                                                  ChartData('Product3', 34),
-                                                  ChartData('Product4', 32),
-                                                  ChartData('Product5', 40)
-                                                ],
+                                                dataSource:
+                                                    dashProvider.circleData,
+                                                //     [
+                                                //   //   // Bind data source
+                                                //   //   ;
+                                                //   ChartData('Product1', 5),
+                                                //   ChartData('Product2', 7),
+                                                // ],
                                                 xValueMapper:
                                                     (ChartData data, _) =>
                                                         data.x,
@@ -813,7 +844,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
               primaryXAxis: CategoryAxis(),
               series: <CartesianSeries>[
             LineSeries<ChartData, String>(
-                dataSource: chartData,
+                dataSource: dashProvider.chartData,
                 xValueMapper: (ChartData data, _) => data.x,
                 yValueMapper: (ChartData data, _) => data.y,
                 // Renders the marker

@@ -92,7 +92,7 @@ class OrderManagementRepository {
   }
 
 //Function to update order status
-  Future<Map<String, String>> orderStatusUpatePutRequest({
+  Future<Map<String, dynamic>> orderStatusUpatePutRequest({
     required String api,
     required String token,
   }) async {

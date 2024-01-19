@@ -16,12 +16,6 @@ class DashboardServiceModel {
       data: json["data"] == null ? null : DashData.fromJson(json["data"]),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": data?.toJson(),
-      };
 }
 
 class DashData {
@@ -47,7 +41,7 @@ class DashData {
   final String? totalDelivery;
   final String? ratingsNdReviews;
   final GraphData? graphData;
-  final List<dynamic> categoryProduct;
+  final List<CategoryProduct> categoryProduct;
 
   factory DashData.fromJson(Map<String, dynamic> json) {
     return DashData(
@@ -64,22 +58,32 @@ class DashData {
           : GraphData.fromJson(json["graph_data"]),
       categoryProduct: json["category_product"] == null
           ? []
-          : List<dynamic>.from(json["category_product"]!.map((x) => x)),
+          : List<CategoryProduct>.from(json["category_product"]!
+              .map((x) => CategoryProduct.fromJson(x))),
     );
   }
+}
 
-  Map<String, dynamic> toJson() => {
-        "total_sale": totalSale,
-        "sold_out": soldOut,
-        "total_product": totalProduct,
-        "total_orders": totalOrders,
-        "total_customers": totalCustomers,
-        "stock_management": stockManagement,
-        "total_delivery": totalDelivery,
-        "ratings_nd_reviews": ratingsNdReviews,
-        "graph_data": graphData?.toJson(),
-        "category_product": categoryProduct.map((x) => x).toList(),
-      };
+class CategoryProduct {
+  CategoryProduct({
+    required this.categoryLabel,
+    required this.categoryProducts,
+  });
+
+  final List<String> categoryLabel;
+  final List<String> categoryProducts;
+
+  factory CategoryProduct.fromJson(Map<String, dynamic> json) {
+    return CategoryProduct(
+      categoryLabel: json["category_label"] == null
+          ? []
+          : List<String>.from(json["category_label"]!.map((x) => x.toString())),
+      categoryProducts: json["category_products"] == null
+          ? []
+          : List<String>.from(
+              json["category_products"]!.map((x) => x.toString())),
+    );
+  }
 }
 
 class GraphData {
@@ -89,7 +93,7 @@ class GraphData {
   });
 
   final List<String> sellerLabel;
-  final List<dynamic> sellerEarn;
+  final List<String> sellerEarn;
 
   factory GraphData.fromJson(Map<String, dynamic> json) {
     return GraphData(
@@ -98,12 +102,7 @@ class GraphData {
           : List<String>.from(json["seller_label"]!.map((x) => x)),
       sellerEarn: json["seller_earn"] == null
           ? []
-          : List<dynamic>.from(json["seller_earn"]!.map((x) => x)),
+          : List<String>.from(json["seller_earn"]!.map((x) => x)),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "seller_label": sellerLabel.map((x) => x).toList(),
-        "seller_earn": sellerEarn.map((x) => x).toList(),
-      };
 }

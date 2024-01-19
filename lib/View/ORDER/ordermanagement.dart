@@ -408,9 +408,11 @@ class PendingOrderListTile extends StatelessWidget {
                                   .then((value) {
                                 if (value) {
                                   Navigator.pop(context);
+                                  Utils.showTost(
+                                      msg: "Order cancelled successfully.");
                                 } else {
-                                  Utils.showTost(msg: "Something went Wrong!");
                                   Navigator.pop(context);
+                                  Utils.showTost(msg: "Something went Wrong!");
                                 }
                               });
                             },
