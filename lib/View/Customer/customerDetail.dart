@@ -3,6 +3,7 @@ import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Customer/Model/customerModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -130,7 +131,7 @@ class CustomerDetailScreen extends StatelessWidget {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.35,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: ListView.builder(
               itemCount: data.products.length,
@@ -164,14 +165,15 @@ class CustomerDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
+                      flex: 3,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
                             Radius.circular(10),
                           ),
                           image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
+                            fit: BoxFit.contain,
+                            image: CachedNetworkImageProvider(
                                 data.products[index].thumbnail.toString()),
                             onError: (exception, stackTrace) =>
                                 ErrorImageWidget(height: height),
@@ -180,6 +182,7 @@ class CustomerDetailScreen extends StatelessWidget {
                       ),
                     ),
                     Expanded(
+                      flex: 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

@@ -7,6 +7,7 @@ import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commanBackground.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/comman_header.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/Placeholders/NoSearch.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                   inputDecoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
-                        hintText: "Search by OrderID",
+                        hintText: "Search by Driver Name",
                         hintStyle: TextStyle(
                             color: colors.greyText,
                             fontWeight: FontWeight.normal),
@@ -57,26 +58,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                           .toString()
                           .contains(query))
                       .toList(),
-                  emptyWidget: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Image.asset(Images.emptySearch,
-                            fit: BoxFit.fitWidth),
-                      ),
-                      Text(
-                        "No Data Found",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                          color: colors.buttonColor,
-                        ),
-                      )
-                    ],
-                  ),
+                  emptyWidget: NoSearch(),
                   builder: (displayedList, index, item) {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 15),
@@ -101,8 +83,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
-                                    provider.deliveryMans[index].image
-                                        .toString(),
+                                    item.image.toString(),
                                     fit: BoxFit.cover,
                                     errorBuilder:
                                         (context, error, stackTrace) =>
@@ -117,8 +98,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    provider.deliveryMans[index].fName
-                                        .toString(),
+                                    item.fName.toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black,
@@ -126,14 +106,14 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "Vehicle Type - ${provider.deliveryMans[index].vehicleType.toString()}",
+                                    "Vehicle Type - ${item.vehicleType.toString()}",
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: colors.greyText,
                                     ),
                                   ),
                                   Text(
-                                    "License No - ${provider.deliveryMans[index].licenseNumber.toString()}",
+                                    "License No - ${item.licenseNumber.toString()}",
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: colors.greyText,
@@ -148,7 +128,7 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                provider.deliveryMans[index].amount.toString(),
+                                item.amount.toString(),
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: Colors.black,
@@ -165,15 +145,9 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                                   ),
                                   context: context,
                                   builder: (ctx) => PickupBottomSheet(
-                                      deliveryManId: provider
-                                          .deliveryMans[index].id
-                                          .toString(),
+                                      deliveryManId: item.id.toString(),
                                       orderId: widget.orderID),
-                                ).then((value) async {
-                                  await provider.getOrderList(
-                                      status: "pending");
-                                  Navigator.pop(context);
-                                }),
+                                ),
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * .3,
                                   alignment: Alignment.center,

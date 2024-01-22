@@ -836,9 +836,14 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                   .applyDefaults(
                                       Theme.of(context).inputDecorationTheme)
                                   .copyWith(
-                                      contentPadding:
-                                          EdgeInsets.only(right: 10)),
-                              hint: Text("Type of product & Price",
+                                    contentPadding: EdgeInsets.only(right: 10),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: colors.lightGrey),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                              hint: Text("Static Product",
                                   style: TextStyle(
                                       color: colors.greyText,
                                       fontWeight: FontWeight.normal)),
@@ -906,10 +911,7 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                               decoration: (const InputDecoration())
                                   .applyDefaults(
                                       Theme.of(context).inputDecorationTheme)
-                                  .copyWith(
-                                      labelText: selectedDiscount == "Flat"
-                                          ? "Discount Price "
-                                          : "Discount in %"),
+                                  .copyWith(labelText: "Discount"),
                             ),
                             const Divider(color: Colors.transparent),
                           ],
@@ -969,88 +971,94 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
               selectedCat == 0
                   ? ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          print(nameCtrl.text);
-                          print(productProvider.selectedCat?.id);
-                          print(productProvider.selectedSubCat?.id);
-                          print(selectedPtype);
-                          print(qtyInStockCtrl.text);
-                          print(skuIdCtrl.text);
-                          print(shippingCtrl.text);
-                          print(selectedTax);
-                          print(TaxCtrl.text);
-                          print(PurchaceCtrl.text);
-                          print(minQtyCtrl.text);
-                          print(productProvider.thumbnail);
-                          print(productProvider.selectedBrand?.id);
-                          print(priceCtrl.text);
-                          print(selectedDiscount);
-                          print(discountPriceCtrl.text);
-                          productProvider
-                              .appProduct(
-                            name: nameCtrl.text.toString(),
-                            category_id:
-                                productProvider.selectedCat!.id.toString(),
-                            sub_category_id:
-                                productProvider.selectedSubCat!.id.toString(),
-                            product_type: selectedPtype.toString(),
-                            unit: selectedUnit.toString(),
-                            thumbnail: productProvider.thumbnail,
-                            discount_type: selectedDiscount.toString(),
-                            discount: discountPriceCtrl.text.toString(),
-                            tax: TaxCtrl.text.toString(),
-                            tax_type: selectedTax.toString(),
-                            unit_price: priceCtrl.text.toString(),
-                            shipping_cost: shippingCtrl.text.toString(),
-                            skuId: skuIdCtrl.text.toString(),
-                            minimum_order_qty: minQtyCtrl.text.toString(),
-                            brand_id:
-                                productProvider.selectedBrand!.id.toString(),
-                            quantity: qtyInStockCtrl.text.toString(),
-                            description: descCtrl.text.toString(),
-                            purchase_price: PurchaceCtrl.text.toString(),
-                          )
-                              .then((value) {
-                            if (value) {
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.success,
-                                animType: AnimType.scale,
-                                autoDismiss: false,
-                                dismissOnBackKeyPress: false,
-                                dismissOnTouchOutside: false,
-                                onDismissCallback: (type) {},
-                                title: "Product Added Successfully",
-                                btnOkOnPress: () {
-                                  print(widget.isFromHome);
-                                  if (widget.isFromHome) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            child: ProductManagementScreen(),
-                                            type: PageTransitionType
-                                                .rightToLeft));
-                                  } else {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                },
-                              )..show();
-                            } else {
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.error,
-                                animType: AnimType.scale,
-                                autoDismiss: false,
-                                onDismissCallback: (type) {},
-                                title: "Something went wrong!",
-                                btnOkColor: Colors.red,
-                                btnOkOnPress: () => Navigator.pop(context),
-                              )..show();
-                            }
-                          });
+                        try {
+                          if (_formKey.currentState!.validate()) {
+                            print(nameCtrl.text);
+                            print(productProvider.selectedCat?.id);
+                            print(productProvider.selectedSubCat?.id);
+                            print(selectedPtype);
+                            print(qtyInStockCtrl.text);
+                            print(skuIdCtrl.text);
+                            print(shippingCtrl.text);
+                            print(selectedTax);
+                            print(TaxCtrl.text);
+                            print(PurchaceCtrl.text);
+                            print(minQtyCtrl.text);
+                            print(productProvider.thumbnail);
+                            print(productProvider.selectedBrand?.id);
+                            print(priceCtrl.text);
+                            print(selectedDiscount);
+                            print(discountPriceCtrl.text);
+                            productProvider
+                                .appProduct(
+                              name: nameCtrl.text.toString(),
+                              category_id:
+                                  productProvider.selectedCat!.id.toString(),
+                              sub_category_id:
+                                  productProvider.selectedSubCat!.id.toString(),
+                              product_type: selectedPtype.toString(),
+                              unit: selectedUnit.toString(),
+                              thumbnail: productProvider.thumbnail,
+                              discount_type: selectedDiscount.toString(),
+                              discount: discountPriceCtrl.text.toString(),
+                              tax: TaxCtrl.text.toString(),
+                              tax_type: selectedTax.toString(),
+                              unit_price: priceCtrl.text.toString(),
+                              shipping_cost: shippingCtrl.text.toString(),
+                              skuId: skuIdCtrl.text.toString(),
+                              minimum_order_qty: minQtyCtrl.text.toString(),
+                              brand_id:
+                                  productProvider.selectedBrand!.id.toString(),
+                              quantity: qtyInStockCtrl.text.toString(),
+                              description: descCtrl.text.toString(),
+                              purchase_price: PurchaceCtrl.text.toString(),
+                            )
+                                .then((value) {
+                              if (value) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.success,
+                                  animType: AnimType.scale,
+                                  autoDismiss: false,
+                                  dismissOnBackKeyPress: false,
+                                  dismissOnTouchOutside: false,
+                                  onDismissCallback: (type) {},
+                                  title: "Product Added Successfully",
+                                  btnOkOnPress: () async {
+                                    print(widget.isFromHome);
+                                    if (widget.isFromHome) {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: ProductManagementScreen(),
+                                              type: PageTransitionType
+                                                  .rightToLeft));
+                                    } else {
+                                      await productProvider
+                                          .getProductManagement();
+                                      Navigator.pop(context, true);
+                                      Navigator.pop(context, true);
+                                    }
+                                  },
+                                )..show();
+                              } else {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.scale,
+                                  autoDismiss: false,
+                                  onDismissCallback: (type) {},
+                                  title: "Something went wrong!",
+                                  btnOkColor: Colors.red,
+                                  btnOkOnPress: () => Navigator.pop(context),
+                                )..show();
+                              }
+                            });
+                          }
+                        } catch (e, StackTrace) {
+                          print(StackTrace.toString());
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -1074,7 +1082,11 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                             subcatName: subcat.text.toString(),
                             subSubName: subkisubcat.text.toString(),
                             context: context,
-                          );
+                          ).then((value) {
+                            cat.clear();
+                            subcat.clear();
+                            subkisubcat.clear();
+                          });
                         }
                       },
                       style: ElevatedButton.styleFrom(

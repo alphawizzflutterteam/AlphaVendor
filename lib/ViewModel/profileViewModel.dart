@@ -47,10 +47,11 @@ class ProfileViewModel with ChangeNotifier {
         .vendorProfileGetRequest(
             api: AppUrl.vendorProfile, token: token, phone: phone)
         .then((value) {
-      print(value.data.first.fName);
+      // print(value.data.first.fName);
       vendorData = value.data.first;
       PreferenceUtils.setString(
           PrefKeys.userDetails, jsonEncode(vendorData.toJson()));
+
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }

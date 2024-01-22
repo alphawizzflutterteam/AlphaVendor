@@ -77,28 +77,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         ],
                       ),
                       Spacer(),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: PopupMenuButton(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          itemBuilder: (context) {
-                            return {
-                              'Cash',
-                              'Online',
-                              'Card Payment',
-                              'Wallet Payment'
-                            }.map((String choice) {
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(choice),
-                              );
-                            }).toList();
-                          },
-                          iconColor: Colors.black,
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: Alignment.topRight,
+                      //   child: PopupMenuButton(
+                      //     color: Colors.white,
+                      //     shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(5)),
+                      //     itemBuilder: (context) {
+                      //       return {
+                      //         'Cash',
+                      //         'Online',
+                      //         'Card Payment',
+                      //         'Wallet Payment'
+                      //       }.map((String choice) {
+                      //         return PopupMenuItem<String>(
+                      //           value: choice,
+                      //           child: Text(choice),
+                      //         );
+                      //       }).toList();
+                      //     },
+                      //     iconColor: Colors.black,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

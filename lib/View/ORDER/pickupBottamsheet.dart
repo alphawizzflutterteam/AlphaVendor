@@ -1,4 +1,5 @@
 import 'package:alpha_work/Utils/color.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/ORDER/ordermanagement.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:flutter/material.dart';
@@ -87,17 +88,18 @@ class _PickupBottomSheetState extends State<PickupBottomSheet> {
               onPressed: () {
                 ordelPro
                     .assignDeliveryMan(
-                      delivery_man_id: widget.deliveryManId,
-                      order_id: widget.orderId,
-                      expected_delivery_date: dateCtrl.text.toString(),
-                    )
-                    .then((value) => Fluttertoast.showToast(
-                          msg: value['msg'].toString(),
-                          backgroundColor: colors.buttonColor,
-                          gravity: ToastGravity.BOTTOM,
-                          textColor: Colors.white,
-                        ));
-                Navigator.pop(context);
+                  delivery_man_id: widget.deliveryManId,
+                  order_id: widget.orderId,
+                  expected_delivery_date: dateCtrl.text.toString(),
+                )
+                    .then((value) async {
+                  Utils.showTost(msg: value['message'].toString());
+                  if (value['status'] == true) {
+                    await ordelPro.getOrderList(status: "processing");
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: colors.buttonColor,

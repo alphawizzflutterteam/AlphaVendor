@@ -124,7 +124,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                             if (_formKey.currentState!.validate()) {
                               print(phoneCtrl.text);
                               auth
-                                  .loginwithPhone(
+                                  .forgetPassOtp(
                                       phone: phoneCtrl.text,
                                       context: context,
                                       resend: false,

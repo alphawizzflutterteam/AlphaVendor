@@ -226,7 +226,7 @@ class PhoneLogin extends StatelessWidget {
                           phone: mobile.text,
                           context: context,
                           isPass: false,
-                          resend: false)
+                          resend: true)
                       .then((value) {});
                   // }
                 }

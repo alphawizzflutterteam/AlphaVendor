@@ -157,33 +157,41 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                 TextFormField(
                   controller: reg,
                   textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.characters,
                   inputFormatters: [RegexFormatter.regNo],
+                  textCapitalization: TextCapitalization.characters,
                   maxLength: 21,
-                  decoration: (const InputDecoration())
-                      .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(
-                          labelText: "Registration Number*", counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enterRegistration Number";
+                      return "Please enter Registration No.";
+                    }
+                    if (value.length < 21) {
+                      return "Please enter valid Reg No.";
                     }
                     return null;
                   },
+                  decoration: (const InputDecoration())
+                      .applyDefaults(Theme.of(context).inputDecorationTheme)
+                      .copyWith(
+                          labelText:
+                              "Business Registration Number (if applicable)",
+                          counterText: ""),
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(
                   controller: gstin,
-                  textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.characters,
                   inputFormatters: [RegexFormatter.regNo],
+                  textCapitalization: TextCapitalization.characters,
                   maxLength: 15,
+                  textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "GSTIN*", counterText: ""),
+                      .copyWith(labelText: "Enter GSTIN*", counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter GSTIN";
+                    }
+                    if (value.length < 15) {
+                      return "Please enter valid GST";
                     }
                     return null;
                   },
@@ -193,7 +201,7 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                   controller: taxid,
                   textCapitalization: TextCapitalization.characters,
                   inputFormatters: [RegexFormatter.regNo],
-                  maxLength: 11,
+                  maxLength: 10,
                   textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
@@ -202,6 +210,9 @@ class _EditStoreDetailScreenState extends State<EditStoreDetailScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter TIN";
+                    }
+                    if (value.length < 10) {
+                      return "Please enter valid TIN";
                     }
                     return null;
                   },

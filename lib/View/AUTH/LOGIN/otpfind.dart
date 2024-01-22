@@ -1,6 +1,7 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/View/AUTH/ForgotPass/resetPass.dart';
 import 'package:alpha_work/View/Profile/changePassword/changePassword.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:flutter/material.dart';
@@ -132,10 +133,11 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                               type: PageTransitionType.rightToLeft),
                           (route) => false);
                     } else {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           PageTransition(
-                              child: ChangePasswordScreen(),
+                              child: ResetPasswordScreen(
+                                  otp: savedotp, phone: mobile),
                               type: PageTransitionType.rightToLeft));
                     }
                   },
@@ -179,13 +181,24 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            await auth
-                                .loginwithPhone(
-                                    phone: mobile,
-                                    context: context,
-                                    isPass: false,
-                                    resend: true)
-                                .then((value) => getOtp());
+                            if (widget.isPass) {
+                              print("dgfhjgf");
+                              await auth
+                                  .forgetPassOtp(
+                                      phone: mobile,
+                                      context: context,
+                                      isPass: widget.isPass,
+                                      resend: false)
+                                  .then((value) => getOtp());
+                            } else {
+                              await auth
+                                  .loginwithPhone(
+                                      phone: mobile,
+                                      context: context,
+                                      isPass: widget.isPass,
+                                      resend: false)
+                                  .then((value) => getOtp());
+                            }
                           },
                           child: Text(
                             "Resend OTP",

@@ -6,6 +6,7 @@ import 'package:alpha_work/View/ORDER/pendingOrderDetail.dart';
 import 'package:alpha_work/View/ORDER/pickupSlot.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/comman_header.dart';
+import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/Placeholders/NoOrder.dart';
 import 'package:alpha_work/Widget/Placeholders/NoSearch.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
@@ -40,8 +41,6 @@ class _OrderManagementState extends State<OrderManagement> {
   void initState() {
     orderProvider =
         Provider.of<OrderManagementViewModel>(context, listen: false);
-    getData();
-
     super.initState();
   }
 
@@ -49,105 +48,111 @@ class _OrderManagementState extends State<OrderManagement> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var widht = MediaQuery.of(context).size.width;
-    orderProvider = Provider.of<OrderManagementViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: orderProvider.isLoading
-          ? appLoader()
-          : Column(
-              children: [
-                Container(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.transparent
-                      : colors.buttonColor,
-                  child: const Stack(
+      appBar: CommanAppbar(appbarTitle: "Order Management"),
+      body: FutureBuilder(
+          future: getData(),
+          builder: (context, snap) {
+            return snap.connectionState == ConnectionState.waiting
+                ? appLoader()
+                : Column(
                     children: [
-                      ProfileHeader(),
-                      InternalDetailPageHeader(
-                        text: "Order Management",
+                      CustomTabBar(
+                        tabBarController: _tabBarController,
+                        onTapItem: (value) => (),
+                        height: 40,
+                        direction: Axis.horizontal,
+                        itemCount: orderProvider.orderStatus.length,
+                        builder: (context, index) => getTabbarChild(
+                            context: context,
+                            index: index,
+                            tabTitle: orderProvider.orderStatus[index].value
+                                .toString()),
+                        indicator: StandardIndicator(
+                          width: 20,
+                          height: 2,
+                          color: Colors.black,
+                        ),
+                        pageController: _controller,
+                      ),
+                      Expanded(
+                        child: PageView.builder(
+                            controller: _controller,
+                            physics: NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: pageCount,
+                            onPageChanged: (value) {
+                              orderProvider.getOrderList(
+                                  status: orderProvider
+                                      .orderStatus[
+                                          _tabBarController.currentIndex]
+                                      .title
+                                      .toString());
+                            },
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Consumer<OrderManagementViewModel>(
+                                    builder: (context, order, _) {
+                                  print(
+                                      "Order list length :${order.orderList.length} page index: ${index}");
+
+                                  return order.isLoading
+                                      ? appLoader()
+                                      : order.orderList.isEmpty
+                                          ? NoOrderFound(height: 100)
+                                          : SearchableList(
+                                              autoFocusOnSearch: false,
+                                              textInputType:
+                                                  TextInputType.number,
+                                              filter: (query) => order.orderList
+                                                  .where((ele) => ele.orderId
+                                                      .toString()
+                                                      .contains(query))
+                                                  .toList(),
+                                              inputDecoration:
+                                                  (const InputDecoration())
+                                                      .applyDefaults(Theme.of(
+                                                              context)
+                                                          .inputDecorationTheme)
+                                                      .copyWith(
+                                                        hintText:
+                                                            "Search by OrderID",
+                                                        hintStyle: TextStyle(
+                                                            color:
+                                                                colors.greyText,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal),
+                                                      ),
+                                              initialList: order.orderList,
+                                              emptyWidget: NoSearch(),
+                                              builder: (context, indx, item) {
+                                                return OrderListTile(
+                                                  orderPro: orderProvider,
+                                                  type: order
+                                                      .orderStatus[index].value
+                                                      .toString(),
+                                                  order: item,
+                                                  title: item.detail!.name
+                                                      .toString(),
+                                                  id: item.orderId.toString(),
+                                                  date:
+                                                      item.orderDate.toString(),
+                                                  price: item.orderAmount
+                                                      .toString(),
+                                                  isAlpha:
+                                                      item.isAlphaDelivery!,
+                                                );
+                                              });
+                                }),
+                              );
+                            }),
                       )
                     ],
-                  ),
-                ),
-                CustomTabBar(
-                  tabBarController: _tabBarController,
-                  height: 40,
-                  direction: Axis.horizontal,
-                  itemCount: orderProvider.orderStatus.length,
-                  builder: (context, index) => getTabbarChild(
-                      context: context,
-                      index: index,
-                      tabTitle:
-                          orderProvider.orderStatus[index].value.toString()),
-                  indicator: StandardIndicator(
-                    width: 20,
-                    height: 2,
-                    color: Colors.black,
-                  ),
-                  pageController: _controller,
-                ),
-                Expanded(
-                  child: PageView.builder(
-                      controller: _controller,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: pageCount,
-                      onPageChanged: (value) {
-                        orderProvider.getOrderList(
-                            status: orderProvider.orderStatus[value].title
-                                .toString());
-                      },
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Consumer<OrderManagementViewModel>(
-                              builder: (context, order, _) {
-                            print(
-                                "Order list length :${order.orderList.length} page index: ${index}");
-
-                            return order.isLoading
-                                ? appLoader()
-                                : order.orderList.isEmpty
-                                    ? NoOrderFound(height: 100)
-                                    : SearchableList(
-                                        autoFocusOnSearch: false,
-                                        textInputType: TextInputType.number,
-                                        filter: (query) => order.orderList
-                                            .where((ele) => ele.orderId
-                                                .toString()
-                                                .contains(query))
-                                            .toList(),
-                                        inputDecoration:
-                                            (const InputDecoration())
-                                                .applyDefaults(Theme.of(context)
-                                                    .inputDecorationTheme)
-                                                .copyWith(
-                                                  hintText: "Search by OrderID",
-                                                  hintStyle: TextStyle(
-                                                      color: colors.greyText,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                        initialList: order.orderList,
-                                        emptyWidget: NoSearch(),
-                                        builder: (context, indx, item) {
-                                          return OrderListTile(
-                                            orderPro: orderProvider,
-                                            type: order.orderStatus[index].value
-                                                .toString(),
-                                            order: item,
-                                            title: item.detail!.name.toString(),
-                                            id: item.orderId.toString(),
-                                            date: item.orderDate.toString(),
-                                            price: item.orderAmount.toString(),
-                                            isAlpha: item.isAlphaDelivery!,
-                                          );
-                                        });
-                          }),
-                        );
-                      }),
-                )
-              ],
-            ),
+                  );
+          }),
     );
   }
 
@@ -272,35 +277,61 @@ class OrderListTile extends StatelessWidget {
             ),
             Row(
               children: [
-                AutoSizeText(
-                  price,
-                  maxLines: 1,
-                  maxFontSize: 24,
-                  minFontSize: 16,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: 'Montreal',
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * .38,
+                  child: AutoSizeText(
+                    price,
+                    maxLines: 1,
+                    maxFontSize: 24,
+                    minFontSize: 16,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontFamily: 'Montreal',
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Spacer(),
-                type == 'Pending'
-                    ? PendingOrderListTile(orderId: id, orderProvider: orderPro)
-                    : Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: getTextColor(type).withOpacity(0.2),
-                          border:
-                              Border.all(width: 1, color: getTextColor(type)),
-                        ),
-                        child: Text(
-                          type,
-                          style: TextStyle(color: getTextColor(type)),
-                        ),
-                      ),
+                if (type == 'Pending')
+                  PendingOrderListTile(
+                      orderId: id,
+                      orderProvider: orderPro,
+                      current: type,
+                      tileText: "CONFIRM",
+                      status: "confirmed"),
+                if (type == 'Confirmed')
+                  PendingOrderListTile(
+                      orderId: id,
+                      orderProvider: orderPro,
+                      current: type,
+                      tileText: "PACK",
+                      status: "processing"),
+                if (type == 'Packaging')
+                  PendingOrderListTile(
+                      orderId: id,
+                      orderProvider: orderPro,
+                      current: type,
+                      tileText: "SHIP",
+                      status: "shipped"),
+                if (!(type == 'Pending' ||
+                    type == 'Confirmed' ||
+                    type == 'Packaging'))
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: getTextColor(type).withOpacity(0.2),
+                      border: Border.all(width: 1, color: getTextColor(type)),
+                    ),
+                    child: Text(
+                      type,
+                      style: TextStyle(color: getTextColor(type)),
+                    ),
+                  ),
+                // type == 'Pending'
+                //     ? PendingOrderListTile(orderId: id, orderProvider: orderPro)
               ],
             ),
           ],
@@ -329,14 +360,23 @@ Color getTextColor(String status) {
 }
 
 class PendingOrderListTile extends StatelessWidget {
-  const PendingOrderListTile(
-      {super.key, required this.orderId, required this.orderProvider});
+  const PendingOrderListTile({
+    super.key,
+    required this.orderId,
+    required this.orderProvider,
+    required this.tileText,
+    required this.status,
+    required this.current,
+  });
   final String orderId;
+  final String tileText;
+  final String status;
+  final String current;
   final OrderManagementViewModel orderProvider;
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
           onTap: () => showDialog(
@@ -345,8 +385,6 @@ class PendingOrderListTile extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               child: Container(
-                // height: height * .4,
-                // width: width * .75,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15)),
@@ -442,6 +480,9 @@ class PendingOrderListTile extends StatelessWidget {
             ),
           ).then((value) => orderProvider.getOrderList(status: 'pending')),
           child: Container(
+            height: 35,
+            width: MediaQuery.of(context).size.width * .2,
+            alignment: Alignment.center,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -458,18 +499,30 @@ class PendingOrderListTile extends StatelessWidget {
             ),
           ),
         ),
-        VerticalDivider(color: Colors.transparent),
+        VerticalDivider(width: 10),
         GestureDetector(
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => PickupSlotScreen(orderID: orderId),
-          )),
+          onTap: () {
+            tileText == "SHIP"
+                ? Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PickupSlotScreen(orderID: orderId),
+                  ))
+                : orderProvider.UpdateOrderStatus(
+                        id: orderId, status: status, Currentstatus: current)
+                    .then((value) => value
+                        ? Utils.showTost(
+                            msg: "Order status upadted successfully")
+                        : Utils.showTost(msg: "Something went wrong!"));
+          },
           child: Container(
+            height: 35,
+            width: MediaQuery.of(context).size.width * .2,
+            alignment: Alignment.center,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
                 color: colors.buttonColor,
                 borderRadius: BorderRadius.circular(5)),
             child: Text(
-              "SHIP NOW",
+              tileText,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 12,

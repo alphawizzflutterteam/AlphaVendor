@@ -3,6 +3,7 @@ import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Customer/customerDetail.dart';
 import 'package:alpha_work/ViewModel/customerViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/Placeholders/NoCustomer.dart';
 import 'package:alpha_work/Widget/Placeholders/NoSearch.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
@@ -39,147 +40,158 @@ class _CustomerScreenState extends State<CustomerScreen> {
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: provider.isLoading
             ? appLoader()
-            : Column(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      child: SearchableList(
-                        initialList: provider.customers,
-                        inputDecoration: (const InputDecoration())
-                            .applyDefaults(
-                                Theme.of(context).inputDecorationTheme)
-                            .copyWith(
-                              hintText: "Search by Name",
-                              hintStyle: TextStyle(
-                                  color: colors.greyText,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                        autoFocusOnSearch: false,
-                        emptyWidget: NoSearch(),
-                        filter: (query) => provider.customers
-                            .where((ele) => ele.fName
-                                .toString()
-                                .toLowerCase()
-                                .contains(query))
-                            .toList(),
-                        builder: (displayedList, index, item) =>
-                            GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: CustomerDetailScreen(data: item),
-                                  type: PageTransitionType.rightToLeft)),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.all(12.0),
-                            decoration: BoxDecoration(
-                                color: colors.lightGrey,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
+            : provider.customers.isEmpty
+                ? Center(
+                    child: NoCustomerPlaceholder(height: height, width: width),
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          child: SearchableList(
+                            initialList: provider.customers,
+                            inputDecoration: (const InputDecoration())
+                                .applyDefaults(
+                                    Theme.of(context).inputDecorationTheme)
+                                .copyWith(
+                                  hintText: "Search by Name",
+                                  hintStyle: TextStyle(
+                                      color: colors.greyText,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                            autoFocusOnSearch: false,
+                            emptyWidget: NoSearch(),
+                            filter: (query) => provider.customers
+                                .where((ele) => ele.fName
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(query))
+                                .toList(),
+                            builder: (displayedList, index, item) =>
+                                GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      child: CustomerDetailScreen(data: item),
+                                      type: PageTransitionType.rightToLeft)),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                padding: const EdgeInsets.all(12.0),
+                                decoration: BoxDecoration(
+                                    color: colors.lightGrey,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      height: height * .06,
-                                      width: height * .06,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          item.image.toString(),
-                                          fit: BoxFit.fill,
-                                          errorBuilder: (context, error,
-                                                  stackTrace) =>
-                                              ErrorImageWidget(height: height),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: height * .06,
+                                          width: height * .06,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.network(
+                                              item.image.toString(),
+                                              fit: BoxFit.fill,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  ErrorImageWidget(
+                                                      height: height),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        VerticalDivider(),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.fName.toString(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              item.phone.toString(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: colors.greyText,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ],
+                                        )
+                                      ],
                                     ),
-                                    VerticalDivider(),
+                                    Divider(
+                                        height: 5, color: Colors.transparent),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          item.fName.toString(),
+                                          "Email",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 16,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold),
+                                              color: colors.greyText,
+                                              fontWeight: FontWeight.normal),
                                         ),
                                         Text(
-                                          item.phone.toString(),
+                                          item.email.toString(),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Address",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 16,
                                               color: colors.greyText,
                                               fontWeight: FontWeight.normal),
+                                        ),
+                                        Text(
+                                          "${item.streetAddress.toString()} ${item.city.toString()} ${item.state.toString()} ${item.country.toString()}",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ],
                                     )
                                   ],
                                 ),
-                                Divider(height: 5, color: Colors.transparent),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Email",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: colors.greyText,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    Text(
-                                      item.email.toString(),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Address",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: colors.greyText,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    Text(
-                                      "${item.streetAddress.toString()} ${item.city.toString()} ${item.state.toString()} ${item.country.toString()}",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                )
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                      )
+                    ],
+                  ),
       ),
     );
   }

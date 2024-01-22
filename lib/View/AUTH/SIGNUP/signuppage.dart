@@ -10,7 +10,6 @@ import 'package:alpha_work/View/Profile/termsCondition/termsCondition.dart';
 import 'package:alpha_work/ViewModel/addressViewModel.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:alpha_work/Widget/DropdownDeco.dart';
-import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,11 +19,9 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:regexed_validator/regexed_validator.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../../Utils/color.dart';
 import '../../../Widget/CommonTextWidget/commontext.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -745,7 +742,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         text: 'Enter your Business detail',
                                       ),
                                       const Text(
-                                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s ',
+                                        'Enter your business details to get started and unlock a world of opportunities.',
                                         style:
                                             TextStyle(color: colors.greyText),
                                       ),

@@ -1,13 +1,15 @@
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Customer/customer.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingReview.dart';
 import 'package:alpha_work/View/Dashboard/TotalDelivery/totalDelivery.dart';
-import 'package:alpha_work/View/Dashboard/notification.dart';
+import 'package:alpha_work/View/Dashboard/notification/notification.dart';
 import 'package:alpha_work/View/Dashboard/stockMgmt/stockMgmt.dart';
 import 'package:alpha_work/View/ORDER/ordermanagement.dart';
 import 'package:alpha_work/View/Payment/payment.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
+import 'package:alpha_work/View/Profile/Advertising/advert.dart';
 import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/settings/settings.dart';
 import 'package:alpha_work/View/Profile/widgets/logoutSheet.dart';
@@ -124,7 +126,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
 
   void _scrollDown() {
     _controller.animateTo(
-      _controller.position.maxScrollExtent - 100,
+      _controller.position.maxScrollExtent - 180,
       duration: Duration(seconds: 2),
       curve: Curves.fastOutSlowIn,
     );
@@ -138,239 +140,235 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
     var width = MediaQuery.of(context).size.width;
     return dashProvider.isLoading
         ? appLoader()
-        : RefreshIndicator(
-            color: colors.buttonColor,
-            backgroundColor: Colors.white,
-            displacement: 40.0,
-            strokeWidth: 2.0,
-            semanticsLabel: 'Pull to refresh',
-            semanticsValue: 'Refresh',
-            onRefresh: () async {
-              await Future.delayed(Duration(seconds: 2));
-              await getData();
-            },
-            child: Scaffold(
-              backgroundColor: Colors.blue[50],
-              drawer: Drawer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DrawerHeader(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: colors.buttonColor,
-                            image: DecorationImage(
-                                opacity: 0.5,
-                                image: AssetImage(
-                                  Images.onboardingBg_light,
-                                ),
-                                fit: BoxFit.contain)),
-                        //BoxDecoration
-                        child: Center(
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 30,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  vendorProvider.vendorData.image.toString()),
-                              onBackgroundImageError: (exception, stackTrace) =>
-                                  ErrorImageWidget(height: height * .09),
-                            ),
-                            title: Text(
-                              "${vendorProvider.vendorData.fName.toString()} ${vendorProvider.vendorData.lName.toString()}",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+        : Scaffold(
+            backgroundColor: colors.lightGrey,
+            drawer: Drawer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DrawerHeader(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: colors.buttonColor,
+                          image: DecorationImage(
+                              opacity: 0.5,
+                              image: AssetImage(
+                                Images.onboardingBg_light,
                               ),
-                            ),
-                            subtitle: GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfileScreen(),
-                                  )),
-                              child: Text(
-                                "View Profile",
-                                style: TextStyle(
-                                    color: colors.lightTextColor,
-                                    fontSize: 12,
-                                    decorationColor: colors.lightTextColor,
-                                    decoration: TextDecoration.underline),
-                              ),
+                              fit: BoxFit.contain)),
+                      //BoxDecoration
+                      child: Center(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 30,
+                            backgroundImage: CachedNetworkImageProvider(
+                                vendorProvider.vendorData.image.toString()),
+                            onBackgroundImageError: (exception, stackTrace) =>
+                                ErrorImageWidget(height: height * .09),
+                          ),
+                          title: Text(
+                            "${vendorProvider.vendorData.fName.toString()} ${vendorProvider.vendorData.lName.toString()}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ) //UserAccountDrawerHeader
+                          subtitle: GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(),
+                                )),
+                            child: Text(
+                              "View Profile",
+                              style: TextStyle(
+                                  color: colors.lightTextColor,
+                                  fontSize: 12,
+                                  decorationColor: colors.lightTextColor,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
                         ),
+                      ) //UserAccountDrawerHeader
+                      ),
 
-                    //DrawerHeader
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "OverView",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                  //DrawerHeader
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "OverView",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            ListTile(
-                              selected: true,
-                              selectedColor: colors.homeBGGradient1,
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImagesFilled[0]),
-                              ),
-                              title: const Text(' Dashboard '),
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListTile(
+                            selected: true,
+                            selectedColor: colors.homeBGGradient1,
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImagesFilled[0]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[1]),
-                              ),
-                              title:
-                                  const DrawerText(text: 'Order Managemnt', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: OrderManagement()));
-                              },
+                            title: const Text(' Dashboard '),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImages[1]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[2]),
-                              ),
-                              title: const DrawerText(
-                                  text: 'Product Management', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child:
-                                            const ProductManagementScreen()));
-                              },
+                            title:
+                                const DrawerText(text: 'Order Managemnt', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: OrderManagement()));
+                            },
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImages[2]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[3]),
-                              ),
-                              title: const DrawerText(text: 'Customer', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: const CustomerScreen()));
-                              },
+                            title: const DrawerText(
+                                text: 'Product Management', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const ProductManagementScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImages[3]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[4]),
-                              ),
-                              title: const DrawerText(
-                                  text: 'Analytics and Reports', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
+                            title: const DrawerText(text: 'Customer', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const CustomerScreen()));
+                            },
+                          ),
+                          // ListTile(
+                          //   leading: ImageIcon(
+                          //     AssetImage(Images.dashImages[4]),
+                          //   ),
+                          //   title: const DrawerText(
+                          //       text: 'Analytics and Reports', ''),
+                          //   onTap: () {
+                          //     Navigator.pop(context);
+                          //   },
+                          // ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImages[5]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[5]),
-                              ),
-                              title: const DrawerText(text: 'Wallet', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: WalletScreen()));
-                              },
+                            title: const DrawerText(text: 'Wallet', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: WalletScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImages[6]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[6]),
-                              ),
-                              title: const DrawerText(text: 'Settings', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: const ProfileSettingScreen()));
-                              },
+                            title: const DrawerText(text: 'Settings', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const ProfileSettingScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImages[7]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[7]),
-                              ),
-                              title: const DrawerText(text: 'Payment', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: const PaymentScreen()));
-                              },
+                            title: const DrawerText(text: 'Payment', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: const PaymentScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.dashImages[8]),
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.dashImages[8]),
-                              ),
-                              title:
-                                  const DrawerText(text: 'Store Setting', ''),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: EditStoreDetailScreen(
-                                            vendor:
-                                                vendorProvider.vendorData)));
-                              },
+                            title: const DrawerText(text: 'Store Setting', ''),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: EditStoreDetailScreen(
+                                          vendor: vendorProvider.vendorData)));
+                            },
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                              AssetImage(Images.logOut),
+                              color: Colors.red,
                             ),
-                            ListTile(
-                              leading: ImageIcon(
-                                AssetImage(Images.logOut),
+                            title: Text(
+                              "Logout",
+                              style: TextStyle(
+                                fontSize: 16,
                                 color: Colors.red,
+                                fontWeight: FontWeight.normal,
                               ),
-                              title: Text(
-                                "Logout",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => LogoutBottomSheet(),
-                                );
-                              },
                             ),
-                          ],
-                        ),
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => LogoutBottomSheet(),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              // backgroundColor: Colors.blue[50],
-              body: dashProvider.isLoading
-                  ? appLoader()
-                  : Column(
+            ),
+            // backgroundColor: Colors.blue[50],
+            body: dashProvider.isLoading
+                ? appLoader()
+                : RefreshIndicator(
+                    color: colors.buttonColor,
+                    displacement: 40.0,
+                    strokeWidth: 2.0,
+                    semanticsLabel: 'Pull to refresh',
+                    semanticsValue: 'Refresh',
+                    onRefresh: () async {
+                      await Future.delayed(Duration(seconds: 2));
+                      await getData();
+                    },
+                    child: Column(
                       children: [
                         Container(
                           padding: const EdgeInsets.only(bottom: 16),
@@ -511,7 +509,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     ProductManagementScreen(),
-                                              )),
+                                              )).then((value) => null),
                                           child: Column(
                                             children: [
                                               Text(
@@ -818,19 +816,19 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                         ),
                       ],
                     ),
-              floatingActionButton: FloatingActionButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50)),
-                onPressed: () => Navigator.push(
-                    context,
-                    PageTransition(
-                        child: AddProdutScreen(isFromHome: true),
-                        type: PageTransitionType.rightToLeft)),
-                backgroundColor: colors.buttonColor,
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
+                  ),
+            floatingActionButton: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              onPressed: () => Navigator.push(
+                  context,
+                  PageTransition(
+                      child: AddProdutScreen(isFromHome: true),
+                      type: PageTransitionType.rightToLeft)),
+              backgroundColor: colors.buttonColor,
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
               ),
             ),
           );

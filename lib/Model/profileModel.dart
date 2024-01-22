@@ -2,6 +2,7 @@ import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Profile/Advertising/advertising.dart';
 import 'package:alpha_work/View/Profile/Faq/faq.dart';
 import 'package:alpha_work/View/Profile/aboutUs/aboutus.dart';
+import 'package:alpha_work/View/Profile/privacyPolicy/privacyPolicy.dart';
 import 'package:alpha_work/View/Profile/referEarn/referEarn.dart';
 import 'package:alpha_work/View/Profile/subscription/subscription.dart';
 import 'package:alpha_work/View/Profile/support/queryList.dart';
@@ -23,10 +24,10 @@ List<ProfileList> profileItem = [
       profileIcon: Images.referAndEarn,
       profileText: 'Refer and Earn',
       navigationScreen: const ReferAndEarnScreen()),
-  ProfileList(
-      profileIcon: Images.subscribe,
-      profileText: 'Subscription',
-      navigationScreen: const SubscriptionScreen()),
+  // ProfileList(
+  //     profileIcon: Images.subscribe,
+  //     profileText: 'Subscription',
+  //     navigationScreen: const SubscriptionScreen()),
   ProfileList(
       profileIcon: Images.support,
       profileText: 'Customer Support',
@@ -35,18 +36,18 @@ List<ProfileList> profileItem = [
       profileIcon: Images.terms,
       profileText: 'Terms and Conditions',
       navigationScreen: const TermsAndConditionScreen()),
-  //  ProfileList(
-  //     profileIcon: Images.changePassword,
-  //     profileText: 'Privacy Policy',
-  //     navigationScreen: ChangePasswordScreen()),
+  ProfileList(
+      profileIcon: Images.privacyPolicy,
+      profileText: 'Privacy Policy',
+      navigationScreen: PrivacyPolicyScreen()),
   ProfileList(
       profileIcon: Images.faq,
       profileText: 'FAQ',
       navigationScreen: const FaqScreen()),
-  ProfileList(
-      profileIcon: Images.speaker,
-      profileText: 'Adverting',
-      navigationScreen: const AdvertisingScreen()),
+  // ProfileList(
+  //     profileIcon: Images.speaker,
+  //     profileText: 'Adverting',
+  //     navigationScreen: const AdvertisingScreen()),
   ProfileList(
       profileIcon: Images.document,
       profileText: 'About Us',

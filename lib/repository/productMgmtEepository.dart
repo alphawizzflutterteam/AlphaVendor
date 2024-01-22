@@ -215,7 +215,7 @@ class ProductManagementRepository {
     request.headers.addAll(
       headers,
     );
-
+    print(request.fields);
     http.StreamedResponse response = await request.send();
     var ans = jsonDecode(await response.stream.bytesToString());
     print(ans);
@@ -239,15 +239,16 @@ class ProductManagementRepository {
       res = await http.get(url, headers: {
         'Authorization': 'Bearer $bearerToken',
       });
+      print(res.statusCode);
       var ans = jsonDecode(res.body);
-      print(ans);
       if (res.statusCode == 200) {
+        print(ans);
         return ProductDetailModel.fromJson(ans);
       } else {
-        showTost();
-        return ProductDetailModel(status: null, message: null, product: []);
+        return ProductDetailModel.fromJson(ans);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print(stackTrace);
       throw Exception(e);
     }
   }

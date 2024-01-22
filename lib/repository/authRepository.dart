@@ -4,11 +4,17 @@ import 'package:http/http.dart' as http;
 
 class AuthRepository {
   //Function get login otp
-  Future<LoginOtpModel> loginOtpPostRequest(
-      {required String api, required String phone}) async {
+  Future<LoginOtpModel> loginOtpPostRequest({
+    required String api,
+    required String phone,
+    required String FCMToken,
+  }) async {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(api));
-      request.fields.addAll({'phone': phone});
+      request.fields.addAll({
+        'phone': phone,
+        'fcm_id': FCMToken,
+      });
       http.StreamedResponse response = await request.send();
       var ans = jsonDecode(await response.stream.bytesToString());
       if (response.statusCode == 200 || response.statusCode == 401) {
@@ -137,10 +143,15 @@ class AuthRepository {
     required String api,
     required String email,
     required String pass,
+    required String FCMToken,
   }) async {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(api));
-      request.fields.addAll({'email': email, 'password': pass});
+      request.fields.addAll({
+        'email': email,
+        'password': pass,
+        'fcm_id': FCMToken,
+      });
       http.StreamedResponse response = await request.send();
       var ans = jsonDecode(await response.stream.bytesToString());
       if (response.statusCode == 200 || response.statusCode == 401) {
@@ -157,6 +168,68 @@ class AuthRepository {
             otp: "");
       }
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  //Function get login otp
+  Future<LoginOtpModel> forgotPassOtpPostRequest(
+      {required String api, required String phone}) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(api));
+      print("$api--$phone");
+      request.fields.addAll({'identity': phone});
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200 || response.statusCode == 401) {
+        print(ans);
+        return LoginOtpModel.fromJson(ans);
+      } else {
+        print(response.reasonPhrase);
+        print(response.statusCode);
+        return LoginOtpModel(
+            status: false,
+            message: "Something went wrong",
+            token: null,
+            errors: [],
+            data: [],
+            otp: "");
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to reset password
+  Future<Map<String, dynamic>> ResetPasswordPutRequest({
+    required String api,
+    required String identity,
+    required String otp,
+    required String password,
+    required String confirm_password,
+  }) async {
+    try {
+      var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+      var request = http.Request('PUT', Uri.parse(api));
+      request.bodyFields = {
+        'identity': identity,
+        'otp': otp,
+        'password': password,
+        'confirm_password': confirm_password,
+      };
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      print(ans);
+      if (response.statusCode == 200) {
+        return ans;
+      } else {
+        print(response.reasonPhrase);
+        return ans;
+      }
+    } catch (e, stackTrace) {
+      print(stackTrace.toString() + "repo");
       throw Exception(e);
     }
   }

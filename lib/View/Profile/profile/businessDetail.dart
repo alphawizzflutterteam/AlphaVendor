@@ -31,7 +31,7 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
   void initState() {
     emailCtrl.text = widget.vendorData.shop!.email.toString();
     typeCtrl.text = widget.vendorData.shop!.bussinessType.toString();
-    nameCtrl.text = widget.vendorData.bankName.toString();
+    nameCtrl.text = widget.vendorData.shop!.name.toString();
     gstinCtrl.text = widget.vendorData.shop!.gstIn.toString();
     regCtrl.text = widget.vendorData.shop!.registerationNumber.toString();
     tinCtrl.text = widget.vendorData.shop!.taxIdentificationNumber.toString();
@@ -111,6 +111,9 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                     if (value == null || value.isEmpty) {
                       return "Please enter GSTIN";
                     }
+                    if (value.length < 15) {
+                      return "Please enter valid GST";
+                    }
                     return null;
                   },
                 ),
@@ -121,6 +124,15 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                   inputFormatters: [RegexFormatter.regNo],
                   textCapitalization: TextCapitalization.characters,
                   maxLength: 21,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter Registration No.";
+                    }
+                    if (value.length < 21) {
+                      return "Please enter valid Reg No.";
+                    }
+                    return null;
+                  },
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
@@ -134,7 +146,7 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                   textInputAction: TextInputAction.done,
                   inputFormatters: [RegexFormatter.regNo],
                   textCapitalization: TextCapitalization.characters,
-                  maxLength: 11,
+                  maxLength: 10,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
@@ -142,6 +154,9 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                           counterText: ""),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
+                      return "Please enter Permanent Account Number";
+                    }
+                    if (value.length < 10) {
                       return "Please enter Permanent Account Number";
                     }
                     return null;
@@ -153,7 +168,7 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                 ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        profilePro
+                        await profilePro
                             .updateBusinessDetail(
                               bussiness_email_id: emailCtrl.text.toString(),
                               bussiness_type: typeCtrl.text.toString(),

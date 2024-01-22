@@ -139,9 +139,10 @@ class ProfileRepository {
       });
 
       request.headers.addAll(headers);
-
+      print(request.fields);
       http.StreamedResponse response = await request.send();
       var res = await jsonDecode(await response.stream.bytesToString());
+
       if (response.statusCode == 200) {
         return res;
       } else {

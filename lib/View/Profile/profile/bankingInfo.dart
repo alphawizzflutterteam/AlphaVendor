@@ -191,7 +191,7 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
                 ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        profilePro
+                        await profilePro
                             .updateBankDetail(
                                 bank_name: nameCtrl.text.toString(),
                                 branch_name: branchCtrl.text.toString(),

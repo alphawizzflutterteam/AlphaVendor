@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Images {
   static const greenTopLogo = "assets/images/logo_with_greenTop.png";
   static const logoWithoutText = "assets/images/logo-without-text.png";
@@ -36,7 +38,7 @@ class Images {
   static const bgDark = "assets/images/darkBG.png";
   static const logoHorizontal = "assets/images/logo-horizontal.png";
   static const success = "assets/images/success.png";
-  static const happy = "assets/images/happy.png";
+  static const happy = "assets/images/bg-pattern.png";
   static const tickSquare = "assets/images/tick-square.png";
   static const bgTab = 'assets/images/tabbar-bg.png';
   static const homeSale = 'assets/images/sale.png';
@@ -74,7 +76,7 @@ class Images {
   static const search = "assets/icons/search.png";
   static const notification = 'assets/icons/notification.png';
   static const headerCart = "assets/icons/cart.png";
-
+  static const NoTicket = 'assets/images/support_ticket.png';
   static const heart = 'assets/icons/heart.png';
   static const order = "assets/icons/order.png";
 
@@ -174,6 +176,8 @@ class Images {
   static const emptySearch = "assets/images/searchData.png";
   static const noProduct = "assets/images/noProduct.png";
   static const noTransaction = "assets/images/noTransaction.png";
+  static const noCustomer = "assets/images/no-customer.png";
+  static const noNotification = "assets/images/no-notification.png";
   static const dashImages = [
     'assets/icons/DrawerItems/category.png',
     'assets/icons/DrawerItems/OrderM.png',

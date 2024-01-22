@@ -255,7 +255,7 @@ class ProductManagementViewModel extends ChangeNotifier {
         .productDetailGetRequest(
             api: AppUrl.productDetailAndedit, bearerToken: token, id: id)
         .then((value) {
-      print(value.product.first.id);
+      print(value.product.length);
       productDetail = value.product;
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
@@ -277,13 +277,15 @@ class ProductManagementViewModel extends ChangeNotifier {
   }
 
 //Function to delete Product
-  Future<void> deleteProduct({required String id}) async {
+  Future<bool> deleteProduct({required String id}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    bool val = false;
     await _myRepo
         .deleteProductPostRequest(
             api: AppUrl.deleteProduct, bearerToken: token, id: id)
-        .then((value) => print(value))
+        .then((value) => val = value)
         .then((value) => setLoading(false));
+    return val;
   }
 
 //Function to add product

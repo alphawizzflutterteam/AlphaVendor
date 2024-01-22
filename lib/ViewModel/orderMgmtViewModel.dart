@@ -61,14 +61,14 @@ class OrderManagementViewModel with ChangeNotifier {
   }
 
 // Function to assign Driver and ship order
-  Future<Map<String, String>> assignDeliveryMan({
+  Future<Map<String, dynamic>> assignDeliveryMan({
     required String delivery_man_id,
     required String order_id,
     required String expected_delivery_date,
   }) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     isLoading = true;
-    Map<String, String> val = {};
+    Map<String, dynamic> val = {};
     await _myRepo
         .assignDeliveryManPostRequest(
             token: token,
@@ -96,11 +96,39 @@ class OrderManagementViewModel with ChangeNotifier {
     print(token);
     await _myRepo
         .orderStatusUpatePutRequest(
-            api: "${AppUrl.orderStatusUpdate}$id", token: token)
+            api: "${AppUrl.orderStatusUpdate}$id",
+            token: token,
+            status: "canceled")
         .then((value) {
       print(value.toString());
       val = value['status'] == true ? true : false;
       print(val.toString() + "VALLUE");
+    }).onError((error, stackTrace) {
+      print(stackTrace.toString());
+      setLoading(false);
+    });
+    return val;
+  }
+
+//Function to cancel order status
+  Future<bool> UpdateOrderStatus({
+    required String id,
+    required String status,
+    required String Currentstatus,
+  }) async {
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    isLoading = false;
+    bool val = false;
+    print(token);
+    await _myRepo
+        .orderStatusUpatePutRequest(
+            api: "${AppUrl.orderStatusUpdate}$id", token: token, status: status)
+        .then((value) {
+      print(value.toString());
+      val = value['status'] == true ? true : false;
+      print(val.toString() + "VALLUE");
+      setLoading(false);
+      getOrderList(status: Currentstatus);
     }).onError((error, stackTrace) {
       print(stackTrace.toString());
       setLoading(false);

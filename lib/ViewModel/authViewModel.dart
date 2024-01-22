@@ -113,8 +113,10 @@ class AuthViewModel with ChangeNotifier {
     required bool resend,
   }) async {
     bool val = false;
+    String FcmToken = PreferenceUtils.getString("FCMTOKEN");
     await _myRepo
-        .loginOtpPostRequest(api: AppUrl.loginOtp, phone: phone)
+        .loginOtpPostRequest(
+            api: AppUrl.loginOtp, phone: phone, FCMToken: FcmToken)
         .then((value) async {
       setLoading(false);
       print(value.token);
@@ -125,11 +127,11 @@ class AuthViewModel with ChangeNotifier {
         PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
         PreferenceUtils.setString(PrefKeys.jwtToken, value.token.toString());
         PreferenceUtils.setString(PrefKeys.mobile, phone.toString());
-        if (!resend) {
+        if (resend) {
           Navigator.push(
               context,
               PageTransition(
-                child: OtpCheckPage(isPass: false),
+                child: OtpCheckPage(isPass: isPass),
                 type: PageTransitionType.rightToLeft,
               ));
         }
@@ -245,9 +247,13 @@ class AuthViewModel with ChangeNotifier {
     required BuildContext context,
     required String pass,
   }) async {
+    String FcmToken = PreferenceUtils.getString("FCMTOKEN");
     await _myRepo
         .loginEmailPostRequest(
-            api: AppUrl.loginWithEmailPassword, email: email, pass: pass)
+            api: AppUrl.loginWithEmailPassword,
+            email: email,
+            pass: pass,
+            FCMToken: FcmToken)
         .then((value) {
       if (value.errors.isNotEmpty) {
         Utils.showTost(msg: value.errors[0]["message"]);
@@ -260,5 +266,62 @@ class AuthViewModel with ChangeNotifier {
         ));
       }
     });
+  }
+
+//Function to get forgot pass otp
+  Future<bool> forgetPassOtp({
+    required String phone,
+    required BuildContext context,
+    required bool isPass,
+    required bool resend,
+  }) async {
+    bool val = false;
+    await _myRepo
+        .forgotPassOtpPostRequest(api: AppUrl.forgetPassOtp, phone: phone)
+        .then((value) async {
+      setLoading(false);
+      print(value.token);
+      print(value.otp);
+      if (value.status!) {
+        Utils.showTost(msg: value.message.toString());
+        val = true;
+        PreferenceUtils.setString(PrefKeys.otp, value.otp.toString());
+        PreferenceUtils.setString(PrefKeys.mobile, phone.toString());
+        if (resend) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: OtpCheckPage(isPass: isPass),
+                type: PageTransitionType.rightToLeft,
+              ));
+        }
+      } else {
+        Utils.showTost(msg: value.message.toString());
+      }
+    });
+    return val;
+  }
+
+//Function to Reset Password
+  Future<bool> ResetPassword({
+    required String phone,
+    required String otp,
+    required String password,
+    required String confirm_password,
+  }) async {
+    bool val = false;
+    await _myRepo.ResetPasswordPutRequest(
+            api: AppUrl.ResetPassword,
+            identity: phone,
+            otp: otp,
+            password: password,
+            confirm_password: confirm_password)
+        .then((value) async {
+      await Utils.showTost(msg: value['message'].toString());
+      val = value['status'] == true ? true : false;
+    }).onError((error, stackTrace) {
+      print(stackTrace);
+    });
+    return val;
   }
 }

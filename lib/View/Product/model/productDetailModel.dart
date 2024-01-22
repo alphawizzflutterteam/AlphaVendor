@@ -19,12 +19,6 @@ class ProductDetailModel {
               json["product"]!.map((x) => Product.fromJson(x))),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "product": product.map((x) => x?.toJson()).toList(),
-      };
 }
 
 class Product {
@@ -65,6 +59,7 @@ class Product {
     required this.taxModel,
     required this.discount,
     required this.discountType,
+    required this.discountPrice,
     required this.currentStock,
     required this.minimumOrderQty,
     required this.details,
@@ -84,9 +79,6 @@ class Product {
     required this.tempShippingCost,
     required this.isShippingCostUpdated,
     required this.code,
-    required this.shortDescription,
-    required this.warranty,
-    required this.specification,
     required this.shop,
     required this.colorsFormatted,
     required this.weight,
@@ -103,6 +95,9 @@ class Product {
     required this.cartId,
     required this.manufacturingDate,
     required this.madeIn,
+    required this.shortDescription,
+    required this.specification,
+    required this.warranty,
     required this.useCoinsWithAmount,
     required this.amountAfterCoinUse,
   });
@@ -124,17 +119,17 @@ class Product {
   final String? digitalProductType;
   final String? digitalFileReady;
   final List<String> images;
-  final List<ColorImage> colorImage;
+  final List<dynamic> colorImage;
   final String? thumbnail;
   final int? featured;
   final int? flashDeal;
   final String? videoProvider;
   final String? videoUrl;
-  final List<String> colors;
+  final List<dynamic> colors;
   final int? variantProduct;
-  final List<int> attributes;
-  final List<ChoiceOption> choiceOptions;
-  final List<Variation> variation;
+  final List<dynamic> attributes;
+  final List<dynamic> choiceOptions;
+  final List<dynamic> variation;
   final int? published;
   final String? unitPrice;
   final String? purchasePrice;
@@ -143,6 +138,7 @@ class Product {
   final String? taxModel;
   final int? discount;
   final String? discountType;
+  final String? discountPrice;
   final int? currentStock;
   final int? minimumOrderQty;
   final String? details;
@@ -157,16 +153,13 @@ class Product {
   final String? metaImage;
   final int? requestStatus;
   final String? deniedNote;
-  final int? shippingCost;
+  final String? shippingCost;
   final int? multiplyQty;
   final int? tempShippingCost;
   final int? isShippingCostUpdated;
   final String? code;
-  final String? shortDescription;
-  final String? warranty;
-  final String? specification;
   final Shop? shop;
-  final List<ColorsFormatted> colorsFormatted;
+  final List<dynamic> colorsFormatted;
   final String? weight;
   final String? specialPrice;
   final String? taxAmount;
@@ -179,8 +172,11 @@ class Product {
   final bool? isFavorite;
   final bool? isCart;
   final int? cartId;
-  final String? manufacturingDate;
+  final DateTime? manufacturingDate;
   final String? madeIn;
+  final String? shortDescription;
+  final String? specification;
+  final String? warranty;
   final String? useCoinsWithAmount;
   final String? amountAfterCoinUse;
 
@@ -210,8 +206,7 @@ class Product {
           : List<String>.from(json["images"]!.map((x) => x)),
       colorImage: json["color_image"] == null
           ? []
-          : List<ColorImage>.from(
-              json["color_image"]!.map((x) => ColorImage.fromJson(x))),
+          : List<dynamic>.from(json["color_image"]!.map((x) => x)),
       thumbnail: json["thumbnail"],
       featured: json["featured"],
       flashDeal: json["flash_deal"],
@@ -219,19 +214,17 @@ class Product {
       videoUrl: json["video_url"],
       colors: json["colors"] == null
           ? []
-          : List<String>.from(json["colors"]!.map((x) => x)),
+          : List<dynamic>.from(json["colors"]!.map((x) => x)),
       variantProduct: json["variant_product"],
       attributes: json["attributes"] == null
           ? []
-          : List<int>.from(json["attributes"]!.map((x) => x)),
+          : List<dynamic>.from(json["attributes"]!.map((x) => x)),
       choiceOptions: json["choice_options"] == null
           ? []
-          : List<ChoiceOption>.from(
-              json["choice_options"]!.map((x) => ChoiceOption.fromJson(x))),
+          : List<dynamic>.from(json["choice_options"]!.map((x) => x)),
       variation: json["variation"] == null
           ? []
-          : List<Variation>.from(
-              json["variation"]!.map((x) => Variation.fromJson(x))),
+          : List<dynamic>.from(json["variation"]!.map((x) => x)),
       published: json["published"],
       unitPrice: json["unit_price"],
       purchasePrice: json["purchase_price"],
@@ -240,6 +233,7 @@ class Product {
       taxModel: json["tax_model"],
       discount: json["discount"],
       discountType: json["discount_type"],
+      discountPrice: json["discount_price"],
       currentStock: json["current_stock"],
       minimumOrderQty: json["minimum_order_qty"],
       details: json["details"],
@@ -254,19 +248,15 @@ class Product {
       metaImage: json["meta_image"],
       requestStatus: json["request_status"],
       deniedNote: json["denied_note"],
-      shippingCost: json["shipping_cost"],
+      shippingCost: json["shipping_cost"].toString(),
       multiplyQty: json["multiply_qty"],
       tempShippingCost: json["temp_shipping_cost"],
       isShippingCostUpdated: json["is_shipping_cost_updated"],
       code: json["code"],
-      shortDescription: json["short_description"],
-      warranty: json["warranty"],
-      specification: json["specification"],
       shop: json["shop"] == null ? null : Shop.fromJson(json["shop"]),
       colorsFormatted: json["colors_formatted"] == null
           ? []
-          : List<ColorsFormatted>.from(json["colors_formatted"]!
-              .map((x) => ColorsFormatted.fromJson(x))),
+          : List<dynamic>.from(json["colors_formatted"]!.map((x) => x)),
       weight: json["weight"],
       specialPrice: json["special_price"],
       taxAmount: json["tax_amount"],
@@ -287,91 +277,15 @@ class Product {
       isFavorite: json["is_favorite"],
       isCart: json["is_cart"],
       cartId: json["cart_id"],
-      manufacturingDate: json["manufacturing_date"],
+      manufacturingDate: DateTime.tryParse(json["manufacturing_date"] ?? ""),
       madeIn: json["made_in"],
+      shortDescription: json["short_description"],
+      specification: json["specification"],
+      warranty: json["warranty"],
       useCoinsWithAmount: json["use_coins_with_amount"],
       amountAfterCoinUse: json["amount_after_coin_use"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "added_by": addedBy,
-        "user_id": userId,
-        "name": name,
-        "slug": slug,
-        "product_type": productType,
-        "category_ids": categoryIds.map((x) => x?.toJson()).toList(),
-        "category_id": categoryId,
-        "sub_category_id": subCategoryId,
-        "sub_sub_category_id": subSubCategoryId,
-        "brand_id": brandId,
-        "unit": unit,
-        "min_qty": minQty,
-        "refundable": refundable,
-        "digital_product_type": digitalProductType,
-        "digital_file_ready": digitalFileReady,
-        "images": images.map((x) => x).toList(),
-        "color_image": colorImage.map((x) => x?.toJson()).toList(),
-        "thumbnail": thumbnail,
-        "featured": featured,
-        "flash_deal": flashDeal,
-        "video_provider": videoProvider,
-        "video_url": videoUrl,
-        "colors": colors.map((x) => x).toList(),
-        "variant_product": variantProduct,
-        "attributes": attributes.map((x) => x).toList(),
-        "choice_options": choiceOptions.map((x) => x?.toJson()).toList(),
-        "variation": variation.map((x) => x?.toJson()).toList(),
-        "published": published,
-        "unit_price": unitPrice,
-        "purchase_price": purchasePrice,
-        "tax": tax,
-        "tax_type": taxType,
-        "tax_model": taxModel,
-        "discount": discount,
-        "discount_type": discountType,
-        "current_stock": currentStock,
-        "minimum_order_qty": minimumOrderQty,
-        "details": details,
-        "free_shipping": freeShipping,
-        "attachment": attachment,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "status": status,
-        "featured_status": featuredStatus,
-        "meta_title": metaTitle,
-        "meta_description": metaDescription,
-        "meta_image": metaImage,
-        "request_status": requestStatus,
-        "denied_note": deniedNote,
-        "shipping_cost": shippingCost,
-        "multiply_qty": multiplyQty,
-        "temp_shipping_cost": tempShippingCost,
-        "is_shipping_cost_updated": isShippingCostUpdated,
-        "code": code,
-        "short_description": shortDescription,
-        "warranty": warranty,
-        "specification": specification,
-        "shop": shop?.toJson(),
-        "colors_formatted": colorsFormatted.map((x) => x?.toJson()).toList(),
-        "weight": weight,
-        "special_price": specialPrice,
-        "tax_amount": taxAmount,
-        "reviews_count": reviewsCount,
-        "rating": rating.map((x) => x).toList(),
-        "tags": tags.map((x) => x).toList(),
-        "translations": translations.map((x) => x).toList(),
-        "share_link": shareLink,
-        "reviews": reviews.map((x) => x).toList(),
-        "is_favorite": isFavorite,
-        "is_cart": isCart,
-        "cart_id": cartId,
-        "manufacturing_date": manufacturingDate,
-        "made_in": madeIn,
-        "use_coins_with_amount": useCoinsWithAmount,
-        "amount_after_coin_use": amountAfterCoinUse,
-      };
 }
 
 class CategoryId {
@@ -389,83 +303,6 @@ class CategoryId {
       position: json["position"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "position": position,
-      };
-}
-
-class ChoiceOption {
-  ChoiceOption({
-    required this.name,
-    required this.title,
-    required this.options,
-  });
-
-  final String? name;
-  final String? title;
-  final List<String> options;
-
-  factory ChoiceOption.fromJson(Map<String, dynamic> json) {
-    return ChoiceOption(
-      name: json["name"],
-      title: json["title"],
-      options: json["options"] == null
-          ? []
-          : List<String>.from(json["options"]!.map((x) => x)),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "title": title,
-        "options": options.map((x) => x).toList(),
-      };
-}
-
-class ColorImage {
-  ColorImage({
-    required this.color,
-    required this.imageName,
-  });
-
-  final String? color;
-  final String? imageName;
-
-  factory ColorImage.fromJson(Map<String, dynamic> json) {
-    return ColorImage(
-      color: json["color"],
-      imageName: json["image_name"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "color": color,
-        "image_name": imageName,
-      };
-}
-
-class ColorsFormatted {
-  ColorsFormatted({
-    required this.name,
-    required this.code,
-  });
-
-  final String? name;
-  final String? code;
-
-  factory ColorsFormatted.fromJson(Map<String, dynamic> json) {
-    return ColorsFormatted(
-      name: json["name"],
-      code: json["code"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "code": code,
-      };
 }
 
 class Shop {
@@ -489,6 +326,7 @@ class Shop {
     required this.isVerified,
     required this.isFollowing,
     required this.banner,
+    required this.productCount,
   });
 
   final int? id;
@@ -510,6 +348,7 @@ class Shop {
   final String? isVerified;
   final String? isFollowing;
   final String? banner;
+  final String? productCount;
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
@@ -532,58 +371,7 @@ class Shop {
       isVerified: json["is_verified"],
       isFollowing: json["is_following"],
       banner: json["banner"],
+      productCount: json["product_count"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "seller_id": sellerId,
-        "name": name,
-        "address": address,
-        "contact": contact,
-        "image": image,
-        "bottom_banner": bottomBanner,
-        "vacation_start_date": vacationStartDate,
-        "vacation_end_date": vacationEndDate,
-        "vacation_note": vacationNote,
-        "vacation_status": vacationStatus,
-        "temporary_close": temporaryClose,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "rating": rating,
-        "followers": followers,
-        "is_verified": isVerified,
-        "is_following": isFollowing,
-        "banner": banner,
-      };
-}
-
-class Variation {
-  Variation({
-    required this.type,
-    required this.price,
-    required this.sku,
-    required this.qty,
-  });
-
-  final String? type;
-  final String? price;
-  final String? sku;
-  final int? qty;
-
-  factory Variation.fromJson(Map<String, dynamic> json) {
-    return Variation(
-      type: json["type"],
-      price: json["price"],
-      sku: json["sku"],
-      qty: json["qty"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "type": type,
-        "price": price,
-        "sku": sku,
-        "qty": qty,
-      };
 }

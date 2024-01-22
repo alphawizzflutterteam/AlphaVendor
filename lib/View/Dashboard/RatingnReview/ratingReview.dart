@@ -61,7 +61,7 @@ class _RatingAndRewiewScreenState extends State<RatingAndRewiewScreen> {
                                 ),
                                 onBackgroundImageError:
                                     (exception, stackTrace) =>
-                                        ErrorImageWidget(height: height),
+                                        ErrorImageWidget(height: 100),
                               ),
                             ),
                             VerticalDivider(),

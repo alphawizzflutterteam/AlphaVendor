@@ -1,5 +1,6 @@
 import 'package:alpha_work/Utils/fcm_helper.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/View/Profile/settings/settings.dart';
 import 'package:alpha_work/ViewModel/addressViewModel.dart';
@@ -157,7 +158,6 @@ class _MyAppState extends State<MyApp> {
                 color: colors.primary,
               ),
           primarySwatch: colors.primary_app,
-          primaryColor: Theme.of(context).colorScheme.lightWhite,
           fontFamily: 'FuturaPT',
           brightness: Brightness.light,
           inputDecorationTheme: InputDecorationTheme(
@@ -202,10 +202,7 @@ class _MyAppState extends State<MyApp> {
         ),
 
         darkTheme: ThemeData(
-          canvasColor: colors.darkColor,
-          cardColor: colors.darkColor2,
-          dialogBackgroundColor: colors.darkColor2,
-          primaryColor: colors.darkColor,
+          scaffoldBackgroundColor: Colors.transparent,
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: colors.darkIcon,
             selectionColor: colors.darkIcon,

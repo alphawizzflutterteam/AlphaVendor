@@ -1,13 +1,14 @@
 // ignore_for_file: file_names
 class AppUrl {
-  static const baseURL = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
-  static const baseURL1 = "https://alpha-ecom.developmentalphawizz.com/api/v1/";
+  static const baseURL =
+      "https://test-alpha-ecom.developmentalphawizz.com/api/v2/";
+  static const baseURL1 =
+      "https://test-alpha-ecom.developmentalphawizz.com/api/v1/";
 
   static const apitoken = '';
 
   static String sendLoginOtp = "${baseURL}auth/send-login-otp";
   static String sendRegisterOtp = "${baseURL}auth/send-otp";
-  static String resetPassword = "${baseURL}customer/reset-password";
   static String getSellerDashboard = "${baseURL1}seller/dashboard";
 
   static String getProfile = "${baseURL}customer/info";
@@ -109,4 +110,7 @@ class AppUrl {
   static const String ratingReview = '${baseURL}seller/rating_n_reviews';
   static const String ReviewDetail = '${baseURL}seller/review_details';
   static const String buyAdvert = '${baseURL}seller/purchase-advertisement';
+  static const String forgetPassOtp = '${baseURL}seller/auth/forgot-password';
+  static const String ResetPassword = '${baseURL}seller/auth/reset-password';
+  static const String Notification = '${baseURL}seller/notifications';
 }

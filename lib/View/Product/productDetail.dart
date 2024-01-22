@@ -1,9 +1,13 @@
+import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Product/editProduct.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
+import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
+import 'package:alpha_work/Widget/dateFormatter.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -182,14 +186,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             status: value ? "1" : "0")
                                         .then((_) {
                                       switchVal = value;
-                                      Fluttertoast.showToast(
-                                          msg: "Updated successfully!",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.TOP,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: colors.buttonColor,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
+                                      Utils.showTost(
+                                        msg: "Updated successfully!",
+                                      );
                                     });
                                   });
                                 }),
@@ -252,7 +251,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             GestureDetector(
                               onTap: () => showDialog(
                                 context: context,
-                                builder: (BuildContext context) {
+                                builder: (BuildContext ctx) {
                                   return Dialog(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -298,8 +297,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                   MainAxisAlignment.spaceAround,
                                               children: [
                                                 GestureDetector(
-                                                  onTap: () =>
-                                                      Navigator.pop(context),
+                                                  onTap: () {
+                                                    Navigator.pop(ctx);
+                                                  },
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     padding: const EdgeInsets
@@ -337,25 +337,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                                 .first
                                                                 .id
                                                                 .toString())
-                                                        .then((value) =>
-                                                            AwesomeDialog(
-                                                              context: context,
-                                                              dialogType:
-                                                                  DialogType
-                                                                      .success,
-                                                              animType: AnimType
-                                                                  .scale,
-                                                              autoDismiss:
-                                                                  false,
-                                                              onDismissCallback:
-                                                                  (type) {},
-                                                              title:
-                                                                  "Product Deleted Successfully",
-                                                              btnOkOnPress: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                            )..show());
+                                                        .then((value) async {
+                                                      if (value) {
+                                                        Utils.showTost(
+                                                            msg:
+                                                                "Product Deleted Successfully");
+                                                        await Provider.of<
+                                                                    ProfileViewModel>(
+                                                                context,
+                                                                listen: false)
+                                                            .getvendorProfileData();
+                                                        Navigator.pop(ctx);
+                                                        Navigator.pop(context);
+                                                      } else {
+                                                        Utils.showTost(
+                                                            msg:
+                                                                "Something went wrong!");
+                                                      }
+                                                    });
                                                   },
                                                 ),
                                               ],
@@ -507,8 +506,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                 ),
                                 Text(
-                                  productP.productDetail.first.manufacturingDate
-                                      .toString(),
+                                  CustomDateFormat.formatDateOnly(productP
+                                      .productDetail.first.manufacturingDate
+                                      .toString()),
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black,

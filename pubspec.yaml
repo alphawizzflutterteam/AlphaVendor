@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   contained_tab_bar_view: ^0.8.0
-  step_progress_indicator: ^1.0.2
   syncfusion_flutter_charts: ^23.2.7
   page_transition: ^2.1.0
   flutter_custom_tab_bar: ^1.2.1
@@ -56,7 +55,6 @@ dependencies:
   pinput: ^3.0.1
   chat_bubbles: ^1.5.0
   flutter_no_internet_widget: ^1.0.0+18-dev.1
-  expandable: ^5.0.1
   searchable_listview: ^2.10.0
   auto_size_text: ^3.0.0
   regexed_validator: ^2.0.0+1
@@ -67,7 +65,7 @@ dependencies:
   firebase_messaging: ^14.6.4
   razorpay_flutter: ^1.1.1
   cached_network_image: ^3.3.1
-  html_editor_enhanced: ^2.5.1
+  
 
   # intl: ^0.18.0
 

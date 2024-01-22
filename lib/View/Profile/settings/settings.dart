@@ -25,17 +25,10 @@ class ProfileSettingScreen extends StatefulWidget {
 
 class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
   late ProfileViewModel profilePro;
-  getData() async {
-    profilePro.vendorData = VendorData.fromJson(
-        jsonDecode(PreferenceUtils.getString(PrefKeys.userDetails)));
-    await profilePro.getStaticPageData();
-    print("Vendor Details: ${profilePro.vendorData.image}");
-  }
 
   @override
   void initState() {
     profilePro = Provider.of<ProfileViewModel>(context, listen: false);
-    getData();
     super.initState();
   }
 
@@ -66,6 +59,7 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                         alignment: Alignment.topCenter,
                         child: AppBar(
                           backgroundColor: Colors.transparent,
+                          forceMaterialTransparency: true,
                           automaticallyImplyLeading: false,
                           leading: InkWell(
                             onTap: () {

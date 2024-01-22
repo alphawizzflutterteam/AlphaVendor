@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
 import 'package:alpha_work/View/Product/model/productDetailModel.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
@@ -127,6 +128,12 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
   String? selectedUnit;
   String? selectedValue;
   bool isFromFile = false;
+  bool containsHtml(String input) {
+    RegExp htmlTags = RegExp(r'<[^>]*>');
+
+    return htmlTags.hasMatch(input);
+  }
+
   void disposeMethod() {
     productProvider.setBrand(null);
     productProvider.setCategory(null);
@@ -147,11 +154,6 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     discountPriceCtrl.clear;
   }
 
-  String removeHtmlTags(String htmlString) {
-    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-    return htmlString.replaceAll(exp, '');
-  }
-
   getData() async {
     await productProvider.getCategory(id: '0');
     await productProvider.getBrandList();
@@ -169,6 +171,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
         (e) => e.id.toString() == widget.productDetail.brandId.toString()));
   }
 
+  bool enabled = true;
   @override
   void dispose() {
     productProvider.setBrand(null);
@@ -198,19 +201,15 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     qtyInStockCtrl.text = widget.productDetail.currentStock.toString();
     skuIdCtrl.text = widget.productDetail.code.toString();
     TaxCtrl.text = widget.productDetail.tax.toString();
-    shippingCtrl.text = widget.productDetail.shippingCost
-        .toString()
-        .replaceAll(RegExp('[^A-Za-z0-9]'), '');
-    descCtrl.text =
-        removeHtmlTags(widget.productDetail.details.toString()).toString();
+    shippingCtrl.text = widget.productDetail.shippingCost.toString();
+    descCtrl.text = widget.productDetail.details.toString();
+    enabled = containsHtml(widget.productDetail.details.toString());
     PurchaceCtrl.text =
         widget.productDetail.purchasePrice!.substring(1).toString();
     minQtyCtrl.text = widget.productDetail.minimumOrderQty.toString();
     warrantyCtrl.text = widget.productDetail.warranty.toString();
     priceCtrl.text = widget.productDetail.unitPrice!.substring(1).toString();
-    discountPriceCtrl.text = widget.productDetail.discount
-        .toString()
-        .replaceAll(RegExp('[^A-Za-z0-9]'), '');
+    discountPriceCtrl.text = widget.productDetail.discount.toString();
     // selectedPtype=widget.productDetail.
     selectedTax = widget.productDetail.taxModel.toString();
     selectedDiscount = widget.productDetail.discountType.toString();
@@ -437,6 +436,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 height: height * .15,
                                 child: TextFormField(
                                   maxLines: 5,
+                                  enabled: false,
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
@@ -831,6 +831,12 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
                                     .copyWith(
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: BorderSide(
+                                              color: colors.lightGrey,
+                                            )),
                                         contentPadding:
                                             EdgeInsets.only(right: 10)),
                                 hint: Text("Simple Product",
@@ -901,10 +907,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
-                                    .copyWith(
-                                        labelText: selectedDiscount == "Flat"
-                                            ? "Discount Price "
-                                            : "Discount in %"),
+                                    .copyWith(labelText: "Discount"),
                               ),
                               const Divider(color: Colors.transparent),
                             ],
@@ -912,88 +915,92 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                         )),
                     ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate() &&
-                              selectedDiscount!.isNotEmpty &&
-                              selectedPtype!.isNotEmpty &&
-                              selectedTax!.isNotEmpty &&
-                              selectedUnit!.isNotEmpty) {
-                            print(nameCtrl.text);
-                            print(productProvider.selectedCat?.id);
-                            print(productProvider.selectedSubCat?.id);
-                            print(selectedPtype);
-                            print(qtyInStockCtrl.text);
-                            print(skuIdCtrl.text);
-                            print(shippingCtrl.text);
-                            print(selectedTax);
-                            print(TaxCtrl.text);
-                            print(PurchaceCtrl.text);
-                            print(minQtyCtrl.text);
-                            if (!isFromFile) {
-                              List<String> url = image!.split("/");
-                              image = url.last;
-                            }
-                            print(image);
-                            print(productProvider.selectedBrand?.id);
-                            print(priceCtrl.text);
-                            print(selectedDiscount);
-                            print(discountPriceCtrl.text);
-                            print(descCtrl.text.toString());
-                            productProvider
-                                .updateProduct(
-                              productId: widget.productDetail.id.toString(),
-                              name: nameCtrl.text.toString(),
-                              category_id:
-                                  productProvider.selectedCat!.id.toString(),
-                              sub_category_id:
-                                  productProvider.selectedSubCat!.id.toString(),
-                              product_type: selectedPtype.toString(),
-                              unit: selectedUnit.toString(),
-                              thumbnail: image.toString(),
-                              discount_type: selectedDiscount.toString(),
-                              discount: discountPriceCtrl.text.toString(),
-                              tax: TaxCtrl.text.toString(),
-                              tax_type: selectedTax.toString(),
-                              unit_price: priceCtrl.text
-                                  .toString()
-                                  .replaceAll(RegExp('[^A-Za-z0-9.]'), ""),
-                              shipping_cost: shippingCtrl.text.toString(),
-                              skuId: skuIdCtrl.text.toString(),
-                              minimum_order_qty: minQtyCtrl.text.toString(),
-                              brand_id:
-                                  productProvider.selectedBrand!.id.toString(),
-                              quantity: qtyInStockCtrl.text.toString(),
-                              description: descCtrl.text.toString(),
-                              purchase_price: PurchaceCtrl.text
-                                  .toString()
-                                  .replaceAll(RegExp('[^A-Za-z0-9.]'), ""),
-                            )
-                                .then((value) {
-                              if (value) {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.success,
-                                  animType: AnimType.scale,
-                                  autoDismiss: false,
-                                  onDismissCallback: (type) {},
-                                  title: "Product Updated Successfully",
-                                  btnOkOnPress: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                )..show();
-                              } else {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.error,
-                                  animType: AnimType.scale,
-                                  autoDismiss: false,
-                                  onDismissCallback: (type) {},
-                                  title: "Something went wrong!",
-                                  btnOkColor: Colors.red,
-                                  btnOkOnPress: () => Navigator.pop(context),
-                                )..show();
+                          if (_formKey.currentState!.validate()) {
+                            if (selectedDiscount!.isNotEmpty &&
+                                selectedPtype!.isNotEmpty &&
+                                selectedTax!.isNotEmpty &&
+                                selectedUnit!.isNotEmpty) {
+                              print(nameCtrl.text);
+                              print(productProvider.selectedCat?.id);
+                              print(productProvider.selectedSubCat?.id);
+                              print(selectedPtype);
+                              print(qtyInStockCtrl.text);
+                              print(skuIdCtrl.text);
+                              print(shippingCtrl.text);
+                              print(selectedTax);
+                              print(TaxCtrl.text);
+                              print(PurchaceCtrl.text);
+                              print(minQtyCtrl.text);
+                              if (!isFromFile) {
+                                List<String> url = image!.split("/");
+                                image = url.last;
                               }
-                            });
+                              print(image);
+                              print(productProvider.selectedBrand?.id);
+                              print(priceCtrl.text);
+                              print(selectedDiscount);
+                              print(discountPriceCtrl.text);
+                              print(descCtrl.text.toString());
+                              productProvider
+                                  .updateProduct(
+                                productId: widget.productDetail.id.toString(),
+                                name: nameCtrl.text.toString(),
+                                category_id:
+                                    productProvider.selectedCat!.id.toString(),
+                                sub_category_id: productProvider
+                                    .selectedSubCat!.id
+                                    .toString(),
+                                product_type: selectedPtype.toString(),
+                                unit: selectedUnit.toString(),
+                                thumbnail: image.toString(),
+                                discount_type: selectedDiscount.toString(),
+                                discount: discountPriceCtrl.text.toString(),
+                                tax: TaxCtrl.text.toString(),
+                                tax_type: selectedTax.toString(),
+                                unit_price: priceCtrl.text
+                                    .toString()
+                                    .replaceAll(RegExp('[^A-Za-z0-9.]'), ""),
+                                shipping_cost: shippingCtrl.text.toString(),
+                                skuId: skuIdCtrl.text.toString(),
+                                minimum_order_qty: minQtyCtrl.text.toString(),
+                                brand_id: productProvider.selectedBrand!.id
+                                    .toString(),
+                                quantity: qtyInStockCtrl.text.toString(),
+                                description: descCtrl.text.toString(),
+                                purchase_price: PurchaceCtrl.text
+                                    .toString()
+                                    .replaceAll(RegExp('[^A-Za-z0-9.]'), ""),
+                              )
+                                  .then((value) {
+                                if (value) {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.success,
+                                    animType: AnimType.scale,
+                                    autoDismiss: false,
+                                    onDismissCallback: (type) {},
+                                    title: "Product Updated Successfully",
+                                    btnOkOnPress: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                  )..show();
+                                } else {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.scale,
+                                    autoDismiss: false,
+                                    onDismissCallback: (type) {},
+                                    title: "Something went wrong!",
+                                    btnOkColor: Colors.red,
+                                    btnOkOnPress: () => Navigator.pop(context),
+                                  )..show();
+                                }
+                              });
+                            } else {
+                              Utils.showTost(msg: "Some Fields Are Missing!");
+                            }
                           }
                         },
                         style: ElevatedButton.styleFrom(

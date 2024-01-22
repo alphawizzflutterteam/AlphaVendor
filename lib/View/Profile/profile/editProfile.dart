@@ -117,6 +117,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 const Divider(color: Colors.transparent),
                 TextFormField(
                   textInputAction: TextInputAction.next,
+                  enabled: false,
                   keyboardType: TextInputType.emailAddress,
                   controller: emailCtrl,
                   decoration: (const InputDecoration())
@@ -161,7 +162,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               print(image);
-              profilePro
+              await profilePro
                   .updateProfileDetail(
                       name: nameCtrl.text.toString(),
                       email: emailCtrl.text.toString(),

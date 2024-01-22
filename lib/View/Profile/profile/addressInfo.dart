@@ -244,7 +244,7 @@ class _EditAddressDetailScreenState extends State<EditAddressDetailScreen> {
               print(addressP.selectedState?.name);
               print(addressP.selectedCity?.name);
               print(zipCtrl.text);
-              profilePro
+              await profilePro
                   .updateAddressDetail(
                     address: addressCtrl.text.toString(),
                     country: addressP.selectedCountry != null

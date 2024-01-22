@@ -26,7 +26,7 @@ class LoginOtpModel {
       data: json["data"] == null
           ? []
           : List<dynamic>.from(json["data"]!.map((x) => x)),
-      otp: json["otp"],
+      otp: json["otp"].toString(),
     );
   }
 

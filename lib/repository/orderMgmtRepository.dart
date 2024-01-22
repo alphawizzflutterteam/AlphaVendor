@@ -22,6 +22,7 @@ class OrderManagementRepository {
       print(res.statusCode);
       print(url);
       var jsonData = jsonDecode(res.body);
+      print(jsonData);
       if (res.statusCode == 200) {
         print(res.body);
 
@@ -59,7 +60,7 @@ class OrderManagementRepository {
   }
 
 //Function to assign driver
-  Future<Map<String, String>> assignDeliveryManPostRequest({
+  Future<Map<String, dynamic>> assignDeliveryManPostRequest({
     required String token,
     required String api,
     required String delivery_man_id,
@@ -82,9 +83,9 @@ class OrderManagementRepository {
       print(ans);
       print(response.statusCode);
       if (response.statusCode == 200 && ans['status'] == true) {
-        return {'msg': ans['message']};
+        return ans;
       } else {
-        return {'msg': ans['errors'][0]['message']};
+        return ans;
       }
     } catch (e) {
       throw Exception(e);
@@ -95,6 +96,7 @@ class OrderManagementRepository {
   Future<Map<String, dynamic>> orderStatusUpatePutRequest({
     required String api,
     required String token,
+    required String status,
   }) async {
     try {
       print(token);
@@ -103,7 +105,7 @@ class OrderManagementRepository {
         'Authorization': 'Bearer $token'
       };
       var request = http.Request('PUT', Uri.parse(api));
-      request.bodyFields = {'order_status': 'canceled'};
+      request.bodyFields = {'order_status': status};
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();

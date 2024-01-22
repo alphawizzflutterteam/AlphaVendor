@@ -2,6 +2,7 @@ import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/Dashboard/Dashboad.dart';
 import 'package:alpha_work/View/Dashboard/model/dashboardServiceModel.dart';
+import 'package:alpha_work/View/Dashboard/notification/model/notificationModel.dart';
 import 'package:alpha_work/repository/dashboardRepository.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class DashboardViewModel with ChangeNotifier {
 
   List<ChartData> chartData = [];
   List<ChartData> circleData = [];
+  List<NotificationData> notifications = [];
   bool get loading => isLoading;
   setLoading(bool value) {
     isLoading = value;
@@ -53,5 +55,18 @@ class DashboardViewModel with ChangeNotifier {
 
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
+  }
+
+  Future<void> getNotification() async {
+    isLoading = true;
+    notifications.clear();
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo.NotificatonGetRequest(api: AppUrl.Notification, token: token)
+        .then((value) {
+      notifications = value.data;
+      setLoading(false);
+    }).onError((error, stackTrace) {
+      print(stackTrace);
+    });
   }
 }
