@@ -20,12 +20,15 @@ class PendingOrderDetail extends StatefulWidget {
 
 class _PendingOrderDetailState extends State<PendingOrderDetail> {
   late ProductManagementViewModel productPro;
+  String address = '';
   @override
   void initState() {
     print(widget.order.detail!.id.toString());
     productPro =
         Provider.of<ProductManagementViewModel>(context, listen: false);
     productPro.getProductDetail(id: widget.order.detail!.id.toString());
+    address =
+        "${widget.order.shippingAddressData!.address}, ${widget.order.shippingAddressData!.city}, ${widget.order.shippingAddressData!.state}, ${widget.order.shippingAddressData!.country}-${widget.order.shippingAddressData!.zip}";
     super.initState();
   }
 
@@ -358,12 +361,16 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                   color: colors.greyText,
                                 ),
                               ),
-                              Text(
-                                widget.order.shippingAddressData!.address
-                                    .toString(),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
+                              Container(
+                                width: width * .9,
+                                child: Text(
+                                  address,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ],
@@ -400,7 +407,39 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                             fontSize: 12),
                                       ),
                                       Text(
-                                        widget.order.detail!.unitPrice
+                                        widget.order.priceDetail!.mrp
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Montreal',
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? colors.textColor
+                                                    : Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Product Discount",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? colors.greyText
+                                                    : Colors.black54,
+                                            fontSize: 12),
+                                      ),
+                                      Text(
+                                        widget.order.priceDetail!.discount
                                             .toString(),
                                         style: TextStyle(
                                             fontFamily: 'Montreal',
@@ -454,7 +493,7 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Discount",
+                                        "Tax fee",
                                         style: TextStyle(
                                             color:
                                                 Theme.of(context).brightness ==
@@ -464,7 +503,71 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                             fontSize: 12),
                                       ),
                                       Text(
-                                        widget.order.priceDetail!.discount
+                                        widget.order.priceDetail!.tax
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Montreal',
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? colors.textColor
+                                                    : Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Subtotal",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? colors.greyText
+                                                    : Colors.black54,
+                                            fontSize: 12),
+                                      ),
+                                      Text(
+                                        widget.order.priceDetail!.subtotal
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Montreal',
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? colors.textColor
+                                                    : Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Coupon Discount",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? colors.greyText
+                                                    : Colors.black54,
+                                            fontSize: 12),
+                                      ),
+                                      Text(
+                                        widget.order.priceDetail!.couponDiscount
                                             .toString(),
                                         style: TextStyle(
                                             fontFamily: 'Montreal',
@@ -502,7 +605,7 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        widget.order.priceDetail!.subtotal
+                                        widget.order.priceDetail!.total
                                             .toString(),
                                         style: TextStyle(
                                             fontFamily: 'Montreal',
@@ -518,6 +621,9 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                   color: colors.greyText,
                                   thickness: 1,
                                 ),
+                                Divider(
+                                  color: Colors.transparent,
+                                ),
                               ],
                             ),
                           ),
@@ -528,60 +634,64 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                 ],
               ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: widget.orderType == "Pending"
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: width * .43,
-                      height: 50,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: colors.lightBorder,
-                          ),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        "CANCEL",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  VerticalDivider(color: Colors.transparent),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PickupSlotScreen(
-                          orderID: widget.order.orderId.toString()),
-                    )),
-                    child: Container(
-                      width: width * .43,
-                      height: 50,
-                      padding: const EdgeInsets.all(8),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: colors.buttonColor,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        "SHIP NOW",
-                        style: TextStyle(
+      bottomNavigationBar: widget.orderType == "Packaging"
+          ? SizedBox(
+              height: 70,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: width * .43,
+                        height: 50,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
                             color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
+                            border: Border.all(
+                              color: colors.lightBorder,
+                            ),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Text(
+                          "CANCEL",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    VerticalDivider(color: Colors.transparent),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context)
+                          .push(MaterialPageRoute(
+                            builder: (context) => PickupSlotScreen(
+                                orderID: widget.order.orderId.toString()),
+                          ))
+                          .then((value) => Navigator.pop(context)),
+                      child: Container(
+                        width: width * .43,
+                        height: 50,
+                        padding: const EdgeInsets.all(8),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: colors.buttonColor,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Text(
+                          "SHIP NOW",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           : null,

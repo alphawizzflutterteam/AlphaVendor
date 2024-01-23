@@ -6,6 +6,7 @@ import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/Placeholders/NoRefer.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -241,110 +242,118 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .5,
-                    child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      itemCount: proProvider.referrals.length,
-                      separatorBuilder: (context, index) => Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 6, horizontal: 20),
-                        color: Colors.grey.withOpacity(0.7),
-                        height: .5,
-                      ),
-                      itemBuilder: (context, i) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width:
-                                            40, // Set the width and height to create a circular shape
-                                        height: 40,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape
-                                              .circle, // Make the container circular
-                                          color: Color(
-                                              0x6B969696), // Set the background color
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            proProvider.referrals[i].name![0]
-                                                .toString()
-                                                .toUpperCase(),
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                          .brightness ==
-                                                      Brightness.dark
-                                                  ? Colors.white
-                                                  : Colors
-                                                      .black, // Set the text color
-                                              fontSize: 14, // Set the text size
-                                              fontWeight: FontWeight
-                                                  .bold, // Set the text weight
+                    child: proProvider.referrals.isEmpty
+                        ? NoReferPlaceholder(
+                            height: MediaQuery.of(context).size.height * .5,
+                            width: MediaQuery.of(context).size.width)
+                        : ListView.separated(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemCount: proProvider.referrals.length,
+                            separatorBuilder: (context, index) => Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 20),
+                              color: Colors.grey.withOpacity(0.7),
+                              height: .5,
+                            ),
+                            itemBuilder: (context, i) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width:
+                                                  40, // Set the width and height to create a circular shape
+                                              height: 40,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape
+                                                    .circle, // Make the container circular
+                                                color: Color(
+                                                    0x6B969696), // Set the background color
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  proProvider
+                                                      .referrals[i].name![0]
+                                                      .toString()
+                                                      .toUpperCase(),
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.white
+                                                        : Colors
+                                                            .black, // Set the text color
+                                                    fontSize:
+                                                        14, // Set the text size
+                                                    fontWeight: FontWeight
+                                                        .bold, // Set the text weight
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            const SizedBox(width: 15),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  proProvider.referrals[i].name
+                                                      .toString(),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: Theme.of(context)
+                                                                  .brightness ==
+                                                              Brightness.dark
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontSize: 14),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                    formatDaate(proProvider
+                                                        .referrals[i].createdAt
+                                                        .toString()),
+                                                    style: TextStyle(
+                                                        color: colors
+                                                            .lightTextColor,
+                                                        fontSize: 12))
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            proProvider.referrals[i].name
-                                                .toString(),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                            .brightness ==
-                                                        Brightness.dark
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontSize: 14),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                              formatDaate(proProvider
-                                                  .referrals[i].createdAt
-                                                  .toString()),
-                                              style: TextStyle(
-                                                  color: colors.lightTextColor,
-                                                  fontSize: 12))
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  // Text(
-                                  //   // profileProvider.referralList[i].balance
-                                  //   //     .toString(),
-                                  //   "200",
-                                  //   style: TextStyle(
-                                  //       color: Theme.of(context).brightness ==
-                                  //               Brightness.dark
-                                  //           ? Colors.white
-                                  //           : Colors.black,
-                                  //       fontSize: 14,
-                                  //       fontWeight: FontWeight.bold),
-                                  // )
-                                ],
-                              ),
-                            ],
+                                        // Text(
+                                        //   // profileProvider.referralList[i].balance
+                                        //   //     .toString(),
+                                        //   "200",
+                                        //   style: TextStyle(
+                                        //       color: Theme.of(context).brightness ==
+                                        //               Brightness.dark
+                                        //           ? Colors.white
+                                        //           : Colors.black,
+                                        //       fontSize: 14,
+                                        //       fontWeight: FontWeight.bold),
+                                        // )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 ],
               ),

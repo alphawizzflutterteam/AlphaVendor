@@ -329,8 +329,8 @@ class Shop {
     required this.productCount,
   });
 
-  final int? id;
-  final int? sellerId;
+  final String? id;
+  final String? sellerId;
   final String? name;
   final String? address;
   final String? contact;

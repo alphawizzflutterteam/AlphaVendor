@@ -143,6 +143,7 @@ class Detail {
     required this.userId,
     required this.shop,
     required this.name,
+    required this.details,
     required this.slug,
     required this.images,
     required this.colorImage,
@@ -204,6 +205,7 @@ class Detail {
   final int? userId;
   final Shop? shop;
   final String? name;
+  final String? details;
   final String? slug;
   final List<String> images;
   final List<dynamic> colorImage;
@@ -244,11 +246,11 @@ class Detail {
   final int? multiplyQty;
   final String? code;
   final int? reviewsCount;
-  final List<Rating> rating;
+  final List<dynamic> rating;
   final List<dynamic> tags;
   final List<dynamic> translations;
   final String? shareLink;
-  final List<Review> reviews;
+  final List<dynamic> reviews;
   final List<dynamic> colorsFormatted;
   final bool? isFavorite;
   final bool? isCart;
@@ -269,6 +271,7 @@ class Detail {
       userId: json["user_id"],
       shop: json["shop"] == null ? null : Shop.fromJson(json["shop"]),
       name: json["name"],
+      details: json["details"],
       slug: json["slug"],
       images: json["images"] == null
           ? []
@@ -321,7 +324,7 @@ class Detail {
       reviewsCount: json["reviews_count"],
       rating: json["rating"] == null
           ? []
-          : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
+          : List<dynamic>.from(json["rating"]!.map((x) => x)),
       tags: json["tags"] == null
           ? []
           : List<dynamic>.from(json["tags"]!.map((x) => x)),
@@ -331,7 +334,7 @@ class Detail {
       shareLink: json["share_link"],
       reviews: json["reviews"] == null
           ? []
-          : List<Review>.from(json["reviews"]!.map((x) => Review.fromJson(x))),
+          : List<dynamic>.from(json["reviews"]!.map((x) => x)),
       colorsFormatted: json["colors_formatted"] == null
           ? []
           : List<dynamic>.from(json["colors_formatted"]!.map((x) => x)),
@@ -364,96 +367,6 @@ class CategoryId {
   }
 }
 
-class Rating {
-  Rating({
-    required this.average,
-    required this.productId,
-  });
-
-  final String? average;
-  final int? productId;
-
-  factory Rating.fromJson(Map<String, dynamic> json) {
-    return Rating(
-      average: json["average"],
-      productId: json["product_id"],
-    );
-  }
-}
-
-class Review {
-  Review({
-    required this.id,
-    required this.productId,
-    required this.customerId,
-    required this.deliveryManId,
-    required this.orderId,
-    required this.comment,
-    required this.attachment,
-    required this.rating,
-    required this.status,
-    required this.isSaved,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.customer,
-  });
-
-  final int? id;
-  final int? productId;
-  final int? customerId;
-  final String? deliveryManId;
-  final String? orderId;
-  final String? comment;
-  final List<dynamic> attachment;
-  final int? rating;
-  final int? status;
-  final int? isSaved;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final Customer? customer;
-
-  factory Review.fromJson(Map<String, dynamic> json) {
-    return Review(
-      id: json["id"],
-      productId: json["product_id"],
-      customerId: json["customer_id"],
-      deliveryManId: json["delivery_man_id"],
-      orderId: json["order_id"],
-      comment: json["comment"],
-      attachment: json["attachment"] == null
-          ? []
-          : List<dynamic>.from(json["attachment"]!.map((x) => x)),
-      rating: json["rating"],
-      status: json["status"],
-      isSaved: json["is_saved"],
-      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
-      customer:
-          json["customer"] == null ? null : Customer.fromJson(json["customer"]),
-    );
-  }
-}
-
-class Customer {
-  Customer({
-    required this.id,
-    required this.name,
-    required this.image,
-  });
-
-  final int? id;
-  final String? name;
-  final String? image;
-
-  factory Customer.fromJson(Map<String, dynamic> json) {
-    return Customer(
-      id: json["id"],
-      name: json["name"],
-      image: json["image"],
-    );
-  }
-}
-
 class Shop {
   Shop({
     required this.id,
@@ -475,10 +388,11 @@ class Shop {
     required this.isVerified,
     required this.isFollowing,
     required this.banner,
+    required this.productCount,
   });
 
-  final int? id;
-  final int? sellerId;
+  final String? id;
+  final String? sellerId;
   final String? name;
   final String? address;
   final String? contact;
@@ -496,6 +410,7 @@ class Shop {
   final String? isVerified;
   final String? isFollowing;
   final String? banner;
+  final String? productCount;
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
@@ -518,27 +433,37 @@ class Shop {
       isVerified: json["is_verified"],
       isFollowing: json["is_following"],
       banner: json["banner"],
+      productCount: json["product_count"],
     );
   }
 }
 
 class PriceDetail {
   PriceDetail({
+    required this.mrp,
+    required this.tax,
     required this.subtotal,
     required this.discount,
+    required this.couponDiscount,
     required this.deliveryFee,
     required this.total,
   });
 
+  final String? mrp;
+  final String? tax;
   final String? subtotal;
   final String? discount;
+  final String? couponDiscount;
   final String? deliveryFee;
   final String? total;
 
   factory PriceDetail.fromJson(Map<String, dynamic> json) {
     return PriceDetail(
+      mrp: json["mrp"],
+      tax: json["tax"],
       subtotal: json["subtotal"],
       discount: json["discount"],
+      couponDiscount: json["coupon_discount"],
       deliveryFee: json["delivery_fee"],
       total: json["total"],
     );

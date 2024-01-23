@@ -1,4 +1,3 @@
-import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/utils.dart';
@@ -10,13 +9,10 @@ import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/dateFormatter.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:html/parser.dart' show parse;
 
 class ProductDetailScreen extends StatefulWidget {
   final String id;
@@ -395,7 +391,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       "Description",
                       style: TextStyle(fontSize: 16, color: colors.greyText),
                     ),
-                    Html(data: productP.productDetail.first.details.toString()),
+                    HtmlWidget(productP.productDetail.first.details.toString()),
+
                     // Text(
                     //   productP.productDetail.first.details.toString(),
                     //   style: TextStyle(fontSize: 16, color: Colors.black),

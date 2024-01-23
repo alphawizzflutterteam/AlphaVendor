@@ -22,7 +22,7 @@ class _WalletScreenState extends State<WalletScreen> {
   late WalletViewMaodel provider;
 
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
-
+  String? withAmt;
   @override
   void initState() {
     provider = Provider.of<WalletViewMaodel>(context, listen: false);
@@ -30,9 +30,38 @@ class _WalletScreenState extends State<WalletScreen> {
     super.initState();
   }
 
+  getColor<Color>(int status) {
+    switch (status) {
+      case 0:
+        return Colors.purple;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.red;
+      default:
+        Colors.purple;
+    }
+  }
+
+  getStatus<Color>(int status) {
+    switch (status) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Accepted";
+      case 2:
+        return "Declined";
+      default:
+        "Pending";
+    }
+  }
+
   getData() async {
     await provider.transactionList();
-    setState(() {});
+    withAmt = provider.transaction!.withdrawalAmount
+        .toString()
+        .replaceAll(RegExp('[^A-Za-z0-9.]'), '');
+    print("Withdraw amount: $withAmt");
   }
 
   final _key = GlobalKey<FormState>();
@@ -40,7 +69,7 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    // provider = Provider.of<WalletViewMaodel>(context);
+    provider = Provider.of<WalletViewMaodel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommanAppbar(appbarTitle: "Wallet"),
@@ -155,14 +184,10 @@ class _WalletScreenState extends State<WalletScreen> {
                                                     .toString()) <=
                                                 0) {
                                               return "Enter a valid amount";
-                                            } else if (double.parse(amountCtrl
-                                                    .text
-                                                    .toString()) >
-                                                double.parse(provider
-                                                    .transaction!
-                                                    .withdrawalAmount
-                                                    .toString()
-                                                    .substring(1))) {
+                                            } else if (double.parse(
+                                                    amountCtrl.text) >
+                                                double.parse(
+                                                    withAmt.toString())) {
                                               return "Withdraw amount can't be greater than balance";
                                             } else {
                                               return null;
@@ -172,22 +197,23 @@ class _WalletScreenState extends State<WalletScreen> {
                                       ),
                                       Spacer(),
                                       ElevatedButton(
-                                          onPressed: () {
+                                          onPressed: () async {
                                             if (_key.currentState!.validate()) {
                                               provider
                                                   .withdrawMoney(
                                                       amount: amountCtrl.text
                                                           .toString())
-                                                  .then((value) =>
-                                                      Fluttertoast.showToast(
-                                                        msg: value,
-                                                        gravity:
-                                                            ToastGravity.BOTTOM,
-                                                        backgroundColor:
-                                                            colors.buttonColor,
-                                                        textColor: Colors.white,
-                                                      ));
-                                              Navigator.pop(ctx);
+                                                  .then((value) async {
+                                                Fluttertoast.showToast(
+                                                  msg: value,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor:
+                                                      colors.buttonColor,
+                                                  textColor: Colors.white,
+                                                );
+                                                await getData();
+                                                Navigator.pop(ctx);
+                                              });
                                             }
                                           },
                                           style: ElevatedButton.styleFrom(
@@ -275,15 +301,15 @@ class _WalletScreenState extends State<WalletScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          provider.transaction!.data[index]
-                                              .withdrawalMethodId
-                                              .toString(),
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black,
-                                          ),
-                                        ),
+                                        // Text(
+                                        //   provider.transaction!.data[index]
+                                        //       .withdrawalMethodId
+                                        //       .toString(),
+                                        //   style: TextStyle(
+                                        //     fontSize: 14,
+                                        //     color: Colors.black,
+                                        //   ),
+                                        // ),
                                         Text(
                                           provider
                                               .transaction!.data[index].amount
@@ -318,31 +344,26 @@ class _WalletScreenState extends State<WalletScreen> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3, horizontal: 5),
                                           decoration: BoxDecoration(
-                                              color: provider
-                                                          .transaction!
-                                                          .data[index]
-                                                          .approved ==
-                                                      0
-                                                  ? Colors.redAccent
-                                                      .withOpacity(0.3)
-                                                  : colors.buttonColor
-                                                      .withOpacity(0.3),
+                                              color: getColor(int.parse(provider
+                                                      .transaction!
+                                                      .data[index]
+                                                      .approved
+                                                      .toString()))
+                                                  .withOpacity(0.3),
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Text(
-                                            provider.transaction!.data[index]
-                                                        .approved ==
-                                                    0
-                                                ? "Declined"
-                                                : "Accepted",
+                                            getStatus(int.parse(provider
+                                                .transaction!
+                                                .data[index]
+                                                .approved
+                                                .toString())),
                                             style: TextStyle(
-                                              color: provider
-                                                          .transaction!
-                                                          .data[index]
-                                                          .approved ==
-                                                      0
-                                                  ? Colors.redAccent
-                                                  : colors.buttonColor,
+                                              color: getColor(int.parse(provider
+                                                  .transaction!
+                                                  .data[index]
+                                                  .approved
+                                                  .toString())),
                                               fontSize: 12,
                                             ),
                                           ),

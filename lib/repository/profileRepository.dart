@@ -34,7 +34,8 @@ class ProfileRepository {
         print(response.reasonPhrase);
         return VendorProfileModel.fromJson(res);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print(stackTrace);
       throw Exception(e);
     }
   }

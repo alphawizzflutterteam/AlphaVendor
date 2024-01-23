@@ -2,7 +2,7 @@ import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -40,8 +40,8 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
-                    Html(
-                      data: provider.staticPageData.privacyPolicy!.content,
+                    HtmlWidget(
+                      provider.staticPageData.privacyPolicy!.content.toString(),
                     ),
                   ],
                 ),

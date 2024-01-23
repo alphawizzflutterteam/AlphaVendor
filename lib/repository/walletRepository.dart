@@ -13,6 +13,7 @@ class WalletRepository {
   }) async {
     try {
       var url = Uri.parse(api).replace(queryParameters: {'amount': amount});
+      print("${api}  $amount");
       var res = await http.post(
         url,
         headers: {'Authorization': 'Bearer $token'},

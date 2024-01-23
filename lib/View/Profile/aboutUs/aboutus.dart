@@ -2,8 +2,8 @@ import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 class AboutUsScreen extends StatefulWidget {
   const AboutUsScreen({super.key});
@@ -32,8 +32,8 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
           : Padding(
               padding: const EdgeInsets.all(16),
               child: SingleChildScrollView(
-                  child: Html(
-                data: provider.staticPageData.aboutUs,
+                  child: HtmlWidget(
+                provider.staticPageData.aboutUs.toString(),
               )),
             ),
     );

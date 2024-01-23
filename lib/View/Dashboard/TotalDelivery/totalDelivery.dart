@@ -1,4 +1,5 @@
 import 'package:alpha_work/Utils/color.dart';
+import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/View/Product/productDetail.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
@@ -261,19 +262,41 @@ class _TotalDeliveredProductScreenState
                                               ),
                                             ],
                                           ),
-                                          trailing: AutoSizeText(
-                                            AlphaOrdrs[index]
-                                                .detail!
-                                                .unitPrice
-                                                .toString(),
-                                            maxFontSize: 18,
-                                            minFontSize: 16,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                // fontSize: 18,
-                                                fontFamily: 'Montreal',
-                                                fontWeight: FontWeight.w500),
+                                          trailing: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                height: 30,
+                                                width: 30,
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Image.asset(
+                                                  Images.alpha_icon,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              AutoSizeText(
+                                                AlphaOrdrs[index]
+                                                    .detail!
+                                                    .unitPrice
+                                                    .toString(),
+                                                maxFontSize: 18,
+                                                minFontSize: 16,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    // fontSize: 18,
+                                                    fontFamily: 'Montreal',
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),

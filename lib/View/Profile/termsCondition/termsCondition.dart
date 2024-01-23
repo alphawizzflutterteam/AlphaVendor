@@ -2,7 +2,7 @@ import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 
 class TermsAndConditionScreen extends StatefulWidget {
@@ -33,8 +33,8 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
           : Padding(
               padding: const EdgeInsets.all(16),
               child: SingleChildScrollView(
-                child: Html(
-                  data: provider.staticPageData.termsNConditions!.content,
+                child: HtmlWidget(
+                  provider.staticPageData.termsNConditions!.content.toString(),
                 ),
               ),
             ),

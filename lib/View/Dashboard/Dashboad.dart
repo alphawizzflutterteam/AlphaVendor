@@ -279,10 +279,12 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                             onTap: () {
                               Navigator.pop(context);
                               Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.rightToLeft,
-                                      child: WalletScreen()));
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child: WalletScreen()))
+                                  .then((value) => dashProvider
+                                      .getDashboardData("WeekEarn"));
                             },
                           ),
                           ListTile(
@@ -606,11 +608,13 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             _scrollDown();
                                           case 1:
                                             Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    child: OrderManagement(),
-                                                    type: PageTransitionType
-                                                        .rightToLeft));
+                                                    context,
+                                                    PageTransition(
+                                                        child:
+                                                            OrderManagement(),
+                                                        type: PageTransitionType
+                                                            .rightToLeft))
+                                                .then((value) => getData());
 
                                             break;
                                           case 3:
@@ -643,12 +647,13 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             break;
                                           case 2:
                                             Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    child:
-                                                        StockManagementScreen(),
-                                                    type: PageTransitionType
-                                                        .rightToLeft));
+                                                    context,
+                                                    PageTransition(
+                                                        child:
+                                                            StockManagementScreen(),
+                                                        type: PageTransitionType
+                                                            .rightToLeft))
+                                                .then((value) => getData());
                                             break;
                                           case 4:
                                             Navigator.push(
@@ -821,10 +826,11 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)),
               onPressed: () => Navigator.push(
-                  context,
-                  PageTransition(
-                      child: AddProdutScreen(isFromHome: true),
-                      type: PageTransitionType.rightToLeft)),
+                      context,
+                      PageTransition(
+                          child: AddProdutScreen(isFromHome: true),
+                          type: PageTransitionType.rightToLeft))
+                  .then((value) => getData()),
               backgroundColor: colors.buttonColor,
               child: Icon(
                 Icons.add,

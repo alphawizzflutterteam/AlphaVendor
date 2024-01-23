@@ -53,7 +53,10 @@ class ProfileViewModel with ChangeNotifier {
           PrefKeys.userDetails, jsonEncode(vendorData.toJson()));
 
       setLoading(false);
-    }).onError((error, stackTrace) => setLoading(false));
+    }).onError((error, stackTrace) {
+      print(stackTrace.toString());
+      setLoading(false);
+    });
   }
 
   //Function to update business Detail
