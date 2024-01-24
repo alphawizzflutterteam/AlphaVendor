@@ -125,16 +125,16 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                           ),
                           SizedBox(height: 8),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                item.amount.toString(),
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              // Text(
+                              //   item.amount.toString(),
+                              //   style: TextStyle(
+                              //     fontSize: 24,
+                              //     color: Colors.black,
+                              //     fontWeight: FontWeight.bold,
+                              //   ),
+                              // ),
                               GestureDetector(
                                 onTap: () => showModalBottomSheet(
                                   shape: RoundedRectangleBorder(

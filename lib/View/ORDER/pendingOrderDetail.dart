@@ -5,6 +5,7 @@ import 'package:alpha_work/View/ORDER/pickupSlot.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
+import 'package:alpha_work/Widget/dateFormatter.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -196,7 +197,7 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                               ],
                             ),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   "Order Date",
@@ -206,7 +207,9 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                   ),
                                 ),
                                 Text(
-                                  widget.order.orderDate.toString(),
+                                  widget.order.orderDate
+                                      .toString()
+                                      .replaceAll("-", " "),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -216,22 +219,49 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                             ),
                           ],
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Payment Method ",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: colors.greyText,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Payment Method ",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: colors.greyText,
+                                  ),
+                                ),
+                                Text(
+                                  widget.order.payment_method,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Cash on delivery",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Shipment Date",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: colors.greyText,
+                                  ),
+                                ),
+                                Text(
+                                  widget.order.expected_delivery_date.isEmpty
+                                      ? ""
+                                      : CustomDateFormat.formatDateOnly(
+                                          widget.order.expected_delivery_date),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

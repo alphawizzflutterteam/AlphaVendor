@@ -301,15 +301,6 @@ class _WalletScreenState extends State<WalletScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        // Text(
-                                        //   provider.transaction!.data[index]
-                                        //       .withdrawalMethodId
-                                        //       .toString(),
-                                        //   style: TextStyle(
-                                        //     fontSize: 14,
-                                        //     color: Colors.black,
-                                        //   ),
-                                        // ),
                                         Text(
                                           provider
                                               .transaction!.data[index].amount
@@ -319,6 +310,25 @@ class _WalletScreenState extends State<WalletScreen> {
                                               fontFamily: 'Montreal',
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          width: width * .7,
+                                          child: Text(
+                                            provider.transaction!.data[index]
+                                                    .transactionNote
+                                                    .toString()
+                                                    .isEmpty
+                                                ? "Transaction under approval"
+                                                : provider.transaction!
+                                                    .data[index].transactionNote
+                                                    .toString(),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),

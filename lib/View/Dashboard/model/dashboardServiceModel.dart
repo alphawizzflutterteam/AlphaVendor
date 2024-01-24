@@ -30,6 +30,10 @@ class DashData {
     required this.ratingsNdReviews,
     required this.graphData,
     required this.categoryProduct,
+    required this.today,
+    required this.month,
+    required this.week,
+    required this.notiCount,
   });
 
   final String? totalSale;
@@ -42,6 +46,10 @@ class DashData {
   final String? ratingsNdReviews;
   final GraphData? graphData;
   final List<CategoryProduct> categoryProduct;
+  final String? today;
+  final String? month;
+  final String? week;
+  final String? notiCount;
 
   factory DashData.fromJson(Map<String, dynamic> json) {
     return DashData(
@@ -60,6 +68,10 @@ class DashData {
           ? []
           : List<CategoryProduct>.from(json["category_product"]!
               .map((x) => CategoryProduct.fromJson(x))),
+      today: json["today"],
+      month: json["month"],
+      week: json["week"],
+      notiCount: json['notification'],
     );
   }
 }

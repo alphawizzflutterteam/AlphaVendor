@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/Dashboard/TotalOrder/model/orederReportModel.dart';
 import 'package:alpha_work/View/Dashboard/model/dashboardServiceModel.dart';
 import 'package:alpha_work/View/Dashboard/notification/model/notificationModel.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,30 @@ class DashboardRepository {
         return NotificationModel(status: null, message: null, data: []);
       }
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+//Function to get Order Report
+  Future<OrderReportModel> OrderReportGetRequest({
+    required String api,
+    required String token,
+  }) async {
+    try {
+      var url = Uri.parse(api);
+      http.Response res = await http.get(url, headers: {
+        'Authorization': 'Bearer $token',
+      });
+      var ans = jsonDecode(res.body);
+      print(ans);
+      if (res.statusCode == 200) {
+        return OrderReportModel.fromJson(ans);
+      } else {
+        print(res.reasonPhrase);
+        return OrderReportModel.fromJson(ans);
+      }
+    } catch (e, ST) {
+      print(ST);
       throw Exception(e);
     }
   }

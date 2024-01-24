@@ -39,6 +39,8 @@ class OrderData {
     required this.detail,
     required this.priceDetail,
     required this.customer,
+    required this.expected_delivery_date,
+    required this.payment_method,
   });
 
   final int? orderId;
@@ -51,6 +53,8 @@ class OrderData {
   final Detail? detail;
   final PriceDetail? priceDetail;
   final String? customer;
+  final String expected_delivery_date;
+  final String payment_method;
 
   factory OrderData.fromJson(Map<String, dynamic> json) {
     return OrderData(
@@ -70,6 +74,8 @@ class OrderData {
           ? null
           : PriceDetail.fromJson(json["price_detail"]),
       customer: json["customer"],
+      expected_delivery_date: json['expected_delivery_date'],
+      payment_method: json['payment_method'],
     );
   }
 }

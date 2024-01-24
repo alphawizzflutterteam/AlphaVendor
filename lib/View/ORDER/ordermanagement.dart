@@ -52,6 +52,7 @@ class _OrderManagementState extends State<OrderManagement> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var widht = MediaQuery.of(context).size.width;
+    print("Ui Reloded");
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommanAppbar(appbarTitle: "Order Management"),
@@ -86,6 +87,7 @@ class _OrderManagementState extends State<OrderManagement> {
                             scrollDirection: Axis.horizontal,
                             itemCount: pageCount,
                             onPageChanged: (value) {
+                              print("dsfghjdgfjdjgdjh");
                               orderProvider.getOrderList(
                                   status: orderProvider
                                       .orderStatus[
@@ -105,50 +107,74 @@ class _OrderManagementState extends State<OrderManagement> {
                                       ? appLoader()
                                       : order.orderList.isEmpty
                                           ? NoOrderFound(height: 100)
-                                          : SearchableList(
-                                              autoFocusOnSearch: false,
-                                              textInputType:
-                                                  TextInputType.number,
-                                              filter: (query) => order.orderList
-                                                  .where((ele) => ele.orderId
-                                                      .toString()
-                                                      .contains(query))
-                                                  .toList(),
-                                              inputDecoration:
-                                                  (const InputDecoration())
-                                                      .applyDefaults(Theme.of(
-                                                              context)
-                                                          .inputDecorationTheme)
-                                                      .copyWith(
-                                                        hintText:
-                                                            "Search by OrderID",
-                                                        hintStyle: TextStyle(
-                                                            color:
-                                                                colors.greyText,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal),
-                                                      ),
-                                              initialList: order.orderList,
-                                              emptyWidget: NoSearch(),
-                                              builder: (context, indx, item) {
-                                                return OrderListTile(
-                                                  orderPro: orderProvider,
-                                                  type: order
-                                                      .orderStatus[index].value
-                                                      .toString(),
-                                                  order: item,
-                                                  title: item.detail!.name
-                                                      .toString(),
-                                                  id: item.orderId.toString(),
-                                                  date:
-                                                      item.orderDate.toString(),
-                                                  price: item.orderAmount
-                                                      .toString(),
-                                                  isAlpha:
-                                                      item.isAlphaDelivery!,
-                                                );
-                                              });
+                                          : RefreshIndicator(
+                                              color: colors.buttonColor,
+                                              displacement: 40.0,
+                                              strokeWidth: 2.0,
+                                              semanticsLabel: 'Pull to refresh',
+                                              semanticsValue: 'Refresh',
+                                              onRefresh: () async {
+                                                await Future.delayed(
+                                                    Duration(seconds: 2));
+                                                await orderProvider
+                                                    .getOrderList(
+                                                        status: orderProvider
+                                                            .orderStatus[index]
+                                                            .title
+                                                            .toString());
+                                              },
+                                              child: SearchableList(
+                                                  autoFocusOnSearch: false,
+                                                  physics:
+                                                      AlwaysScrollableScrollPhysics(),
+                                                  textInputType:
+                                                      TextInputType.number,
+                                                  filter: (query) => order
+                                                      .orderList
+                                                      .where((ele) => ele
+                                                          .orderId
+                                                          .toString()
+                                                          .contains(query))
+                                                      .toList(),
+                                                  inputDecoration:
+                                                      (const InputDecoration())
+                                                          .applyDefaults(Theme
+                                                                  .of(context)
+                                                              .inputDecorationTheme)
+                                                          .copyWith(
+                                                            hintText:
+                                                                "Search by OrderID",
+                                                            hintStyle: TextStyle(
+                                                                color: colors
+                                                                    .greyText,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          ),
+                                                  initialList: order.orderList,
+                                                  emptyWidget: NoSearch(),
+                                                  builder:
+                                                      (context, indx, item) {
+                                                    return OrderListTile(
+                                                      orderPro: orderProvider,
+                                                      type: order
+                                                          .orderStatus[index]
+                                                          .value
+                                                          .toString(),
+                                                      order: item,
+                                                      title: item.detail!.name
+                                                          .toString(),
+                                                      id: item.orderId
+                                                          .toString(),
+                                                      date: item.orderDate
+                                                          .toString(),
+                                                      price: item.orderAmount
+                                                          .toString(),
+                                                      isAlpha:
+                                                          item.isAlphaDelivery!,
+                                                    );
+                                                  }),
+                                            );
                                 }),
                               );
                             }),
@@ -333,8 +359,6 @@ class OrderListTile extends StatelessWidget {
                       style: TextStyle(color: getTextColor(type)),
                     ),
                   ),
-                // type == 'Pending'
-                //     ? PendingOrderListTile(orderId: id, orderProvider: orderPro)
               ],
             ),
           ],
@@ -384,7 +408,7 @@ class PendingOrderListTile extends StatelessWidget {
         GestureDetector(
           onTap: () => showDialog(
             context: context,
-            builder: (context) => Dialog(
+            builder: (ctx) => Dialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               child: Container(
@@ -424,7 +448,7 @@ class PendingOrderListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureDetector(
-                            onTap: () => Navigator.pop(context),
+                            onTap: () => Navigator.pop(ctx),
                             child: Container(
                               width: MediaQuery.of(context).size.width * .35,
                               alignment: Alignment.center,
@@ -448,11 +472,12 @@ class PendingOrderListTile extends StatelessWidget {
                                   .cancelOrder(ctx: context, id: orderId)
                                   .then((value) {
                                 if (value) {
-                                  Navigator.pop(context);
+                                  Navigator.pop(ctx);
+                                  orderProvider.getOrderList(status: status);
                                   Utils.showTost(
                                       msg: "Order cancelled successfully.");
                                 } else {
-                                  Navigator.pop(context);
+                                  Navigator.pop(ctx);
                                   Utils.showTost(msg: "Something went Wrong!");
                                 }
                               });
@@ -481,7 +506,7 @@ class PendingOrderListTile extends StatelessWidget {
                 ),
               ),
             ),
-          ).then((value) => orderProvider.getOrderList(status: 'pending')),
+          ),
           child: Container(
             height: 35,
             width: MediaQuery.of(context).size.width * .2,

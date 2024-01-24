@@ -1,9 +1,7 @@
 // ignore_for_file: file_names
 class AppUrl {
-  static const baseURL =
-      "https://test-alpha-ecom.developmentalphawizz.com/api/v2/";
-  static const baseURL1 =
-      "https://test-alpha-ecom.developmentalphawizz.com/api/v1/";
+  static const baseURL = "https://alpha-ecom.developmentalphawizz.com/api/v2/";
+  static const baseURL1 = "https://alpha-ecom.developmentalphawizz.com/api/v1/";
 
   static const apitoken = '';
 
@@ -113,4 +111,5 @@ class AppUrl {
   static const String forgetPassOtp = '${baseURL}seller/auth/forgot-password';
   static const String ResetPassword = '${baseURL}seller/auth/reset-password';
   static const String Notification = '${baseURL}seller/notifications';
+  static const String OrderReport = '${baseURL}seller/orders-report';
 }

@@ -15,7 +15,7 @@ class CustomDateFormat {
     DateTime dateTime = DateTime.parse(dateString);
 
     // Format the date
-    String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+    String formattedDate = DateFormat('dd MMMM yyyy').format(dateTime);
     return formattedDate;
   }
 }

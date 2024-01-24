@@ -417,17 +417,32 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                     }),
                                     actions: [
                                       IconButton(
-                                        icon: Image.asset(
-                                          Images.notification,
-                                          color: Colors.white,
-                                          height: 25,
+                                        icon: Badge(
+                                          isLabelVisible: dashProvider
+                                                      .dashData.notiCount
+                                                      .toString() ==
+                                                  '0'
+                                              ? false
+                                              : true,
+                                          label: Text(
+                                            dashProvider.dashData.notiCount
+                                                .toString(),
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                          child: Image.asset(
+                                            Images.notification,
+                                            color: Colors.white,
+                                            height: 25,
+                                          ),
                                         ),
                                         onPressed: () => Navigator.push(
-                                            context,
-                                            PageTransition(
-                                                child: NotificationScreen(),
-                                                type: PageTransitionType
-                                                    .rightToLeft)),
+                                                context,
+                                                PageTransition(
+                                                    child: NotificationScreen(),
+                                                    type: PageTransitionType
+                                                        .rightToLeft))
+                                            .then((value) => dashProvider
+                                                .getDashboardData("WeekEarn")),
                                       ),
                                     ],
                                   ),
@@ -552,7 +567,10 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                                 PageTransition(
                                                   type: PageTransitionType
                                                       .rightToLeft,
-                                                  child: TotalOrderScreen(),
+                                                  child: TotalOrderScreen(
+                                                      total: dashProvider
+                                                          .dashData.totalOrders
+                                                          .toString()),
                                                 ));
                                           },
                                           child: Column(
@@ -614,8 +632,11 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             Navigator.push(
                                                     context,
                                                     PageTransition(
-                                                        child:
-                                                            TotalOrderScreen(),
+                                                        child: TotalOrderScreen(
+                                                            total: dashProvider
+                                                                .dashData
+                                                                .totalOrders
+                                                                .toString()),
                                                         type: PageTransitionType
                                                             .rightToLeft))
                                                 .then((value) => getData());
@@ -709,15 +730,17 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                                 color: colors.greyText,
                                               ),
                                             ),
-                                            AutoSizeText(
-                                              getCardVal(index),
-                                              maxFontSize: 28,
-                                              minFontSize: 22,
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                fontFamily: 'Montreal',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
+                                            Expanded(
+                                              child: AutoSizeText(
+                                                getCardVal(index),
+                                                maxFontSize: 28,
+                                                minFontSize: 16,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontFamily: 'Montreal',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                             ),
                                           ],

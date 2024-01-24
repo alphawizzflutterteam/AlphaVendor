@@ -1,6 +1,7 @@
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/View/Dashboard/Dashboad.dart';
+import 'package:alpha_work/View/Dashboard/TotalOrder/model/orederReportModel.dart';
 import 'package:alpha_work/View/Dashboard/model/dashboardServiceModel.dart';
 import 'package:alpha_work/View/Dashboard/notification/model/notificationModel.dart';
 import 'package:alpha_work/repository/dashboardRepository.dart';
@@ -14,6 +15,7 @@ class DashboardViewModel with ChangeNotifier {
   List<ChartData> chartData = [];
   List<ChartData> circleData = [];
   List<NotificationData> notifications = [];
+  OrderReportModel? orderReport;
   bool get loading => isLoading;
   setLoading(bool value) {
     isLoading = value;
@@ -67,6 +69,19 @@ class DashboardViewModel with ChangeNotifier {
       setLoading(false);
     }).onError((error, stackTrace) {
       print(stackTrace);
+    });
+  }
+
+  Future<void> getOrderReport() async {
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo.OrderReportGetRequest(api: AppUrl.OrderReport, token: token)
+        .then((value) {
+      orderReport = value;
+      setLoading(false);
+    }).onError((error, stackTrace) {
+      print(stackTrace);
+      setLoading(false);
     });
   }
 }
