@@ -28,7 +28,7 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
         Provider.of<ProductManagementViewModel>(context, listen: false);
     productPro.getProductDetail(id: widget.order.detail!.id.toString());
     address =
-        "${widget.order.shippingAddressData!.address}, ${widget.order.shippingAddressData!.city}, ${widget.order.shippingAddressData!.state}, ${widget.order.shippingAddressData!.country}-${widget.order.shippingAddressData!.zip}";
+        "${widget.order.shippingAddressData!.address}, ${widget.order.shippingAddressData!.address1}, ${widget.order.shippingAddressData!.city}, ${widget.order.shippingAddressData!.state}, ${widget.order.shippingAddressData!.country}-${widget.order.shippingAddressData!.zip}";
     super.initState();
   }
 

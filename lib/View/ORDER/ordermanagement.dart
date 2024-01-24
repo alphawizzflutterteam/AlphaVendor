@@ -19,7 +19,8 @@ import 'package:provider/provider.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
 class OrderManagement extends StatefulWidget {
-  const OrderManagement({super.key});
+  const OrderManagement({super.key, required this.index});
+  final int index;
 
   @override
   State<OrderManagement> createState() => _OrderManagementState();
@@ -27,14 +28,17 @@ class OrderManagement extends StatefulWidget {
 
 class _OrderManagementState extends State<OrderManagement> {
   late int pageCount;
-  final PageController _controller = PageController();
-  final CustomTabBarController _tabBarController = CustomTabBarController();
+  PageController _controller = PageController();
+  CustomTabBarController _tabBarController = CustomTabBarController();
 
   late OrderManagementViewModel orderProvider;
   getData() async {
     await orderProvider.getOrderList(status: '');
 
     pageCount = orderProvider.orderStatus.length.toInt();
+    _controller = PageController(initialPage: widget.index);
+    orderProvider.getOrderList(
+        status: orderProvider.orderStatus[widget.index].title.toString());
   }
 
   @override
@@ -60,7 +64,6 @@ class _OrderManagementState extends State<OrderManagement> {
                     children: [
                       CustomTabBar(
                         tabBarController: _tabBarController,
-                        onTapItem: (value) => (),
                         height: 40,
                         direction: Axis.horizontal,
                         itemCount: orderProvider.orderStatus.length,

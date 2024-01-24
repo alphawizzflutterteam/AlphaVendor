@@ -3,6 +3,7 @@ import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Customer/customer.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingReview.dart';
 import 'package:alpha_work/View/Dashboard/TotalDelivery/totalDelivery.dart';
+import 'package:alpha_work/View/Dashboard/TotalOrder/totalOrder.dart';
 import 'package:alpha_work/View/Dashboard/notification/notification.dart';
 import 'package:alpha_work/View/Dashboard/stockMgmt/stockMgmt.dart';
 import 'package:alpha_work/View/ORDER/ordermanagement.dart';
@@ -229,7 +230,9 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   context,
                                   PageTransition(
                                       type: PageTransitionType.rightToLeft,
-                                      child: OrderManagement()));
+                                      child: OrderManagement(
+                                        index: 0,
+                                      )));
                             },
                           ),
                           ListTile(
@@ -547,9 +550,10 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             Navigator.push(
                                                 context,
                                                 PageTransition(
-                                                    type: PageTransitionType
-                                                        .rightToLeft,
-                                                    child: OrderManagement()));
+                                                  type: PageTransitionType
+                                                      .rightToLeft,
+                                                  child: TotalOrderScreen(),
+                                                ));
                                           },
                                           child: Column(
                                             children: [
@@ -611,7 +615,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                                     context,
                                                     PageTransition(
                                                         child:
-                                                            OrderManagement(),
+                                                            TotalOrderScreen(),
                                                         type: PageTransitionType
                                                             .rightToLeft))
                                                 .then((value) => getData());

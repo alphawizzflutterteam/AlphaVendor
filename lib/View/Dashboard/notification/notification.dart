@@ -52,7 +52,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ? Navigator.pushReplacement(
                                 context,
                                 PageTransition(
-                                    child: OrderManagement(),
+                                    child: OrderManagement(index: 0),
                                     type: PageTransitionType.rightToLeft),
                               )
                             : null,

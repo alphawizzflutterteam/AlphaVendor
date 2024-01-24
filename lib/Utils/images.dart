@@ -179,6 +179,7 @@ class Images {
   static const noCustomer = "assets/images/no-customer.png";
   static const noNotification = "assets/images/no-notification.png";
   static const noRefer = "assets/images/NoRefer.png";
+  static const bfGrids = "assets/images/grids.png";
   static const dashImages = [
     'assets/icons/DrawerItems/category.png',
     'assets/icons/DrawerItems/OrderM.png',
