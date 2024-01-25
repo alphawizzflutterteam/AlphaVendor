@@ -60,11 +60,11 @@ List<ProfileList> profileItem = [
       profileIcon: Images.changePassword,
       profileText: 'Change Password',
       navigationScreen: ChangePasswordScreen()),
-  // ProfileList(
-  //     profileIcon: Images.changeLanguage,
-  //     profileText: 'Change Language',
-  //     navigationScreen: ""),
 
   ProfileList(
       profileIcon: Images.logOut, profileText: 'Logout', navigationScreen: ""),
+  ProfileList(
+      profileIcon: Images.deactivate,
+      profileText: 'Delete Account',
+      navigationScreen: ""),
 ];

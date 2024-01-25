@@ -1,6 +1,7 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
+import 'package:alpha_work/View/ORDER/pendingOrderDetail.dart';
 import 'package:alpha_work/View/Product/productDetail.dart';
 import 'package:alpha_work/ViewModel/orderMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
@@ -139,11 +140,10 @@ class _TotalDeliveredProductScreenState
                                         onTap: () => Navigator.push(
                                             context,
                                             PageTransition(
-                                                child: ProductDetailScreen(
-                                                    id: AlphaOrdrs[index]
-                                                        .detail!
-                                                        .id
-                                                        .toString()),
+                                                child: PendingOrderDetail(
+                                                  order: AlphaOrdrs[index],
+                                                  orderType: "Delivered",
+                                                ),
                                                 type: PageTransitionType
                                                     .rightToLeft)),
                                         child: ListTile(
@@ -219,11 +219,10 @@ class _TotalDeliveredProductScreenState
                                         onTap: () => Navigator.push(
                                             context,
                                             PageTransition(
-                                                child: ProductDetailScreen(
-                                                    id: AlphaOrdrs[index]
-                                                        .detail!
-                                                        .id
-                                                        .toString()),
+                                                child: PendingOrderDetail(
+                                                  order: AlphaOrdrs[index],
+                                                  orderType: "Delivered",
+                                                ),
                                                 type: PageTransitionType
                                                     .rightToLeft)),
                                         child: ListTile(

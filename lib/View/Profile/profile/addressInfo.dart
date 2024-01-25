@@ -226,60 +226,62 @@ class _EditAddressDetailScreenState extends State<EditAddressDetailScreen> {
                     return null;
                   },
                 ),
-                const Divider(color: Colors.transparent),
+                SizedBox(
+                  height: height * .24,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate() &&
+                          addressP.selectedCountry != null &&
+                          addressP.selectedState != null &&
+                          addressP.selectedCity != null) {
+                        print(addressCtrl.text);
+                        print(addressP.selectedCountry?.name);
+                        print(addressP.selectedState?.name);
+                        print(addressP.selectedCity?.name);
+                        print(zipCtrl.text);
+                        await profilePro
+                            .updateAddressDetail(
+                              address: addressCtrl.text.toString(),
+                              country: addressP.selectedCountry != null
+                                  ? addressP.selectedCountry!.name.toString()
+                                  : countryCtrl.text.toString(),
+                              state: addressP.selectedState != null
+                                  ? addressP.selectedState!.name.toString()
+                                  : stateCtrl.text.toString(),
+                              city: addressP.selectedCity != null
+                                  ? addressP.selectedCity!.name.toString()
+                                  : cityCtrl.text.toString(),
+                              pincode: zipCtrl.text.toString(),
+                            )
+                            .then(
+                              (value) => Fluttertoast.showToast(
+                                msg: value['msg'],
+                                backgroundColor: colors.buttonColor,
+                                textColor: Colors.white,
+                                gravity: ToastGravity.BOTTOM,
+                              ),
+                            );
+                        await profilePro
+                            .getvendorProfileData()
+                            .then((value) => Navigator.pop(context));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(width * .9, 50)),
+                    child: Text(
+                      "SAVE",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-          onPressed: () async {
-            if (_formKey.currentState!.validate() &&
-                addressP.selectedCountry != null &&
-                addressP.selectedState != null &&
-                addressP.selectedCity != null) {
-              print(addressCtrl.text);
-              print(addressP.selectedCountry?.name);
-              print(addressP.selectedState?.name);
-              print(addressP.selectedCity?.name);
-              print(zipCtrl.text);
-              await profilePro
-                  .updateAddressDetail(
-                    address: addressCtrl.text.toString(),
-                    country: addressP.selectedCountry != null
-                        ? addressP.selectedCountry!.name.toString()
-                        : countryCtrl.text.toString(),
-                    state: addressP.selectedState != null
-                        ? addressP.selectedState!.name.toString()
-                        : stateCtrl.text.toString(),
-                    city: addressP.selectedCity != null
-                        ? addressP.selectedCity!.name.toString()
-                        : cityCtrl.text.toString(),
-                    pincode: zipCtrl.text.toString(),
-                  )
-                  .then(
-                    (value) => Fluttertoast.showToast(
-                      msg: value['msg'],
-                      backgroundColor: colors.buttonColor,
-                      textColor: Colors.white,
-                      gravity: ToastGravity.BOTTOM,
-                    ),
-                  );
-              await profilePro
-                  .getvendorProfileData()
-                  .then((value) => Navigator.pop(context));
-            }
-          },
-          style: ElevatedButton.styleFrom(fixedSize: Size(width * .9, 50)),
-          child: Text(
-            "SAVE",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
     );
   }
 }

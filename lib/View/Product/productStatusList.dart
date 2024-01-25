@@ -132,7 +132,7 @@ class _ActiveProductScreenState extends State<ActiveProductScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
                                     item.thumbnail.toString(),
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain,
                                     errorBuilder: (context, url, error) =>
                                         ErrorImageWidget(height: null),
                                   ),

@@ -130,34 +130,55 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                 ),
                               ],
                             ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: productPro.productDetail.first.weight
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: colors.greyText, fontSize: 16),
-                                  ),
-                                  TextSpan(
-                                    text: " | ",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  TextSpan(
-                                    text: 'Qty -',
-                                    style: TextStyle(
-                                        color: colors.greyText, fontSize: 16),
-                                  ),
-                                  TextSpan(
-                                    text: productPro
-                                        .productDetail.first.minimumOrderQty
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                            SizedBox(
+                              width: width * .68,
+                              child: RichText(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: productPro
+                                          .productDetail.first.weight
+                                          .toString(),
+                                      style: TextStyle(
+                                          color: colors.greyText, fontSize: 16),
+                                    ),
+                                    TextSpan(
+                                      text: " | ",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    TextSpan(
+                                      text: 'Qty -',
+                                      style: TextStyle(
+                                          color: colors.greyText, fontSize: 16),
+                                    ),
+                                    TextSpan(
+                                      text: widget.order.detail!.quantity
+                                          .toString(),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                      text: " | ",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    TextSpan(
+                                      text: 'Variant - ',
+                                      style: TextStyle(
+                                          color: colors.greyText, fontSize: 16),
+                                    ),
+                                    TextSpan(
+                                      text: widget.order.variant.toString(),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -233,7 +254,7 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                   ),
                                 ),
                                 Text(
-                                  widget.order.payment_method,
+                                  widget.order.payment_method.toString(),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,

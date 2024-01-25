@@ -532,4 +532,27 @@ class ProfileRepository {
       throw Exception(e);
     }
   }
+
+//Function To delete account
+  Future<Map<String, dynamic>> deleteAccGetRequest({
+    required String api,
+    required String token,
+  }) async {
+    try {
+      var url = Uri.parse(api);
+      http.Response res =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(res.body);
+      print(ans);
+      if (res.statusCode == 200) {
+        return ans;
+      } else {
+        print(res.reasonPhrase);
+        return ans;
+      }
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      throw Exception(e);
+    }
+  }
 }

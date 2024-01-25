@@ -5,6 +5,7 @@ import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
 import 'package:alpha_work/View/Profile/Chat/chat.dart';
 import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/widgets/currencySheet.dart';
@@ -220,6 +221,142 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
                               builder: (context) => CurrencyBottomSheet(),
+                            );
+                          } else if (profileItem[i].profileText ==
+                              "Delete Account") {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => Dialog(
+                                child: Container(
+                                  height: height * .35,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 90,
+                                        height: 90,
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: colors.lightGrey,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Image.asset(
+                                          Images.deactivate,
+                                          fit: BoxFit.contain,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(16),
+                                          child: Text(
+                                            'Are you sure want to delete account ',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(fontSize: 18),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () => Navigator.pop(ctx),
+                                                child: Container(
+                                                  height: 40,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                      color: Color(0xFFC3C5DD),
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    'CANCEL',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium!
+                                                        .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            VerticalDivider(),
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () => profilePro
+                                                    .deleteAccount()
+                                                    .then((value) {
+                                                  if (value) {
+                                                    PreferenceUtils.setString(
+                                                        PrefKeys.jwtToken, "");
+                                                    PreferenceUtils.setString(
+                                                        PrefKeys.isLoggedIn,
+                                                        "false");
+                                                    Navigator.pop(ctx);
+                                                    Navigator
+                                                        .pushAndRemoveUntil(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      LoginPage(),
+                                                            ),
+                                                            (route) => false);
+                                                  } else {
+                                                    Navigator.pop(ctx);
+                                                  }
+                                                }),
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFF0A9494),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: Text(
+                                                    'DELETE',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium!
+                                                        .copyWith(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             );
                           }
                           Navigator.push(

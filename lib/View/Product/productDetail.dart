@@ -76,7 +76,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(
                               productP.productDetail.first.thumbnail.toString(),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               errorBuilder: (context, error, stackTrace) =>
                                   ErrorImageWidget(height: height),
                             ),

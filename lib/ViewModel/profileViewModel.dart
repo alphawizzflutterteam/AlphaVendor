@@ -407,4 +407,20 @@ class ProfileViewModel with ChangeNotifier {
     }).onError((error, stackTrace) => setLoading(false));
     return true;
   }
+
+  //Function to delete Vendor account
+  Future<bool> deleteAccount() async {
+    bool val = false;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo
+        .deleteAccGetRequest(api: AppUrl.DeactivateAcc, token: token)
+        .then((value) {
+      val = value['status'];
+      Utils.showTost(msg: value['message'].toString());
+    }).onError((error, stackTrace) {
+      print(stackTrace);
+      setLoading(false);
+    });
+    return val;
+  }
 }

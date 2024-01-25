@@ -41,6 +41,7 @@ class OrderData {
     required this.customer,
     required this.expected_delivery_date,
     required this.payment_method,
+    required this.variant,
   });
 
   final int? orderId;
@@ -53,6 +54,7 @@ class OrderData {
   final Detail? detail;
   final PriceDetail? priceDetail;
   final String? customer;
+  final String? variant;
   final String expected_delivery_date;
   final String payment_method;
 
@@ -76,6 +78,7 @@ class OrderData {
       customer: json["customer"],
       expected_delivery_date: json['expected_delivery_date'],
       payment_method: json['payment_method'],
+      variant: json['variant'],
     );
   }
 }
@@ -204,6 +207,7 @@ class Detail {
     required this.warranty,
     required this.useCoinsWithAmount,
     required this.amountAfterCoinUse,
+    required this.quantity,
   });
 
   final int? id;
@@ -266,6 +270,7 @@ class Detail {
   final String? warranty;
   final String? useCoinsWithAmount;
   final String? amountAfterCoinUse;
+  final String quantity;
 
   factory Detail.fromJson(Map<String, dynamic> json) {
     return Detail(
@@ -352,6 +357,7 @@ class Detail {
       warranty: json["warranty"],
       useCoinsWithAmount: json["use_coins_with_amount"],
       amountAfterCoinUse: json["amount_after_coin_use"],
+      quantity: json['quantity'],
     );
   }
 }

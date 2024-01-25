@@ -31,9 +31,9 @@ class DashData {
     required this.graphData,
     required this.categoryProduct,
     required this.today,
-    required this.month,
     required this.week,
-    required this.notiCount,
+    required this.month,
+    required this.notification,
   });
 
   final String? totalSale;
@@ -47,9 +47,9 @@ class DashData {
   final GraphData? graphData;
   final List<CategoryProduct> categoryProduct;
   final String? today;
-  final String? month;
   final String? week;
-  final String? notiCount;
+  final String? month;
+  final String? notification;
 
   factory DashData.fromJson(Map<String, dynamic> json) {
     return DashData(
@@ -69,9 +69,9 @@ class DashData {
           : List<CategoryProduct>.from(json["category_product"]!
               .map((x) => CategoryProduct.fromJson(x))),
       today: json["today"],
-      month: json["month"],
       week: json["week"],
-      notiCount: json['notification'],
+      month: json["month"],
+      notification: json["notification"],
     );
   }
 }
@@ -89,11 +89,10 @@ class CategoryProduct {
     return CategoryProduct(
       categoryLabel: json["category_label"] == null
           ? []
-          : List<String>.from(json["category_label"]!.map((x) => x.toString())),
+          : List<String>.from(json["category_label"]!.map((x) => x)),
       categoryProducts: json["category_products"] == null
           ? []
-          : List<String>.from(
-              json["category_products"]!.map((x) => x.toString())),
+          : List<String>.from(json["category_products"]!.map((x) => x)),
     );
   }
 }

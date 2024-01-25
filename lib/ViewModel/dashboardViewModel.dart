@@ -5,6 +5,7 @@ import 'package:alpha_work/View/Dashboard/TotalOrder/model/orederReportModel.dar
 import 'package:alpha_work/View/Dashboard/model/dashboardServiceModel.dart';
 import 'package:alpha_work/View/Dashboard/notification/model/notificationModel.dart';
 import 'package:alpha_work/repository/dashboardRepository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DashboardViewModel with ChangeNotifier {
@@ -14,6 +15,7 @@ class DashboardViewModel with ChangeNotifier {
 
   List<ChartData> chartData = [];
   List<ChartData> circleData = [];
+  List<CategoryProduct> pieData = [];
   List<NotificationData> notifications = [];
   OrderReportModel? orderReport;
   bool get loading => isLoading;
@@ -28,6 +30,7 @@ class DashboardViewModel with ChangeNotifier {
     print(token);
     chartData.clear();
     circleData.clear();
+    pieData.clear();
     await _myRepo
         .getDashboardDataRequest(
             api: AppUrl.dashboardData + "?type=" + type, token: token)
@@ -40,14 +43,16 @@ class DashboardViewModel with ChangeNotifier {
       }
 
       try {
-        for (int i = 0;
-            i < dashData.categoryProduct!.first.categoryLabel.length;
+        for (var i = 0;
+            i < dashData.categoryProduct.first.categoryLabel.length;
             i++) {
           circleData.add(ChartData(
-              dashData.categoryProduct!.first.categoryLabel[i].toString(),
-              double.parse(dashData.categoryProduct!.first.categoryProducts[i])
-                  .toDouble()));
+              dashData.categoryProduct.first.categoryLabel[i],
+              double.parse(
+                  dashData.categoryProduct.first.categoryProducts[i])));
         }
+
+        print(circleData.length);
       } catch (stacktrace, error) {
         print(stacktrace.toString() + "CIRCLE ERROR");
         print(error.toString() + "CIRCLE ERROR s");

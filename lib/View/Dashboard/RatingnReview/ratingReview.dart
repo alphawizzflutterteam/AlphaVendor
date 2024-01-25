@@ -154,7 +154,7 @@ class _RatingAndRewiewScreenState extends State<RatingAndRewiewScreen> {
                                   width: height * .07,
                                   fit: BoxFit.fitHeight,
                                   errorBuilder: (context, error, stackTrace) =>
-                                      ErrorImageWidget(height: height),
+                                      ErrorImageWidget(height: height * .07),
                                 ),
                               ),
                               VerticalDivider(),

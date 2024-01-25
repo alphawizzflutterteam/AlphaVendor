@@ -419,13 +419,13 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                       IconButton(
                                         icon: Badge(
                                           isLabelVisible: dashProvider
-                                                      .dashData.notiCount
+                                                      .dashData.notification
                                                       .toString() ==
                                                   '0'
                                               ? false
                                               : true,
                                           label: Text(
-                                            dashProvider.dashData.notiCount
+                                            dashProvider.dashData.notification
                                                 .toString(),
                                             style: TextStyle(fontSize: 10),
                                           ),

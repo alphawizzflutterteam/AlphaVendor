@@ -112,11 +112,17 @@ class _PickupSlotScreenState extends State<PickupSlotScreen> {
                                       color: colors.greyText,
                                     ),
                                   ),
-                                  Text(
-                                    "License No - ${item.licenseNumber.toString()}",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: colors.greyText,
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .55,
+                                    child: Text(
+                                      "License No - ${item.licenseNumber.toString()}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: colors.greyText,
+                                      ),
                                     ),
                                   ),
                                 ],

@@ -44,7 +44,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: AppBar(
               backgroundColor: Colors.transparent,
               leading: IconButton(
@@ -98,8 +98,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                         decoration: InputDecoration()
                             .applyDefaults(
                                 Theme.of(context).inputDecorationTheme)
-                            .copyWith(
-                                label: Text("Mobile No."), counterText: ""),
+                            .copyWith(label: Text("Mobile No.")),
                         validator: (value) {
                           if (value == null ||
                               value.isEmpty ||

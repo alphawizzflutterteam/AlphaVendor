@@ -415,7 +415,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         decoration: BoxDecoration(
                                           color: isChecked
                                               ? const Color(0xFF0A9494)
-                                              : colors.greyText,
+                                              : colors.lightGrey,
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),

@@ -88,7 +88,13 @@ class _OtpCheckPageState extends State<OtpCheckPage> {
               onPressed: () => Navigator.pop(context),
               icon: Icon(Icons.arrow_back_ios_new_rounded),
             ),
-            title: Text("Verify Number"),
+            title: Text(
+              "Verify Number",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             centerTitle: true,
           ),
           Padding(

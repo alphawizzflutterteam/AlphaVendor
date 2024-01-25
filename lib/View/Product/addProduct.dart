@@ -440,21 +440,21 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                             //   },
                             // ),
                             const Divider(color: Colors.transparent),
-                            TextFormField(
-                              keyboardType: TextInputType.number,
-                              decoration: (const InputDecoration())
-                                  .applyDefaults(
-                                      Theme.of(context).inputDecorationTheme)
-                                  .copyWith(labelText: "Shipping Cost"),
-                              controller: shippingCtrl,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Enter shipping cost";
-                                }
-                                return null;
-                              },
-                            ),
-                            const Divider(color: Colors.transparent),
+                            // TextFormField(
+                            //   keyboardType: TextInputType.number,
+                            //   decoration: (const InputDecoration())
+                            //       .applyDefaults(
+                            //           Theme.of(context).inputDecorationTheme)
+                            //       .copyWith(labelText: "Shipping Cost"),
+                            //   controller: shippingCtrl,
+                            //   validator: (value) {
+                            //     if (value == null || value.isEmpty) {
+                            //       return "Enter shipping cost";
+                            //     }
+                            //     return null;
+                            //   },
+                            // ),
+                            // const Divider(color: Colors.transparent),
                             SizedBox(
                               height: height * .15,
                               child: TextFormField(
@@ -1004,7 +1004,8 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                               tax: TaxCtrl.text.toString(),
                               tax_type: selectedTax.toString(),
                               unit_price: priceCtrl.text.toString(),
-                              shipping_cost: shippingCtrl.text.toString(),
+                              // shipping_cost: shippingCtrl.text.toString(),
+                              shipping_cost: "",
                               skuId: skuIdCtrl.text.toString(),
                               minimum_order_qty: minQtyCtrl.text.toString(),
                               brand_id:
