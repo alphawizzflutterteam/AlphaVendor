@@ -106,16 +106,16 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                   textInputAction: TextInputAction.next,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
-                      .copyWith(labelText: "Enter GSTIN*", counterText: ""),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter GSTIN";
-                    }
-                    if (value.length < 15) {
-                      return "Please enter valid GST";
-                    }
-                    return null;
-                  },
+                      .copyWith(labelText: "Enter GSTIN", counterText: ""),
+                  // validator: (value) {
+                  //   if (value == null || value.isEmpty) {
+                  //     return "Please enter GSTIN";
+                  //   }
+                  //   if (value.length < 15) {
+                  //     return "Please enter valid GST";
+                  //   }
+                  //   return null;
+                  // },
                 ),
                 const Divider(color: Colors.transparent),
                 TextFormField(

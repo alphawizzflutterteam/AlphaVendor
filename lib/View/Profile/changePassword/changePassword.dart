@@ -76,9 +76,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 TextFormField(
                   controller: newPass,
                   textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    validatePassword(value);
-                  },
+                  validator: (value) => validatePassword(value),
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
@@ -89,12 +87,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 TextFormField(
                   controller: confirmPass,
                   textInputAction: TextInputAction.done,
-                  validator: (value) {
-                    if (value != null || value!.isEmpty) {
-                      return "Please enter password";
-                    }
-                    return null;
-                  },
+                  validator: (value) => validatePassword(value),
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
@@ -110,7 +103,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState!.validate()) {
               if (oldPass.text == newPass.text) {
                 Fluttertoast.showToast(
@@ -118,7 +111,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               } else if (newPass.text != confirmPass.text) {
                 Fluttertoast.showToast(msg: "Password do not match");
               } else {
-                profileP
+                await profileP
                     .cahngePassword(
                         old_password: oldPass.text.toString(),
                         newPass: newPass.text.toString(),

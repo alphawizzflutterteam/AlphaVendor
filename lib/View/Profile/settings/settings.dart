@@ -227,8 +227,12 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             showDialog(
                               context: context,
                               builder: (ctx) => Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 child: Container(
-                                  height: height * .35,
+                                  // height: height * .35,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 16),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),

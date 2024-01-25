@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Product/model/categoryModel.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
@@ -973,90 +974,103 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                       onPressed: () {
                         try {
                           if (_formKey.currentState!.validate()) {
-                            print(nameCtrl.text);
-                            print(productProvider.selectedCat?.id);
-                            print(productProvider.selectedSubCat?.id);
-                            print(selectedPtype);
-                            print(qtyInStockCtrl.text);
-                            print(skuIdCtrl.text);
-                            print(shippingCtrl.text);
-                            print(selectedTax);
-                            print(TaxCtrl.text);
-                            print(PurchaceCtrl.text);
-                            print(minQtyCtrl.text);
-                            print(productProvider.thumbnail);
-                            print(productProvider.selectedBrand?.id);
-                            print(priceCtrl.text);
-                            print(selectedDiscount);
-                            print(discountPriceCtrl.text);
-                            productProvider
-                                .appProduct(
-                              name: nameCtrl.text.toString(),
-                              category_id:
-                                  productProvider.selectedCat!.id.toString(),
-                              sub_category_id:
-                                  productProvider.selectedSubCat!.id.toString(),
-                              product_type: selectedPtype.toString(),
-                              unit: selectedUnit.toString(),
-                              thumbnail: productProvider.thumbnail,
-                              discount_type: selectedDiscount.toString(),
-                              discount: discountPriceCtrl.text.toString(),
-                              tax: TaxCtrl.text.toString(),
-                              tax_type: selectedTax.toString(),
-                              unit_price: priceCtrl.text.toString(),
-                              // shipping_cost: shippingCtrl.text.toString(),
-                              shipping_cost: "",
-                              skuId: skuIdCtrl.text.toString(),
-                              minimum_order_qty: minQtyCtrl.text.toString(),
-                              brand_id:
-                                  productProvider.selectedBrand!.id.toString(),
-                              quantity: qtyInStockCtrl.text.toString(),
-                              description: descCtrl.text.toString(),
-                              purchase_price: PurchaceCtrl.text.toString(),
-                            )
-                                .then((value) {
-                              if (value) {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.success,
-                                  animType: AnimType.scale,
-                                  autoDismiss: false,
-                                  dismissOnBackKeyPress: false,
-                                  dismissOnTouchOutside: false,
-                                  onDismissCallback: (type) {},
-                                  title: "Product Added Successfully",
-                                  btnOkOnPress: () async {
-                                    print(widget.isFromHome);
-                                    if (widget.isFromHome) {
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: ProductManagementScreen(),
-                                              type: PageTransitionType
-                                                  .rightToLeft));
-                                    } else {
-                                      await productProvider
-                                          .getProductManagement();
-                                      Navigator.pop(context, true);
-                                      Navigator.pop(context, true);
-                                    }
-                                  },
-                                )..show();
-                              } else {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.error,
-                                  animType: AnimType.scale,
-                                  autoDismiss: false,
-                                  onDismissCallback: (type) {},
-                                  title: "Something went wrong!",
-                                  btnOkColor: Colors.red,
-                                  btnOkOnPress: () => Navigator.pop(context),
-                                )..show();
-                              }
-                            });
+                            if (productProvider.selectedCat != null &&
+                                productProvider.selectedSubCat != null &&
+                                selectedPtype != null &&
+                                selectedTax != null &&
+                                selectedDiscount != null &&
+                                productProvider.selectedBrand != null &&
+                                selectedUnit != null) {
+                              print(nameCtrl.text);
+                              print(productProvider.selectedCat?.id);
+                              print(productProvider.selectedSubCat?.id);
+                              print(selectedPtype);
+                              print(qtyInStockCtrl.text);
+                              print(skuIdCtrl.text);
+                              print(shippingCtrl.text);
+                              print(selectedTax);
+                              print(TaxCtrl.text);
+                              print(PurchaceCtrl.text);
+                              print(minQtyCtrl.text);
+                              print(productProvider.thumbnail);
+                              print(productProvider.selectedBrand?.id);
+                              print(priceCtrl.text);
+                              print(selectedDiscount);
+                              print(discountPriceCtrl.text);
+                              productProvider
+                                  .appProduct(
+                                name: nameCtrl.text.toString(),
+                                category_id:
+                                    productProvider.selectedCat!.id.toString(),
+                                sub_category_id: productProvider
+                                    .selectedSubCat!.id
+                                    .toString(),
+                                product_type: selectedPtype.toString(),
+                                unit: selectedUnit.toString(),
+                                thumbnail: productProvider.thumbnail,
+                                discount_type: selectedDiscount.toString(),
+                                discount: discountPriceCtrl.text.toString(),
+                                tax: TaxCtrl.text.toString(),
+                                tax_type: selectedTax.toString(),
+                                unit_price: priceCtrl.text.toString(),
+                                // shipping_cost: shippingCtrl.text.toString(),
+                                shipping_cost: "0",
+                                skuId: skuIdCtrl.text.toString(),
+                                minimum_order_qty: minQtyCtrl.text.toString(),
+                                brand_id: productProvider.selectedBrand!.id
+                                    .toString(),
+                                quantity: qtyInStockCtrl.text.toString(),
+                                description: descCtrl.text.toString(),
+                                purchase_price: PurchaceCtrl.text.toString(),
+                              )
+                                  .then((value) {
+                                if (value) {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.success,
+                                    animType: AnimType.scale,
+                                    autoDismiss: false,
+                                    dismissOnBackKeyPress: false,
+                                    dismissOnTouchOutside: false,
+                                    onDismissCallback: (type) {},
+                                    title: "Product Added Successfully",
+                                    btnOkOnPress: () async {
+                                      print(widget.isFromHome);
+                                      if (widget.isFromHome) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                child:
+                                                    ProductManagementScreen(),
+                                                type: PageTransitionType
+                                                    .rightToLeft));
+                                      } else {
+                                        await productProvider
+                                            .getProductManagement();
+                                        Navigator.pop(context, true);
+                                        Navigator.pop(context, true);
+                                      }
+                                    },
+                                  )..show();
+                                } else {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.scale,
+                                    autoDismiss: false,
+                                    onDismissCallback: (type) {},
+                                    title: "Something went wrong!",
+                                    btnOkColor: Colors.red,
+                                    btnOkOnPress: () => Navigator.pop(context),
+                                  )..show();
+                                }
+                              });
+                            } else {
+                              Utils.showTost(
+                                  msg: "Some Fields are missing please check");
+                            }
                           }
                         } catch (e, StackTrace) {
                           print(StackTrace.toString());

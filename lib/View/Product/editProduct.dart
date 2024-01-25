@@ -172,6 +172,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
   }
 
   bool enabled = true;
+  late final Future myFuture;
   @override
   void dispose() {
     productProvider.setBrand(null);
@@ -218,7 +219,8 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     print("namamjdhf${priceCtrl.text}");
     productProvider =
         Provider.of<ProductManagementViewModel>(context, listen: false);
-    // getData();
+    myFuture = getData();
+
     super.initState();
   }
 
@@ -247,7 +249,7 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
       backgroundColor: Colors.white,
       appBar: CommanAppbar(appbarTitle: "Edit Product"),
       body: FutureBuilder(
-        future: getData(),
+        future: myFuture,
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? appLoader()

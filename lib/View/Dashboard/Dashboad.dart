@@ -1,5 +1,4 @@
 import 'package:alpha_work/Utils/images.dart';
-import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/Customer/customer.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingReview.dart';
 import 'package:alpha_work/View/Dashboard/TotalDelivery/totalDelivery.dart';
@@ -10,7 +9,6 @@ import 'package:alpha_work/View/ORDER/ordermanagement.dart';
 import 'package:alpha_work/View/Payment/payment.dart';
 import 'package:alpha_work/View/Product/addProduct.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
-import 'package:alpha_work/View/Profile/Advertising/advert.dart';
 import 'package:alpha_work/View/Profile/profile/Profile.dart';
 import 'package:alpha_work/View/Profile/settings/settings.dart';
 import 'package:alpha_work/View/Profile/widgets/logoutSheet.dart';
@@ -797,51 +795,53 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                   ),
                                 ),
                                 const Divider(color: Colors.transparent),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Categories Wise Product Count',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Container(
-                                          child: SfCircularChart(
-                                              legend: const Legend(
-                                                  iconWidth: 20,
-                                                  width: '100',
-                                                  isVisible: true),
-                                              tooltipBehavior:
-                                                  _tooltipBehavior1,
-                                              series: <CircularSeries>[
-                                            // Render pie chart
+                                dashProvider.circleData.isEmpty
+                                    ? Container()
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Categories Wise Product Count',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Container(
+                                                child: SfCircularChart(
+                                                    legend: const Legend(
+                                                        iconWidth: 20,
+                                                        width: '100',
+                                                        isVisible: true),
+                                                    tooltipBehavior:
+                                                        _tooltipBehavior1,
+                                                    series: <CircularSeries>[
+                                                  // Render pie chart
 
-                                            PieSeries<ChartData, String>(
-                                                dataSource:
-                                                    dashProvider.circleData,
-                                                //     [
-                                                //   //   // Bind data source
-                                                //   //   ;
-                                                //   ChartData('Product1', 5),
-                                                //   ChartData('Product2', 7),
-                                                // ],
-                                                xValueMapper:
-                                                    (ChartData data, _) =>
-                                                        data.x,
-                                                yValueMapper:
-                                                    (ChartData data, _) =>
-                                                        data.y,
-                                                dataLabelSettings:
-                                                    const DataLabelSettings(
-                                                        isVisible: true)),
-                                          ])),
-                                    ],
-                                  ),
-                                ),
+                                                  PieSeries<ChartData, String>(
+                                                      dataSource: dashProvider
+                                                          .circleData,
+                                                      //     [
+                                                      //   //   // Bind data source
+                                                      //   //   ;
+                                                      //   ChartData('Product1', 5),
+                                                      //   ChartData('Product2', 7),
+                                                      // ],
+                                                      xValueMapper:
+                                                          (ChartData data, _) =>
+                                                              data.x,
+                                                      yValueMapper:
+                                                          (ChartData data, _) =>
+                                                              data.y,
+                                                      dataLabelSettings:
+                                                          const DataLabelSettings(
+                                                              isVisible: true)),
+                                                ])),
+                                          ],
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
