@@ -88,6 +88,7 @@ class AuthRepository {
     required String bankAddr,
     required String accNo,
     required String ifsc,
+    required String AccHolderName,
   }) async {
     try {
       var body = {
@@ -118,6 +119,7 @@ class AuthRepository {
         'account_number': accNo,
         'ifsc_code': ifsc,
         'otp': otp,
+        'holder_name': AccHolderName,
       };
       var url = Uri.parse(api);
       print(url);

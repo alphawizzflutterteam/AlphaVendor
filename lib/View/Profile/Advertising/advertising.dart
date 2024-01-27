@@ -1,6 +1,7 @@
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/Profile/Advertising/selectpayment.dart';
+import 'package:alpha_work/View/Profile/Advertising/uploadBanner.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
@@ -43,7 +44,12 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
                   onTap: () => Navigator.push(
                       context,
                       PageTransition(
-                          child: SelectPaymentScreen(
+                          // child: SelectPaymentScreen(
+                          //   amount: profilePro.adverts[index].amount!,
+                          //   heading: profilePro.adverts[index].title!,
+                          //   adId: profilePro.adverts[index].id.toString(),
+                          // ),
+                          child: UploadBannerScreen(
                             amount: profilePro.adverts[index].amount!,
                             heading: profilePro.adverts[index].title!,
                             adId: profilePro.adverts[index].id.toString(),

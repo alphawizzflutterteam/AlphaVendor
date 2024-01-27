@@ -195,6 +195,7 @@ class AuthViewModel with ChangeNotifier {
     required String bankAddr,
     required String accNo,
     required String ifsc,
+    required String AccHolderName,
   }) async {
     LoginOtpModel val = LoginOtpModel(
         status: false,
@@ -226,6 +227,7 @@ class AuthViewModel with ChangeNotifier {
       state: state,
       zip: zip,
       country: country,
+      AccHolderName: AccHolderName,
       bankName: bankName,
       branch: branch,
       accType: accType,

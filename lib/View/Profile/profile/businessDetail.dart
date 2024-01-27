@@ -162,9 +162,7 @@ class _EditBusinessDetailScreenState extends State<EditBusinessDetailScreen> {
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: height * .24,
-                ),
+                const Divider(color: Colors.transparent),
                 ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {

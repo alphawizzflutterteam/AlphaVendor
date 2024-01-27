@@ -180,6 +180,7 @@ class Images {
   static const noNotification = "assets/images/no-notification.png";
   static const noRefer = "assets/images/NoRefer.png";
   static const bfGrids = "assets/images/grids.png";
+  static const yellowCheck = "assets/svg/addCheck.svg";
   static const deactivate = "assets/icons/deactivate.png";
   static const dashImages = [
     'assets/icons/DrawerItems/category.png',

@@ -812,8 +812,14 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                             Container(
                                                 child: SfCircularChart(
                                                     legend: const Legend(
-                                                        iconWidth: 20,
-                                                        width: '100',
+                                                        orientation:
+                                                            LegendItemOrientation
+                                                                .vertical,
+                                                        position:
+                                                            LegendPosition.left,
+                                                        iconWidth: 10,
+                                                        alignment:
+                                                            ChartAlignment.far,
                                                         isVisible: true),
                                                     tooltipBehavior:
                                                         _tooltipBehavior1,
@@ -823,6 +829,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                                                   PieSeries<ChartData, String>(
                                                       dataSource: dashProvider
                                                           .circleData,
+
                                                       //     [
                                                       //   //   // Bind data source
                                                       //   //   ;

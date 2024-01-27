@@ -1,4 +1,5 @@
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/View/Profile/Advertising/advertRequest.dart';
 import 'package:alpha_work/View/Profile/Advertising/advertising.dart';
 import 'package:alpha_work/View/Profile/Faq/faq.dart';
 import 'package:alpha_work/View/Profile/aboutUs/aboutus.dart';
@@ -47,7 +48,7 @@ List<ProfileList> profileItem = [
   // ProfileList(
   //     profileIcon: Images.speaker,
   //     profileText: 'Adverting',
-  //     navigationScreen: const AdvertisingScreen()),
+  //     navigationScreen: const AdvertRequestScreen()),
   ProfileList(
       profileIcon: Images.document,
       profileText: 'About Us',

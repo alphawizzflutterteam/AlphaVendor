@@ -1,4 +1,5 @@
 import 'package:alpha_work/Utils/color.dart';
+import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/View/ORDER/ordermanagement.dart';
 import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
@@ -63,13 +64,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             width: MediaQuery.of(context).size.height * .07,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: colors.lightGrey,
+                              color: colors.white10,
                               image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                  notiPro.notifications[index].image.toString(),
-                                ),
+                                image: AssetImage(Images.error_image),
                                 onError: (exception, stackTrace) =>
-                                    ErrorImageWidget(height: 60),
+                                    ErrorImageWidget(height: 100),
                               ),
                             ),
                           ),

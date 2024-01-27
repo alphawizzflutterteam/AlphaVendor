@@ -60,6 +60,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController postalcodecontroller = TextEditingController();
 
   // for banking information
+  TextEditingController AccHolderName = TextEditingController();
   TextEditingController banknamecontroller = TextEditingController();
   TextEditingController bankbranchcontroller = TextEditingController();
   TextEditingController accounttypecontroller = TextEditingController();
@@ -475,7 +476,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    if (pinCtrl.text == savedotp) {
+                                    if (pinCtrl.text == savedotp &&
+                                        savedotp.isNotEmpty) {
                                       progressItem.add(
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -503,6 +505,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                             _scrollController
                                                 .position.maxScrollExtent);
                                       });
+                                    } else if (savedotp.isEmpty) {
+                                      Fluttertoast.showToast(
+                                          msg: "No OTP found",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: colors.buttonColor,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
                                     } else {
                                       Fluttertoast.showToast(
                                           msg: "OTP did not match!",
@@ -1396,6 +1407,24 @@ class _SignUpPageState extends State<SignUpPage> {
                                   SizedBox(height: height * .02),
                                   TextFormField(
                                     textInputAction: TextInputAction.next,
+                                    controller: AccHolderName,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    decoration: (const InputDecoration())
+                                        .applyDefaults(Theme.of(context)
+                                            .inputDecorationTheme)
+                                        .copyWith(
+                                            labelText: "Account Holder Name*"),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Please enter Account Holder Name";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  const Divider(color: Colors.transparent),
+                                  TextFormField(
+                                    textInputAction: TextInputAction.next,
                                     controller: banknamecontroller,
                                     // inputFormatters: [],
                                     textCapitalization:
@@ -1552,6 +1581,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         print(addressP.selectedState?.name);
                                         print(addressP.selectedCity?.name);
                                         print(postalcodecontroller.text);
+                                        print(AccHolderName.text);
                                         print(banknamecontroller.text);
                                         print(bankbranchcontroller.text);
                                         print(selectedValue);
@@ -1601,6 +1631,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                           country: addressP
                                               .selectedCountry!.name
                                               .toString(),
+                                          AccHolderName:
+                                              AccHolderName.text.toString(),
                                           bankName: banknamecontroller.text
                                               .toString(),
                                           branch: bankbranchcontroller.text

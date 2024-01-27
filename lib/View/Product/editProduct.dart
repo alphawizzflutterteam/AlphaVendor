@@ -244,7 +244,6 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    // productProvider = Provider.of<ProductManagementViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommanAppbar(appbarTitle: "Edit Product"),
@@ -970,8 +969,11 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   shipping_cost: shippingCtrl.text.toString(),
                                   skuId: skuIdCtrl.text.toString(),
                                   minimum_order_qty: minQtyCtrl.text.toString(),
-                                  brand_id: productProvider.selectedBrand!.id
-                                      .toString(),
+                                  brand_id:
+                                      productProvider.selectedBrand == null
+                                          ? ""
+                                          : productProvider.selectedBrand!.id
+                                              .toString(),
                                   quantity: qtyInStockCtrl.text.toString(),
                                   description: descCtrl.text.toString(),
                                   purchase_price: PurchaceCtrl.text

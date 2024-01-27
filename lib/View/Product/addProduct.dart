@@ -844,7 +844,7 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                   ),
-                              hint: Text("Static Product",
+                              hint: Text("Simple Product",
                                   style: TextStyle(
                                       color: colors.greyText,
                                       fontWeight: FontWeight.normal)),
@@ -979,7 +979,6 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                 selectedPtype != null &&
                                 selectedTax != null &&
                                 selectedDiscount != null &&
-                                productProvider.selectedBrand != null &&
                                 selectedUnit != null) {
                               print(nameCtrl.text);
                               print(productProvider.selectedCat?.id);
@@ -1017,8 +1016,10 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                 shipping_cost: "0",
                                 skuId: skuIdCtrl.text.toString(),
                                 minimum_order_qty: minQtyCtrl.text.toString(),
-                                brand_id: productProvider.selectedBrand!.id
-                                    .toString(),
+                                brand_id: productProvider.selectedBrand == null
+                                    ? ""
+                                    : productProvider.selectedBrand!.id
+                                        .toString(),
                                 quantity: qtyInStockCtrl.text.toString(),
                                 description: descCtrl.text.toString(),
                                 purchase_price: PurchaceCtrl.text.toString(),

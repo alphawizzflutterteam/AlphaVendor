@@ -115,4 +115,7 @@ class AppUrl {
   static const String Notification = '${baseURL}seller/notifications';
   static const String OrderReport = '${baseURL}seller/orders-report';
   static const String DeactivateAcc = '${baseURL}seller/account-delete';
+  static const String uploadBanner = '${baseURL}seller/purchase-advertisement';
+  static const String adgetRequest =
+      "${baseURL}seller/get-request-advertisement";
 }

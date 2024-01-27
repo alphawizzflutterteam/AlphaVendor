@@ -28,6 +28,7 @@ class ProductManagementViewModel extends ChangeNotifier {
   CategoryData? selectedSubCat;
   CategoryData? selectedSubSubCat;
   BrandData? selectedBrand;
+  final List<ProductData> selectedAdProducts = [];
   String thumbnail = '';
   bool get loading => isLoading;
   setLoading(bool value) {

@@ -92,29 +92,6 @@ class CustomerDetailScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Address",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: colors.greyText,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    Text(
-                      "${data.streetAddress.toString()} ${data.city.toString()} ${data.state.toString()} ${data.country.toString()}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                )
               ],
             ),
           ),

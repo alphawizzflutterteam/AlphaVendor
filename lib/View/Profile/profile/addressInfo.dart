@@ -226,9 +226,7 @@ class _EditAddressDetailScreenState extends State<EditAddressDetailScreen> {
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: height * .24,
-                ),
+                const Divider(color: Colors.transparent),
                 ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate() &&

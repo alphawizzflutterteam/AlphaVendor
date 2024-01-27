@@ -5,9 +5,9 @@ import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
-import 'package:alpha_work/View/Dashboard/Dashboad.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingNreviewModel.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/reviewDetailModel.dart';
+import 'package:alpha_work/View/Profile/Advertising/model/adListModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
 import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
@@ -26,7 +26,7 @@ class ProfileViewModel with ChangeNotifier {
   List<AdvertData> adverts = [];
   List<SupportData> queries = [];
   List<ChatData> supportChats = [];
-
+  List<AdListData> adsRequests = [];
   late ReviewModel reviewData;
   late ReviewDetailModel reviewDetailData;
   bool isLoading = true;
@@ -116,6 +116,7 @@ class ProfileViewModel with ChangeNotifier {
 
 //Function to update Bank Detail
   Future<Map<String, dynamic>> updateBankDetail({
+    required String holderName,
     required String bank_name,
     required String branch_name,
     required String account_type,
@@ -130,6 +131,7 @@ class ProfileViewModel with ChangeNotifier {
         .updateBankDetail(
             api: AppUrl.updateBankingDetail,
             token: token,
+            holderName: holderName,
             bank_name: bank_name,
             branch_name: branch_name,
             account_type: account_type,
@@ -422,5 +424,51 @@ class ProfileViewModel with ChangeNotifier {
       setLoading(false);
     });
     return val;
+  }
+
+  //Function for advertisement Confirmation
+  Future<bool> UploadBanner({
+    required String adId,
+    required String startDate,
+    required List<String> productIds,
+    required String transaction_id,
+    required String amount,
+    required String path,
+  }) async {
+    bool val = false;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo.BannerUploadPostRequest(
+            api: AppUrl.uploadBanner,
+            token: token,
+            adId: adId,
+            startDate: startDate,
+            productIds: productIds,
+            transaction_id: transaction_id,
+            amount: amount,
+            path: path)
+        .then((value) {
+      val = value['status'];
+      Utils.showTost(msg: value['message'].toString());
+    }).onError((error, stackTrace) {
+      print(stackTrace);
+      setLoading(false);
+    });
+    return val;
+  }
+
+//Function to get AdList Status
+//Function to delete Vendor account
+  Future<void> getAdsStatus() async {
+    adsRequests.clear();
+    isLoading = true;
+    String token = PreferenceUtils.getString(PrefKeys.jwtToken);
+    await _myRepo.AdvertSatusGetRequest(api: AppUrl.adgetRequest, token: token)
+        .then((value) {
+      adsRequests = value.data;
+      setLoading(false);
+    }).onError((error, stackTrace) {
+      print(stackTrace);
+      setLoading(false);
+    });
   }
 }

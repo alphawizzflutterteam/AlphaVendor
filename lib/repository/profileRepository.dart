@@ -5,6 +5,7 @@ import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingNreviewModel.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/reviewDetailModel.dart';
+import 'package:alpha_work/View/Profile/Advertising/model/adListModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/advertModel.dart';
 import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
@@ -118,6 +119,7 @@ class ProfileRepository {
   Future<dynamic> updateBankDetail({
     required String api,
     required String token,
+    required String holderName,
     required String bank_name,
     required String branch_name,
     required String account_type,
@@ -137,6 +139,7 @@ class ProfileRepository {
         'bank_address': bank_address,
         'account_number': account_number,
         'ifsc_code': ifsc_code,
+        'holder_name': holderName,
       });
 
       request.headers.addAll(headers);
@@ -549,6 +552,70 @@ class ProfileRepository {
       } else {
         print(res.reasonPhrase);
         return ans;
+      }
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      throw Exception(e);
+    }
+  }
+
+//Function to upload banner and payment
+  Future<Map<String, dynamic>> BannerUploadPostRequest({
+    required String api,
+    required String token,
+    required String adId,
+    required String startDate,
+    required List<String> productIds,
+    required String transaction_id,
+    required String amount,
+    required String path,
+  }) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(api));
+      var headers = {'Authorization': 'Bearer $token'};
+      request.fields.addAll({
+        'ad_id': adId,
+        'start_date': startDate,
+        'product_ids[]': productIds.toString(),
+        'transaction_id': transaction_id,
+        'amount': amount,
+      });
+      request.files
+          .add(await http.MultipartFile.fromPath('image', path.toString()));
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      var ans = jsonDecode(await response.stream.bytesToString());
+      if (response.statusCode == 200) {
+        print(ans);
+        return ans;
+      } else {
+        print(ans);
+        print(response.reasonPhrase);
+        return ans;
+      }
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      throw Exception(e);
+    }
+  }
+
+  //Function to upload banner and payment
+  Future<AdListModel> AdvertSatusGetRequest({
+    required String api,
+    required String token,
+  }) async {
+    try {
+      var url = Uri.parse(api);
+      http.Response response =
+          await http.get(url, headers: {'Authorization': 'Bearer $token'});
+      var ans = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        print(ans);
+        return AdListModel.fromJson(ans);
+      } else {
+        print(ans);
+        print(response.reasonPhrase);
+        return AdListModel.fromJson(ans);
       }
     } catch (e, stackTrace) {
       print(stackTrace);

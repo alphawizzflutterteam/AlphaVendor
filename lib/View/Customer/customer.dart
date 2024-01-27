@@ -110,14 +110,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              item.fName.toString(),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold),
+                                            SizedBox(
+                                              width: width * .65,
+                                              child: Text(
+                                                item.fName.toString(),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
                                             ),
                                             Text(
                                               item.phone.toString(),
@@ -159,30 +163,6 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                         ),
                                       ],
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Address",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: colors.greyText,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                        Text(
-                                          "${item.streetAddress.toString()} ${item.city.toString()} ${item.state.toString()} ${item.country.toString()}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )
                                   ],
                                 ),
                               ),

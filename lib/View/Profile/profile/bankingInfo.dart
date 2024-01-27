@@ -25,6 +25,7 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
   final TextEditingController addrCtrl = TextEditingController();
   final TextEditingController accNoCtrl = TextEditingController();
   final TextEditingController ifscCtrl = TextEditingController();
+  final TextEditingController AccHolderName = TextEditingController();
   String? selectedVal;
   List<DropdownMenuItem> items = [
     DropdownMenuItem(
@@ -56,6 +57,7 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
     accNoCtrl.text = widget.vendorData.accountNo.toString();
     ifscCtrl.text = widget.vendorData.ifscCode.toString();
     selectedVal = widget.vendorData.accountType.toString();
+    AccHolderName.text = widget.vendorData.holderName.toString();
     profilePro = Provider.of<ProfileViewModel>(context, listen: false);
     super.initState();
   }
@@ -75,6 +77,21 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  controller: AccHolderName,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: (const InputDecoration())
+                      .applyDefaults(Theme.of(context).inputDecorationTheme)
+                      .copyWith(labelText: "Account Holder Name*"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter Account Holder Name";
+                    }
+                    return null;
+                  },
+                ),
+                const Divider(color: Colors.transparent),
                 TextFormField(
                   controller: nameCtrl,
                   textCapitalization: TextCapitalization.words,
@@ -185,14 +202,13 @@ class _EditBankingDetailScreenState extends State<EditBankingDetailScreen> {
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: height * .17,
-                ),
+                const Divider(color: Colors.transparent),
                 ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         await profilePro
                             .updateBankDetail(
+                                holderName: AccHolderName.text,
                                 bank_name: nameCtrl.text.toString(),
                                 branch_name: branchCtrl.text.toString(),
                                 account_type: selectedVal.toString(),

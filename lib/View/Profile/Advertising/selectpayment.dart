@@ -15,11 +15,18 @@ class SelectPaymentScreen extends StatefulWidget {
   final String amount;
   final String adId;
   final String heading;
+  final File image;
+  final List<String> productIds;
+  final String StartingDate;
+
   SelectPaymentScreen(
       {super.key,
       required this.amount,
+      required this.adId,
       required this.heading,
-      required this.adId});
+      required this.image,
+      required this.StartingDate,
+      required this.productIds});
 
   @override
   State<SelectPaymentScreen> createState() => _SelectPaymentScreenState();
@@ -30,6 +37,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
   Razorpay? _razorpay;
   int? pricerazorpayy;
   late ProfileViewModel provider;
+  String? transactionId;
   @override
   void initState() {
     super.initState();
@@ -38,6 +46,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
     _razorpay?.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay?.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     provider = Provider.of<ProfileViewModel>(context, listen: false);
+    print(widget.productIds);
   }
 
   void openCheckout(amount) async {
@@ -62,24 +71,32 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
     PaymentSuccessResponse response,
   ) async {
     print("transaction id${response.paymentId!}");
+    transactionId = response.paymentId.toString();
     Utils.showTost(msg: "Payment successfull.");
-    await provider
-        .buyAdvert(adId: widget.adId, paymentId: response.paymentId!)
-        .then((value) => showDialog(
-              context: context,
-              builder: (ctx) {
-                Future.delayed(Duration(seconds: 3)).then((value) {
-                  Navigator.pop(ctx);
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      PageTransition(
-                          child: DashboardScreen1(),
-                          type: PageTransitionType.rightToLeft),
-                      (route) => false);
-                });
-                return AdSuccessDialog();
-              },
-            ));
+    await provider.UploadBanner(
+            adId: widget.adId,
+            amount: widget.amount,
+            path: widget.image.path,
+            productIds: widget.productIds,
+            startDate: widget.StartingDate,
+            transaction_id: response.paymentId.toString())
+        .then((value) => value
+            ? showDialog(
+                context: context,
+                builder: (ctx) {
+                  Future.delayed(Duration(seconds: 3)).then((value) {
+                    Navigator.pop(ctx);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        PageTransition(
+                            child: DashboardScreen1(),
+                            type: PageTransitionType.rightToLeft),
+                        (route) => false);
+                  });
+                  return AdSuccessDialog();
+                },
+              )
+            : null);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
