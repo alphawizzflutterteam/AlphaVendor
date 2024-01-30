@@ -69,7 +69,7 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
+                        horizontal: 12, vertical: 10),
                     child: Row(
                       children: [
                         SizedBox.square(
@@ -107,28 +107,30 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                 ),
                               ),
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  productPro.productDetail.first.specialPrice
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      color: colors.buttonColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montreal'),
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  productPro.productDetail.first.unitPrice
-                                      .toString(),
-                                  style: TextStyle(
-                                      decoration: TextDecoration.lineThrough,
-                                      fontSize: 16,
-                                      color: colors.greyText,
-                                      fontFamily: 'Montreal'),
-                                ),
-                              ],
+                            SizedBox(
+                              width: width * .65,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    productPro.productDetail.first.specialPrice
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: colors.buttonColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montreal'),
+                                  ),
+                                  Text(
+                                    productPro.productDetail.first.unitPrice
+                                        .toString(),
+                                    style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                        fontSize: 16,
+                                        color: colors.greyText,
+                                        fontFamily: 'Montreal'),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               width: width * .68,
