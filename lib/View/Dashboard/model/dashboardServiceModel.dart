@@ -45,7 +45,7 @@ class DashData {
   final String? totalDelivery;
   final String? ratingsNdReviews;
   final GraphData? graphData;
-  final List<CategoryProduct> categoryProduct;
+  final CategoryProduct? categoryProduct;
   final String? today;
   final String? week;
   final String? month;
@@ -65,9 +65,8 @@ class DashData {
           ? null
           : GraphData.fromJson(json["graph_data"]),
       categoryProduct: json["category_product"] == null
-          ? []
-          : List<CategoryProduct>.from(json["category_product"]!
-              .map((x) => CategoryProduct.fromJson(x))),
+          ? null
+          : CategoryProduct.fromJson(json["category_product"]),
       today: json["today"],
       week: json["week"],
       month: json["month"],
@@ -104,7 +103,7 @@ class GraphData {
   });
 
   final List<String> sellerLabel;
-  final List<String> sellerEarn;
+  final List<dynamic> sellerEarn;
 
   factory GraphData.fromJson(Map<String, dynamic> json) {
     return GraphData(
@@ -113,7 +112,7 @@ class GraphData {
           : List<String>.from(json["seller_label"]!.map((x) => x)),
       sellerEarn: json["seller_earn"] == null
           ? []
-          : List<String>.from(json["seller_earn"]!.map((x) => x)),
+          : List<dynamic>.from(json["seller_earn"]!.map((x) => x)),
     );
   }
 }

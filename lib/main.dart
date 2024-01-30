@@ -1,7 +1,5 @@
 import 'package:alpha_work/Utils/fcm_helper.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
-import 'package:alpha_work/Utils/utils.dart';
-import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/View/Profile/settings/settings.dart';
 import 'package:alpha_work/ViewModel/addressViewModel.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
@@ -137,6 +135,8 @@ class _MyAppState extends State<MyApp> {
         ],
         themeMode: ThemeMode.light,
         theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          cardColor: Colors.white,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               backgroundColor: colors.buttonColor,
@@ -152,7 +152,6 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.light,
           ),
           canvasColor: Theme.of(context).colorScheme.lightWhite,
-          cardColor: Theme.of(context).colorScheme.white,
           dialogBackgroundColor: Theme.of(context).colorScheme.white,
           iconTheme: Theme.of(context).iconTheme.copyWith(
                 color: colors.primary,
@@ -202,82 +201,33 @@ class _MyAppState extends State<MyApp> {
         ),
 
         darkTheme: ThemeData(
-          scaffoldBackgroundColor: Colors.transparent,
+          scaffoldBackgroundColor: Colors.black,
+          cardColor: Color(0xFF2D3438),
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: colors.darkIcon,
             selectionColor: colors.darkIcon,
             selectionHandleColor: colors.darkIcon,
           ),
-          fontFamily: 'ubuntu',
           brightness: Brightness.dark,
           hintColor: colors.white10,
-          iconTheme: Theme.of(context).iconTheme.copyWith(
-                color: colors.secondary,
-              ),
           textTheme: TextTheme(
-            titleLarge: TextStyle(
-              color: Theme.of(context).colorScheme.fontColor,
-              fontWeight: FontWeight.w600,
-            ),
-            titleMedium: TextStyle(
-              color: Theme.of(context).colorScheme.fontColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ).apply(
-            bodyColor: Theme.of(context).colorScheme.fontColor,
-          ),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: colors.primary_app,
-          ).copyWith(
-            secondary: colors.darkIcon,
-            brightness: Brightness.dark,
-          ),
-          checkboxTheme: CheckboxThemeData(
-            fillColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return null;
-              }
-              if (states.contains(MaterialState.selected)) {
-                return colors.primary;
-              }
-              return null;
-            }),
-          ),
-          radioTheme: RadioThemeData(
-            fillColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return null;
-              }
-              if (states.contains(MaterialState.selected)) {
-                return colors.primary;
-              }
-              return null;
-            }),
-          ),
-          switchTheme: SwitchThemeData(
-            thumbColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return null;
-              }
-              if (states.contains(MaterialState.selected)) {
-                return colors.primary;
-              }
-              return null;
-            }),
-            trackColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return null;
-              }
-              if (states.contains(MaterialState.selected)) {
-                return colors.primary;
-              }
-              return null;
-            }),
-          ),
+              titleLarge: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'FuturaPT',
+                fontSize: 24,
+              ),
+              titleMedium: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'FuturaPT',
+                fontWeight: FontWeight.bold,
+              ),
+              bodySmall: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              )),
         ),
         // themeMode: themeNotifier.getThemeMode(),
         // themeMode: ThemeMode.dark,

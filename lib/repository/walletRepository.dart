@@ -19,6 +19,7 @@ class WalletRepository {
         headers: {'Authorization': 'Bearer $token'},
       );
       var ans = jsonDecode(res.body);
+      print(ans);
       if (res.statusCode == 200) {
         print(ans);
         return ans['message'];
@@ -26,7 +27,8 @@ class WalletRepository {
         print(res.reasonPhrase);
         return ans['message'];
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print(stackTrace);
       throw Exception(e);
     }
   }

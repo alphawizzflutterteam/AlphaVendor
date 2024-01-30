@@ -141,7 +141,7 @@ class _TotalDeliveredProductScreenState
                                             context,
                                             PageTransition(
                                                 child: PendingOrderDetail(
-                                                  order: AlphaOrdrs[index],
+                                                  order: NormalOrdrs[index],
                                                   orderType: "Delivered",
                                                 ),
                                                 type: PageTransitionType

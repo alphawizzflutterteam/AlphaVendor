@@ -37,25 +37,22 @@ class DashboardViewModel with ChangeNotifier {
         .then((value) {
       print(value.data!.totalSale);
       dashData = value.data!;
-      for (int i = 0; i < dashData.graphData!.sellerLabel.length; i++) {
-        chartData.add(ChartData(dashData.graphData!.sellerLabel[i],
-            double.parse(dashData.graphData!.sellerEarn[i])));
-      }
-
       try {
         for (var i = 0;
-            i < dashData.categoryProduct.first.categoryLabel.length;
+            i < dashData.categoryProduct!.categoryLabel.length;
             i++) {
-          circleData.add(ChartData(
-              dashData.categoryProduct.first.categoryLabel[i],
-              double.parse(
-                  dashData.categoryProduct.first.categoryProducts[i])));
+          circleData.add(ChartData(dashData.categoryProduct!.categoryLabel[i],
+              double.parse(dashData.categoryProduct!.categoryProducts[i])));
         }
 
         print(circleData.length);
       } catch (stacktrace, error) {
         print(stacktrace.toString() + "CIRCLE ERROR");
         print(error.toString() + "CIRCLE ERROR s");
+      }
+      for (int i = 0; i < dashData.graphData!.sellerLabel.length; i++) {
+        chartData.add(ChartData(dashData.graphData!.sellerLabel[i],
+            double.parse(dashData.graphData!.sellerEarn[i])));
       }
 
       // print("chart Data ${chartData.toString()}");

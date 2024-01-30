@@ -343,9 +343,17 @@ class OrderListTile extends StatelessWidget {
                       current: type,
                       tileText: "SHIP",
                       status: "shipped"),
+                if (type == 'Failed to Deliver')
+                  PendingOrderListTile(
+                      orderId: id,
+                      orderProvider: orderPro,
+                      current: type,
+                      tileText: "SHIP",
+                      status: "shipped"),
                 if (!(type == 'Pending' ||
                     type == 'Confirmed' ||
-                    type == 'Packaging'))
+                    type == 'Packaging' ||
+                    type == 'Failed to Deliver'))
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
