@@ -387,17 +387,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     Divider(color: colors.lightGrey, height: 1),
                     SizedBox(height: height * .02),
-                    Text(
-                      "Description",
-                      style: TextStyle(fontSize: 16, color: colors.greyText),
-                    ),
-                    HtmlWidget(productP.productDetail.first.details.toString()),
 
-                    // Text(
-                    //   productP.productDetail.first.details.toString(),
-                    //   style: TextStyle(fontSize: 16, color: Colors.black),
-                    // ),
-                    Divider(height: 25),
                     Row(
                       children: [
                         Column(
@@ -539,6 +529,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         Spacer(),
                       ],
                     ),
+                    Divider(height: 25),
+                    Text(
+                      "Description",
+                      style: TextStyle(fontSize: 16, color: colors.greyText),
+                    ),
+                    HtmlWidget(productP.productDetail.first.details.toString()),
+
                   ],
                 ),
               ),

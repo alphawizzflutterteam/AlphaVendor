@@ -26,7 +26,7 @@ class _FaqScreenState extends State<FaqScreen> {
     provider = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommanAppbar(appbarTitle: "FAQ"),
+      appBar: CommanAppbar(appbarTitle: "FAQs"),
       body: provider.isLoading
           ? appLoader()
           : Padding(

@@ -12,7 +12,9 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-
+  bool pass = false;
+  bool pass1 = false;
+  bool pass2 = false;
   final TextEditingController oldPass = TextEditingController();
   final TextEditingController newPass = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
@@ -60,6 +62,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 TextFormField(
                   controller: oldPass,
                   textInputAction: TextInputAction.next,
+                  obscureText: pass,
                   validator: (value) {
                     if (value != null && value.isEmpty) {
                       return "Please enter old passward";
@@ -70,6 +73,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
                         labelText: "Old Password",
+                      suffixIcon: IconButton(onPressed: () => setState(() {
+                        pass=!pass;
+                      }), icon: Icon(pass?Icons.visibility_off:Icons.visibility))
                       ),
                 ),
                 Divider(color: Colors.transparent),
@@ -77,21 +83,29 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   controller: newPass,
                   textInputAction: TextInputAction.next,
                   validator: (value) => validatePassword(value),
+                  obscureText: pass1,
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
                         labelText: "New Password",
+                      suffixIcon: IconButton(onPressed: () => setState(() {
+                        pass1=!pass1;
+                      }), icon: Icon(pass1?Icons.visibility_off:Icons.visibility))
                       ),
                 ),
                 Divider(color: Colors.transparent),
                 TextFormField(
                   controller: confirmPass,
                   textInputAction: TextInputAction.done,
+                  obscureText: pass2,
                   validator: (value) => validatePassword(value),
                   decoration: (const InputDecoration())
                       .applyDefaults(Theme.of(context).inputDecorationTheme)
                       .copyWith(
                         labelText: "Confirm Password",
+                      suffixIcon: IconButton(onPressed: () => setState(() {
+                        pass2=!pass2;
+                      }), icon: Icon(pass2?Icons.visibility_off:Icons.visibility))
                       ),
                 ),
               ],

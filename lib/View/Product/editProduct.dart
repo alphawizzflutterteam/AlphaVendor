@@ -14,6 +14,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EditProdutScreen extends StatefulWidget {
@@ -28,6 +29,8 @@ class EditProdutScreen extends StatefulWidget {
 class _EditProdutScreenState extends State<EditProdutScreen> {
   late ProductManagementViewModel productProvider;
   var _formKey = GlobalKey<FormState>();
+  bool freeDelivery=false;
+  bool cancellable=false;
   final List<DropdownMenuItem> Taxitems = [
     DropdownMenuItem(
         child: Text(
@@ -117,7 +120,8 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
   final warrantyCtrl = TextEditingController();
   final guaranteeCtrl = TextEditingController();
   final brandNameCtrl = TextEditingController();
-  // final deliverableCtrl = TextEditingController();
+  final warranty = TextEditingController();
+  final manufacturing = TextEditingController();
   final priceCtrl = TextEditingController();
   final discountPriceCtrl = TextEditingController();
 
@@ -530,7 +534,6 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 //   items: indicatoritems,
                                 // ),
                                 // const Divider(color: Colors.transparent),
-
                                 TextFormField(
                                   keyboardType: TextInputType.number,
                                   decoration: (const InputDecoration())
@@ -809,7 +812,25 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 //     ),
                                 //   ],
                                 // ),
+
                                 const Divider(color: Colors.transparent),
+                                Row(
+                                  children: [
+                                    Checkbox(value: freeDelivery, onChanged: (val) {
+                                      setState(() {
+                                        freeDelivery=val!;
+                                      });
+                                    }),
+                                    Text("Free Delivery"),
+                                    Checkbox(value: cancellable, onChanged: (val) {
+                                      setState(() {
+                                        cancellable=val!;
+                                      });
+                                    }),
+                                    Text("Returnable / Cancellable"),
+                                  ],
+                                ),
+                                const Divider(color: Colors.transparent,height: 5),
                                 // Row(
                                 //   children: [
                                 //     SizedBox(
@@ -832,26 +853,76 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 //     )
                                 //   ],
                                 // ),
-                                DropdownButtonFormField2(
-                                  decoration: const InputDecoration()
-                                      .applyDefaults(Theme.of(context)
-                                          .inputDecorationTheme)
-                                      .copyWith(
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              borderSide: BorderSide(
-                                                color: colors.lightGrey,
-                                              )),
-                                          contentPadding:
-                                              EdgeInsets.only(right: 10)),
-                                  hint: Text("Simple Product",
-                                      style: TextStyle(
-                                          color: colors.greyText,
-                                          fontWeight: FontWeight.normal)),
-                                  value: selectedValue,
-                                  items: Taxitems,
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textCapitalization: TextCapitalization.words,
+                                  controller: warranty,
+
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                      .copyWith(labelText: "Warranty",hintText: "Ex: 1 Year"),
                                 ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: manufacturing,
+                                  readOnly: true,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(
+                                      Theme.of(context).inputDecorationTheme)
+                                      .copyWith(labelText: "Manufacturing Date",disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                    suffixIcon: IconButton(
+                                        onPressed: () async {
+                                          DateTime? pickedDate = await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(1900), //DateTime.now() - not to allow to choose before today.
+                                              lastDate: DateTime.now());
+                                          if (pickedDate != null) {
+                                            print(
+                                                pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                            String formattedDate =
+                                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                                            print(
+                                                formattedDate); //formatted date output using intl package =>  2021-03-16
+                                            //you can implement different kind of Date Format here according to your requirement
+
+                                            setState(() {
+                                              manufacturing.text =
+                                                  formattedDate; //set output date to TextField value.
+                                            });
+                                          }
+                                        },
+                                        icon: Icon(
+                                          Icons.date_range_rounded,
+                                          color: Colors.black,
+                                        )),
+                                  ),
+                                ),
+                                // const Divider(color: Colors.transparent),
+                                // DropdownButtonFormField2(
+                                //   decoration: const InputDecoration()
+                                //       .applyDefaults(Theme.of(context)
+                                //           .inputDecorationTheme)
+                                //       .copyWith(
+                                //           enabledBorder: OutlineInputBorder(
+                                //               borderRadius:
+                                //                   BorderRadius.circular(10),
+                                //               borderSide: BorderSide(
+                                //                 color: colors.lightGrey,
+                                //               )),
+                                //           contentPadding:
+                                //               EdgeInsets.only(right: 10)),
+                                //   hint: Text("Simple Product",
+                                //       style: TextStyle(
+                                //           color: colors.greyText,
+                                //           fontWeight: FontWeight.normal)),
+                                //   value: selectedValue,
+                                //   items: Taxitems,
+                                // ),
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   keyboardType: TextInputType.number,

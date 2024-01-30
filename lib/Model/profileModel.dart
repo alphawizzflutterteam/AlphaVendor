@@ -43,7 +43,7 @@ List<ProfileList> profileItem = [
       navigationScreen: PrivacyPolicyScreen()),
   ProfileList(
       profileIcon: Images.faq,
-      profileText: 'FAQ',
+      profileText: 'FAQs',
       navigationScreen: const FaqScreen()),
   // ProfileList(
   //     profileIcon: Images.speaker,
