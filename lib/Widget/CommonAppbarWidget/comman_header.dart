@@ -12,13 +12,10 @@ class ProfileHeader extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.centerRight,
-              child: Image.asset(
-                Images.headerBGLine,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? null
-                    : Colors.white54,
-                // width: MediaQuery.of(context).size.width * .8,
-              ),
+              child: Image.asset(Images.headerBGLine,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? null
+                      : Colors.white30),
             ),
             Theme.of(context).brightness == Brightness.dark
                 ? Image.asset(

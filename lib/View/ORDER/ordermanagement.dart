@@ -87,7 +87,6 @@ class _OrderManagementState extends State<OrderManagement> {
                             scrollDirection: Axis.horizontal,
                             itemCount: pageCount,
                             onPageChanged: (value) {
-                              print("dsfghjdgfjdjgdjh");
                               orderProvider.getOrderList(
                                   status: orderProvider
                                       .orderStatus[

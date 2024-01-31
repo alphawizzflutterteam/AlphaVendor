@@ -1,14 +1,9 @@
-import 'dart:ffi';
-
 import 'package:alpha_work/Utils/appUrls.dart';
-import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
-import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/ORDER/model/derliveryManModel.dart';
 import 'package:alpha_work/View/ORDER/model/orderModel.dart';
 import 'package:alpha_work/repository/orderMgmtRepository.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class OrderManagementViewModel with ChangeNotifier {
   OrderManagementRepository _myRepo = OrderManagementRepository();
@@ -25,12 +20,12 @@ class OrderManagementViewModel with ChangeNotifier {
   //Function to fetch orders based on status
   Future<void> getOrderList({required String status}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-    isLoading = true;
+    setLoading(true);
     orderList.clear();
     await _myRepo
         .orderListGetRequest(
             api: AppUrl.orderList, token: token, status: status)
-        .then((value) {
+        .then((value) async {
       print(value.data.length);
       if (orderStatus.length == 0) {
         orderStatus = value.orderStatus;
@@ -39,6 +34,7 @@ class OrderManagementViewModel with ChangeNotifier {
       }
       orderList = value.data;
       print(orderList.first.detail!.name);
+
       setLoading(false);
     }).onError((error, stackTrace) {
       print(stackTrace.toString());

@@ -102,125 +102,130 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Payments History",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 16, right: 16, top: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Payments History",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      Container(
-                        height: height * .65,
-                        child: walletPro.orderTransactions!.data.length == 0
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox.square(
-                                      dimension: height * .3,
-                                      child: Image.asset(
-                                        Images.noTransaction,
-                                      ),
-                                    ),
-                                    Text(
-                                      "No transaction ",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      "You haven’t made any transactions yet",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: colors.greyText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                itemCount:
-                                    walletPro.orderTransactions!.data.length,
-                                itemBuilder: (context, index) => Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: colors.lightGrey,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                        const Divider(color: Colors.transparent),
+                        Expanded(
+                          child: walletPro.orderTransactions!.data.length == 0
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            walletPro.orderTransactions!
-                                                .data[index].amount
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: colors.buttonColor,
-                                              fontFamily: 'Montreal',
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            "ID- ${walletPro.orderTransactions!.data[index].orderId.toString()}",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: colors.greyText,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ],
+                                      SizedBox.square(
+                                        dimension: height * .3,
+                                        child: Image.asset(
+                                          Images.noTransaction,
+                                        ),
                                       ),
-                                      Spacer(),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            walletPro.orderTransactions!
-                                                .data[index].createdAt
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: colors.greyText,
-                                            ),
-                                          ),
-                                          Divider(
-                                              color: Colors.transparent,
-                                              height: 3),
-                                          Text(
-                                            walletPro.orderTransactions!
-                                                .data[index].paymentMethod
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
+                                      Text(
+                                        "No transaction ",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        "You haven’t made any transactions yet",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: colors.greyText,
+                                        ),
                                       ),
                                     ],
                                   ),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      walletPro.orderTransactions!.data.length,
+                                  itemBuilder: (context, index) => Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: colors.lightGrey,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              walletPro.orderTransactions!
+                                                  .data[index].amount
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                color: colors.buttonColor,
+                                                fontFamily: 'Montreal',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              "ID- ${walletPro.orderTransactions!.data[index].orderId.toString()}",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: colors.greyText,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        ),
+                                        Spacer(),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              walletPro.orderTransactions!
+                                                  .data[index].createdAt
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: colors.greyText,
+                                              ),
+                                            ),
+                                            Divider(
+                                                color: Colors.transparent,
+                                                height: 3),
+                                            Text(
+                                              walletPro.orderTransactions!
+                                                  .data[index].paymentMethod
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

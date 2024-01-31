@@ -8,6 +8,7 @@ import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/dateFormatter.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PendingOrderDetail extends StatefulWidget {
@@ -277,8 +278,9 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                 Text(
                                   widget.order.expected_delivery_date.isEmpty
                                       ? ""
-                                      : CustomDateFormat.formatDateOnly(
-                                          widget.order.expected_delivery_date),
+                                      : DateFormat('dd MMMM yyyy').format(
+                                          DateTime.parse(widget
+                                              .order.expected_delivery_date)),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
