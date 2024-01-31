@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:alpha_work/Model/profileModel.dart';
-import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
@@ -13,6 +10,7 @@ import 'package:alpha_work/View/Profile/widgets/logoutSheet.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -101,14 +99,26 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              CircleAvatar(
-                                radius: (height / width) * 20,
-                                backgroundImage: NetworkImage(
-                                  profilePro.vendorData.image.toString(),
+                              GestureDetector(
+                                onTap: () => showDialog(
+                                  context: context,
+                                  builder: (dctx) => Dialog(
+                                    backgroundColor: Colors.transparent,
+                                    child: CachedNetworkImage(
+                                      imageUrl: profilePro.vendorData.image
+                                          .toString(),
+                                    ),
+                                  ),
                                 ),
-                                onBackgroundImageError:
-                                    (exception, stackTrace) =>
-                                        ErrorImageWidget(height: 50),
+                                child: CircleAvatar(
+                                  radius: (height / width) * 20,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    profilePro.vendorData.image.toString(),
+                                  ),
+                                  onBackgroundImageError:
+                                      (exception, stackTrace) =>
+                                          ErrorImageWidget(height: 50),
+                                ),
                               ),
                               VerticalDivider(),
                               Column(

@@ -108,13 +108,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        radius: (height / width) * 25,
-                        backgroundImage: CachedNetworkImageProvider(
-                          pro.vendorData.image.toString(),
+                      GestureDetector(
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (dctx) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            child: CachedNetworkImage(
+                              imageUrl: pro.vendorData.image.toString(),
+                            ),
+                          ),
                         ),
-                        onBackgroundImageError: (exception, stackTrace) =>
-                            ErrorImageWidget(height: 90),
+                        child: CircleAvatar(
+                          radius: (height / width) * 25,
+                          backgroundImage: CachedNetworkImageProvider(
+                            pro.vendorData.image.toString(),
+                          ),
+                          onBackgroundImageError: (exception, stackTrace) =>
+                              ErrorImageWidget(height: 90),
+                        ),
                       ),
                       Text(
                         "${pro.vendorData.fName.toString().toUpperCase()} ${pro.vendorData.lName.toString().toUpperCase()}",

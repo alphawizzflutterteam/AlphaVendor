@@ -116,17 +116,18 @@ class _PendingOrderDetailState extends State<PendingOrderDetail> {
                                     productPro.productDetail.first.specialPrice
                                         .toString(),
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 16,
                                         color: colors.buttonColor,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Montreal'),
                                   ),
+                                  VerticalDivider(width: 3),
                                   Text(
                                     productPro.productDetail.first.unitPrice
                                         .toString(),
                                     style: TextStyle(
                                         decoration: TextDecoration.lineThrough,
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         color: colors.greyText,
                                         fontFamily: 'Montreal'),
                                   ),

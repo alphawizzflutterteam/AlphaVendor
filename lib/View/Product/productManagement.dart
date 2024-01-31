@@ -9,6 +9,7 @@ import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -274,8 +275,8 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Image.network(
-                                      productMgmtProvider
+                                    CachedNetworkImage(
+                                      imageUrl: productMgmtProvider
                                           .productManagementData
                                           .categories[slectedIndex]
                                           .childes[indx]
@@ -283,7 +284,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                                           .toString(),
                                       height: height * .1,
                                       fit: BoxFit.fitHeight,
-                                      errorBuilder: (context, error,
+                                      errorWidget: (context, error,
                                               stackTrace) =>
                                           ErrorImageWidget(height: height * .1),
                                     ),
