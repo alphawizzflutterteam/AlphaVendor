@@ -2,12 +2,10 @@ import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/utils.dart';
 import 'package:alpha_work/View/AUTH/ForgotPass/forgotpass.dart';
-import 'package:alpha_work/View/AUTH/LOGIN/otpfind.dart';
 import 'package:alpha_work/ViewModel/authViewModel.dart';
 import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -40,132 +38,135 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
-        child: Container(
-          height: height,
-          child: Stack(
-            children: [
-              Container(
-                height: height * .35,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(Images.onboardingBg_light))),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  height: height,
-                  width: width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Spacer(),
-                      Image.asset(Images.alphalogo_light,
-                          height: (height / width) * 35,
-                          width: (height / width) * 35),
-                      Text(
-                        AppLocalizations.of(context)!.signInToYourAccount,
-                        style: const TextStyle(fontSize: 28),
-                      ),
-                      SizedBox(
-                        width: width * .7,
-                        child: Text(
-                          "Effortless Access to Orders, Insights, and Customized Solutions",
-                          style:
-                              TextStyle(color: colors.greyText, fontSize: 14),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: Container(
+            height: height,
+            child: Stack(
+              children: [
+                Container(
+                  height: height * .35,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(Images.onboardingBg_light))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    height: height,
+                    width: width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Spacer(),
+                        Image.asset(Images.alphalogo_light,
+                            height: (height / width) * 35,
+                            width: (height / width) * 35),
+                        Text(
+                          AppLocalizations.of(context)!.signInToYourAccount,
+                          style: const TextStyle(fontSize: 28),
                         ),
-                      ),
-                      Divider(color: Colors.transparent),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () => setState(() {
-                              indx = 0;
-                            }),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 12),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: indx == 0
-                                    ? colors.buttonColor.withOpacity(0.3)
-                                    : Colors.white,
-                              ),
-                              child: Text(
-                                "Login via Phone",
-                                style: TextStyle(
-                                  fontSize: 16,
+                        SizedBox(
+                          width: width * .7,
+                          child: Text(
+                            "Effortless Access to Orders, Insights, and Customized Solutions",
+                            style:
+                                TextStyle(color: colors.greyText, fontSize: 14),
+                          ),
+                        ),
+                        Divider(color: Colors.transparent),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => setState(() {
+                                indx = 0;
+                              }),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
                                   color: indx == 0
-                                      ? colors.buttonColor
-                                      : Colors.black,
+                                      ? colors.buttonColor.withOpacity(0.3)
+                                      : Colors.white,
                                 ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => setState(() {
-                              indx = 1;
-                            }),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 12),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: indx == 1
-                                    ? colors.buttonColor.withOpacity(0.3)
-                                    : Colors.white,
-                              ),
-                              child: Text(
-                                "Login via Email",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: indx == 1
-                                      ? colors.buttonColor
-                                      : Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      indx == 0
-                          ? PhoneLogin(auth: auth)
-                          : EmailView(auth: auth),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => const SignUpPage())));
-                        },
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Don`t have an account?"),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                Text(
-                                  "Signup",
+                                child: Text(
+                                  "Login via Phone",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: colors.buttonColor,
-                                      decoration: TextDecoration.underline),
-                                )
-                              ],
-                            )),
-                      ),
-                      Divider(color: Colors.white),
-                    ],
+                                    fontSize: 16,
+                                    color: indx == 0
+                                        ? colors.buttonColor
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => setState(() {
+                                indx = 1;
+                              }),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: indx == 1
+                                      ? colors.buttonColor.withOpacity(0.3)
+                                      : Colors.white,
+                                ),
+                                child: Text(
+                                  "Login via Email",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: indx == 1
+                                        ? colors.buttonColor
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        indx == 0
+                            ? PhoneLogin(auth: auth)
+                            : EmailView(auth: auth),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => const SignUpPage())));
+                          },
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Don`t have an account?"),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Text(
+                                    "Signup",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: colors.buttonColor,
+                                        decoration: TextDecoration.underline),
+                                  )
+                                ],
+                              )),
+                        ),
+                        Divider(color: Colors.white),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -189,35 +190,25 @@ class PhoneLogin extends StatelessWidget {
             const Divider(color: Colors.transparent),
             TextFormField(
               controller: mobile,
-              inputFormatters: [RegexFormatter.phone],
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration()
                   .applyDefaults(Theme.of(context).inputDecorationTheme)
                   .copyWith(
-                    label: Text("Mobile No."),
+                    label: Text("Phone Number"),
                   ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Enter a valid number";
-                }
-                return null;
-              },
               keyboardType: TextInputType.number,
               maxLength: 10,
-              onChanged: (value) {
-                if (value.length == 10) {
-                  // FocusScope.of(context).unfocus();
-                }
-              },
+
             ),
             const Divider(
               color: Colors.transparent,
             ),
             GestureDetector(
               onTap: () {
-                // if (_formKey.currentState!.validate()) {
+
                 FocusScope.of(context).unfocus();
 
-                if (mobile.text == "") {
+                if (mobile.text == ""||mobile.text.length<10) {
                   Utils.showTost(msg: "Please enter valid mobile number.");
                 } else {
                   print(mobile.text);
@@ -228,7 +219,7 @@ class PhoneLogin extends StatelessWidget {
                           isPass: false,
                           resend: true)
                       .then((value) {});
-                  // }
+
                 }
               },
               child: Container(

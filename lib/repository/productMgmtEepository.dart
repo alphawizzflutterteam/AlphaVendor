@@ -184,6 +184,10 @@ class ProductManagementRepository {
     required String quantity,
     required String description,
     required String purchase_price,
+    required String freeDelivery,
+    required String returnable,
+    required String manufacturing,
+    required String warranty,
   }) async {
     var headers = {'Authorization': 'Bearer $token'};
     print(api);
@@ -210,6 +214,10 @@ class ProductManagementRepository {
       'description[]': description,
       'lang[]': 'en',
       'purchase_price': purchase_price,
+      'free_delivery': freeDelivery,
+      'returnable': returnable,
+      'warranty': warranty,
+      'manufacturing_date': manufacturing,
     });
 
     request.headers.addAll(
@@ -330,6 +338,10 @@ class ProductManagementRepository {
     required String quantity,
     required String description,
     required String purchase_price,
+    required String freeDelivery,
+    required String returnable,
+    required String manufacturing,
+    required String warranty,
   }) async {
     try {
       var headers = {'Authorization': 'Bearer $token'};
@@ -357,6 +369,10 @@ class ProductManagementRepository {
         'description[]': description,
         'lang[]': 'en',
         'purchase_price': purchase_price,
+        'free_delivery': freeDelivery,
+        'returnable': returnable,
+        'warranty': warranty,
+        'manufacturing_date': manufacturing,
       };
       final http.Response response;
       print("Body: $body");

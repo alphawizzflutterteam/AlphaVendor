@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-
-import 'package:alpha_work/Model/productManagementModel.dart';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/utils.dart';
@@ -9,11 +7,14 @@ import 'package:alpha_work/View/Product/model/categoryModel.dart';
 import 'package:alpha_work/View/Product/productManagement.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,8 @@ class AddProdutScreen extends StatefulWidget {
 
 class _AddProdutScreenState extends State<AddProdutScreen> {
   int selectedCat = 0;
+  bool freeDelivery = false;
+  bool cancellable = false;
   late ProductManagementViewModel productProvider;
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
@@ -118,10 +121,10 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
   final warrantyCtrl = TextEditingController();
   final guaranteeCtrl = TextEditingController();
   final brandNameCtrl = TextEditingController();
-  // final deliverableCtrl = TextEditingController();
   final priceCtrl = TextEditingController();
+  final warranty = TextEditingController();
+  final manufacturing = TextEditingController();
   final discountPriceCtrl = TextEditingController();
-  //function to genrate random Sku id
   String generateSku() {
     Random random = new Random();
     int skuId = random.nextInt(10000) + 999999;
@@ -129,9 +132,7 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
   }
 
   final TextEditingController cat = TextEditingController();
-
   final TextEditingController subcat = TextEditingController();
-
   final TextEditingController subkisubcat = TextEditingController();
 
   void disposeMethod() {
@@ -287,6 +288,27 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                           padding: const EdgeInsets.only(top: 5),
                           child: Column(
                             children: [
+                              DropdownButtonFormField2(
+                                decoration: const InputDecoration()
+                                    .applyDefaults(
+                                        Theme.of(context).inputDecorationTheme)
+                                    .copyWith(
+                                      contentPadding:
+                                          EdgeInsets.only(right: 10),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: colors.lightGrey),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ),
+                                hint: Text("Simple Product",
+                                    style: TextStyle(
+                                        color: colors.greyText,
+                                        fontWeight: FontWeight.normal)),
+                                value: selectedValue,
+                                items: Taxitems,
+                              ),
+                              const Divider(color: Colors.transparent),
                               TextFormField(
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
@@ -399,11 +421,16 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                               const Divider(color: Colors.transparent),
                               TextFormField(
                                 keyboardType: TextInputType.number,
+                                maxLength: 7,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
                                     .copyWith(
                                       labelText: "Quantity in Stock",
+                                      counterText: "",
                                     ),
                                 controller: qtyInStockCtrl,
                                 validator: (value) {
@@ -430,20 +457,6 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                   return null;
                                 },
                               ),
-                              // const Divider(color: Colors.transparent),
-                              // TextFormField(
-                              //   decoration: (const InputDecoration())
-                              //       .applyDefaults(
-                              //           Theme.of(context).inputDecorationTheme)
-                              //       .copyWith(labelText: "Add Tags"),
-                              //   controller: TagsCtrl,
-                              //   validator: (value) {
-                              //     if (value == null || value.isEmpty) {
-                              //       return "Enter tags";
-                              //     }
-                              //     return null;
-                              //   },
-                              // ),
                               const Divider(color: Colors.transparent),
                               // TextFormField(
                               //   keyboardType: TextInputType.number,
@@ -498,14 +511,19 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                 }),
                                 items: Taxitems,
                               ),
-
                               const Divider(color: Colors.transparent),
                               TextFormField(
                                 keyboardType: TextInputType.number,
+                                maxLength: 2,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Add Tax in %"),
+                                    .copyWith(
+                                        labelText: "Add Tax in %",
+                                        counterText: ""),
                                 controller: TaxCtrl,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -554,11 +572,16 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
 
                               TextFormField(
                                 keyboardType: TextInputType.number,
+                                maxLength: 3,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
                                     .copyWith(
-                                        labelText: "Minimum Order Quantity"),
+                                        labelText: "Minimum Order Quantity",
+                                        counterText: ""),
                                 controller: minQtyCtrl,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -710,7 +733,30 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                   ),
                                 ],
                               ),
-                              const Divider(color: Colors.transparent),
+                              const Divider(
+                                  color: Colors.transparent, height: 5),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      value: freeDelivery,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          freeDelivery = val!;
+                                        });
+                                      }),
+                                  Text("Free Delivery"),
+                                  Checkbox(
+                                      value: cancellable,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          cancellable = val!;
+                                        });
+                                      }),
+                                  Text("Returnable / Cancellable"),
+                                ],
+                              ),
+                              const Divider(
+                                  color: Colors.transparent, height: 5),
                               // Row(
                               //   children: [
                               //     DottedBorder(
@@ -838,30 +884,69 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                               //     )
                               //   ],
                               // ),
-                              DropdownButtonFormField2(
-                                decoration: const InputDecoration()
+                              TextFormField(
+                                textCapitalization: TextCapitalization.words,
+                                controller: warranty,
+                                decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
                                     .copyWith(
-                                      contentPadding:
-                                          EdgeInsets.only(right: 10),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: colors.lightGrey),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
+                                        labelText: "Warranty",
+                                        hintText: "Ex: 1 Year"),
+                              ),
+                              const Divider(color: Colors.transparent),
+                              TextFormField(
+                                controller: manufacturing,
+                                readOnly: true,
+                                decoration: (const InputDecoration())
+                                    .applyDefaults(
+                                        Theme.of(context).inputDecorationTheme)
+                                    .copyWith(
+                                      labelText: "Manufacturing Date",
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      suffixIcon: IconButton(
+                                          onPressed: () async {
+                                            DateTime? pickedDate =
+                                                await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime(
+                                                        1900), //DateTime.now() - not to allow to choose before today.
+                                                    lastDate: DateTime.now());
+                                            if (pickedDate != null) {
+                                              print(
+                                                  pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                              String formattedDate =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(pickedDate);
+                                              print(
+                                                  formattedDate); //formatted date output using intl package =>  2021-03-16
+                                              //you can implement different kind of Date Format here according to your requirement
+
+                                              setState(() {
+                                                manufacturing.text =
+                                                    formattedDate; //set output date to TextField value.
+                                              });
+                                            }
+                                          },
+                                          icon: Icon(
+                                            Icons.date_range_rounded,
+                                            color: Colors.black,
+                                          )),
                                     ),
-                                hint: Text("Simple Product",
-                                    style: TextStyle(
-                                        color: colors.greyText,
-                                        fontWeight: FontWeight.normal)),
-                                value: selectedValue,
-                                items: Taxitems,
                               ),
                               const Divider(color: Colors.transparent),
                               TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: priceCtrl,
+                                maxLength: 7,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return "Enter price";
@@ -871,15 +956,22 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Price"),
+                                    .copyWith(
+                                        labelText: "Price", counterText: ""),
                               ),
                               const Divider(color: Colors.transparent),
                               TextFormField(
                                 keyboardType: TextInputType.number,
+                                maxLength: 7,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Purchase Price"),
+                                    .copyWith(
+                                        labelText: "Purchase Price",
+                                        counterText: ""),
                                 controller: PurchaceCtrl,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -910,6 +1002,8 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                               TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: discountPriceCtrl,
+                                maxLength:
+                                    selectedDiscount == 'percent' ? 2 : 6,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return "Enter discount price";
@@ -919,7 +1013,8 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                 decoration: (const InputDecoration())
                                     .applyDefaults(
                                         Theme.of(context).inputDecorationTheme)
-                                    .copyWith(labelText: "Discount"),
+                                    .copyWith(
+                                        labelText: "Discount", counterText: ""),
                               ),
                               const Divider(color: Colors.transparent),
                             ],
@@ -987,7 +1082,8 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                   selectedPtype != null &&
                                   selectedTax != null &&
                                   selectedDiscount != null &&
-                                  selectedUnit != null) {
+                                  selectedUnit != null &&
+                                  manufacturing.text.isNotEmpty) {
                                 print(nameCtrl.text);
                                 print(productProvider.selectedCat?.id);
                                 print(productProvider.selectedSubCat?.id);
@@ -1032,6 +1128,12 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
                                   quantity: qtyInStockCtrl.text.toString(),
                                   description: descCtrl.text.toString(),
                                   purchase_price: PurchaceCtrl.text.toString(),
+                                  warranty: warranty.text.isEmpty
+                                      ? " "
+                                      : warranty.text.toString(),
+                                  manufacturing: manufacturing.text.toString(),
+                                  returnable: cancellable ? "1" : '0',
+                                  freeDelivery: freeDelivery ? '1' : '0',
                                 )
                                     .then((value) {
                                   if (value) {

@@ -371,6 +371,7 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
                       await Future.delayed(Duration(seconds: 2));
                       await getData();
                     },
+
                     child: Column(
                       children: [
                         Container(

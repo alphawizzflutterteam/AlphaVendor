@@ -5,6 +5,7 @@ import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/dateFormatter.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -209,18 +210,31 @@ class _ProductReviewDetailScreenState extends State<ProductReviewDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              CircleAvatar(
-                                radius: (height / width) * 15,
-                                backgroundColor: colors.lightGrey,
-                                backgroundImage: NetworkImage(reviewPro
-                                    .reviewDetailData
-                                    .reviews[index]
-                                    .customer!
-                                    .image
-                                    .toString()),
-                                onBackgroundImageError:
-                                    (exception, stackTrace) =>
-                                        ErrorImageWidget(height: 65),
+                              GestureDetector(
+                                onTap: () => showDialog(
+                                  context: context,
+                                  builder: (dctx) => Dialog(
+                                    backgroundColor: Colors.transparent,
+                                    child: CachedNetworkImage(
+                                      imageUrl: reviewPro.reviewDetailData
+                                          .reviews[index].customer!.image
+                                          .toString(),
+                                    ),
+                                  ),
+                                ),
+                                child: CircleAvatar(
+                                  radius: (height / width) * 15,
+                                  backgroundColor: colors.lightGrey,
+                                  backgroundImage: NetworkImage(reviewPro
+                                      .reviewDetailData
+                                      .reviews[index]
+                                      .customer!
+                                      .image
+                                      .toString()),
+                                  onBackgroundImageError:
+                                      (exception, stackTrace) =>
+                                          ErrorImageWidget(height: 65),
+                                ),
                               ),
                               VerticalDivider(width: 5),
                               Column(

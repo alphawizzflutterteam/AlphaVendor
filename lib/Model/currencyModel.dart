@@ -2,7 +2,6 @@
 //
 //     final currencyModel = currencyModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 CurrencyModel currencyModelFromJson(String str) =>

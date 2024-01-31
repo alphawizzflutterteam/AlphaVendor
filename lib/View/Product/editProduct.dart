@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:alpha_work/Utils/color.dart';
 import 'package:alpha_work/Utils/images.dart';
 import 'package:alpha_work/Utils/utils.dart';
@@ -12,8 +11,10 @@ import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EditProdutScreen extends StatefulWidget {
@@ -28,6 +29,8 @@ class EditProdutScreen extends StatefulWidget {
 class _EditProdutScreenState extends State<EditProdutScreen> {
   late ProductManagementViewModel productProvider;
   var _formKey = GlobalKey<FormState>();
+  bool freeDelivery = false;
+  bool cancellable = false;
   final List<DropdownMenuItem> Taxitems = [
     DropdownMenuItem(
         child: Text(
@@ -117,7 +120,8 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
   final warrantyCtrl = TextEditingController();
   final guaranteeCtrl = TextEditingController();
   final brandNameCtrl = TextEditingController();
-  // final deliverableCtrl = TextEditingController();
+  final warranty = TextEditingController();
+  final manufacturing = TextEditingController();
   final priceCtrl = TextEditingController();
   final discountPriceCtrl = TextEditingController();
 
@@ -216,6 +220,10 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     selectedDiscount = widget.productDetail.discountType.toString();
     selectedUnit = widget.productDetail.unit.toString();
     selectedPtype = widget.productDetail.productType.toString();
+    warranty.text = widget.productDetail.warranty.toString();
+    manufacturing.text = widget.productDetail.manufacturingDate.toString();
+    freeDelivery = widget.productDetail.freeDelivery == 1 ? true : false;
+    cancellable = widget.productDetail.returnable == 1 ? true : false;
     print("namamjdhf${priceCtrl.text}");
     productProvider =
         Provider.of<ProductManagementViewModel>(context, listen: false);
@@ -377,11 +385,16 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   keyboardType: TextInputType.number,
+                                  maxLength: 7,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
                                       .copyWith(
                                         labelText: "Quantity in Stock",
+                                        counterText: "",
                                       ),
                                   controller: qtyInStockCtrl,
                                   validator: (value) {
@@ -481,10 +494,16 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   keyboardType: TextInputType.number,
+                                  maxLength: 2,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
-                                      .copyWith(labelText: "Add Tax in %"),
+                                      .copyWith(
+                                          labelText: "Add Tax in %",
+                                          counterText: ""),
                                   controller: TaxCtrl,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -530,14 +549,18 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 //   items: indicatoritems,
                                 // ),
                                 // const Divider(color: Colors.transparent),
-
                                 TextFormField(
                                   keyboardType: TextInputType.number,
+                                  maxLength: 3,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
                                       .copyWith(
-                                          labelText: "Minimum Order Quantity"),
+                                          labelText: "Minimum Order Quantity",
+                                          counterText: ""),
                                   controller: minQtyCtrl,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -809,7 +832,30 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 //     ),
                                 //   ],
                                 // ),
+
                                 const Divider(color: Colors.transparent),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                        value: freeDelivery,
+                                        onChanged: (val) {
+                                          setState(() {
+                                            freeDelivery = val!;
+                                          });
+                                        }),
+                                    Text("Free Delivery"),
+                                    Checkbox(
+                                        value: cancellable,
+                                        onChanged: (val) {
+                                          setState(() {
+                                            cancellable = val!;
+                                          });
+                                        }),
+                                    Text("Returnable / Cancellable"),
+                                  ],
+                                ),
+                                const Divider(
+                                    color: Colors.transparent, height: 5),
                                 // Row(
                                 //   children: [
                                 //     SizedBox(
@@ -832,30 +878,95 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 //     )
                                 //   ],
                                 // ),
-                                DropdownButtonFormField2(
-                                  decoration: const InputDecoration()
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  textCapitalization: TextCapitalization.words,
+                                  controller: warranty,
+                                  decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
                                       .copyWith(
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              borderSide: BorderSide(
-                                                color: colors.lightGrey,
-                                              )),
-                                          contentPadding:
-                                              EdgeInsets.only(right: 10)),
-                                  hint: Text("Simple Product",
-                                      style: TextStyle(
-                                          color: colors.greyText,
-                                          fontWeight: FontWeight.normal)),
-                                  value: selectedValue,
-                                  items: Taxitems,
+                                          labelText: "Warranty",
+                                          hintText: "Ex: 1 Year"),
                                 ),
+                                const Divider(color: Colors.transparent),
+                                TextFormField(
+                                  controller: manufacturing,
+                                  readOnly: true,
+                                  decoration: (const InputDecoration())
+                                      .applyDefaults(Theme.of(context)
+                                          .inputDecorationTheme)
+                                      .copyWith(
+                                        labelText: "Manufacturing Date",
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        suffixIcon: IconButton(
+                                            onPressed: () async {
+                                              DateTime? pickedDate =
+                                                  await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.parse(
+                                                              manufacturing
+                                                                  .text),
+                                                      firstDate: DateTime(
+                                                          1900), //DateTime.now() - not to allow to choose before today.
+                                                      lastDate: DateTime.now());
+                                              if (pickedDate != null) {
+                                                print(
+                                                    pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                                String formattedDate =
+                                                    DateFormat('yyyy-MM-dd')
+                                                        .format(pickedDate);
+                                                print(
+                                                    formattedDate); //formatted date output using intl package =>  2021-03-16
+                                                //you can implement different kind of Date Format here according to your requirement
+
+                                                setState(() {
+                                                  manufacturing.text =
+                                                      formattedDate; //set output date to TextField value.
+                                                });
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.date_range_rounded,
+                                              color: Colors.black,
+                                            )),
+                                      ),
+                                ),
+                                // const Divider(color: Colors.transparent),
+                                // DropdownButtonFormField2(
+                                //   decoration: const InputDecoration()
+                                //       .applyDefaults(Theme.of(context)
+                                //           .inputDecorationTheme)
+                                //       .copyWith(
+                                //           enabledBorder: OutlineInputBorder(
+                                //               borderRadius:
+                                //                   BorderRadius.circular(10),
+                                //               borderSide: BorderSide(
+                                //                 color: colors.lightGrey,
+                                //               )),
+                                //           contentPadding:
+                                //               EdgeInsets.only(right: 10)),
+                                //   hint: Text("Simple Product",
+                                //       style: TextStyle(
+                                //           color: colors.greyText,
+                                //           fontWeight: FontWeight.normal)),
+                                //   value: selectedValue,
+                                //   items: Taxitems,
+                                // ),
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   keyboardType: TextInputType.number,
                                   controller: priceCtrl,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  maxLength: 7,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "Enter price";
@@ -865,15 +976,22 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
-                                      .copyWith(labelText: "Price"),
+                                      .copyWith(
+                                          labelText: "Price", counterText: ""),
                                 ),
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   keyboardType: TextInputType.number,
+                                  maxLength: 7,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
-                                      .copyWith(labelText: "Purchase Price"),
+                                      .copyWith(
+                                          labelText: "Purchase Price",
+                                          counterText: ""),
                                   controller: PurchaceCtrl,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -903,6 +1021,11 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                 const Divider(color: Colors.transparent),
                                 TextFormField(
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  maxLength:
+                                      selectedDiscount == 'percent' ? 2 : 7,
                                   controller: discountPriceCtrl,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -913,7 +1036,9 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   decoration: (const InputDecoration())
                                       .applyDefaults(Theme.of(context)
                                           .inputDecorationTheme)
-                                      .copyWith(labelText: "Discount"),
+                                      .copyWith(
+                                          labelText: "Discount",
+                                          counterText: ""),
                                 ),
                                 const Divider(color: Colors.transparent),
                               ],
@@ -979,6 +1104,12 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   purchase_price: PurchaceCtrl.text
                                       .toString()
                                       .replaceAll(RegExp('[^A-Za-z0-9.]'), ""),
+                                  warranty: warranty.text.isEmpty
+                                      ? " "
+                                      : warranty.text.toString(),
+                                  manufacturing: manufacturing.text.toString(),
+                                  returnable: cancellable ? "1" : '0',
+                                  freeDelivery: freeDelivery ? '1' : '0',
                                 )
                                     .then((value) {
                                   if (value) {

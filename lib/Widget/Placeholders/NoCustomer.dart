@@ -14,26 +14,26 @@ class NoCustomerPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Image.asset(Images.noCustomer,
-              height: height * .32, width: width, fit: BoxFit.contain),
-        ),
-        Text(
-          "No Customer Data Found",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-            color: colors.greyText,
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.asset(Images.noCustomer,
+                height: height * .25, width: width * .75, fit: BoxFit.contain),
           ),
-        ),
-      ],
+          Text(
+            "No Customer Data Found",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: colors.greyText,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
