@@ -7,6 +7,7 @@ import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -52,16 +53,27 @@ class _RatingAndRewiewScreenState extends State<RatingAndRewiewScreen> {
                       children: [
                         Row(
                           children: [
-                            SizedBox.square(
-                              dimension: (height / width) * 35,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(
-                                  widget.image,
+                            GestureDetector(
+                              onTap: () => showDialog(
+                                context: context,
+                                builder: (dctx) => Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.image,
+                                  ),
                                 ),
-                                onBackgroundImageError:
-                                    (exception, stackTrace) =>
-                                        ErrorImageWidget(height: 100),
+                              ),
+                              child: SizedBox.square(
+                                dimension: (height / width) * 35,
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage: NetworkImage(
+                                    widget.image,
+                                  ),
+                                  onBackgroundImageError:
+                                      (exception, stackTrace) =>
+                                          ErrorImageWidget(height: 100),
+                                ),
                               ),
                             ),
                             VerticalDivider(),

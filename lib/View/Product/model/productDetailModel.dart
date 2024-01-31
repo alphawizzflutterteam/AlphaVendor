@@ -100,6 +100,8 @@ class Product {
     required this.warranty,
     required this.useCoinsWithAmount,
     required this.amountAfterCoinUse,
+    required this.freeDelivery,
+    required this.returnable,
   });
 
   final int? id;
@@ -172,13 +174,15 @@ class Product {
   final bool? isFavorite;
   final bool? isCart;
   final int? cartId;
-  final DateTime? manufacturingDate;
+  final String? manufacturingDate;
   final String? madeIn;
   final String? shortDescription;
   final String? specification;
   final String? warranty;
   final String? useCoinsWithAmount;
   final String? amountAfterCoinUse;
+  final int? freeDelivery;
+  final int? returnable;
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -277,13 +281,15 @@ class Product {
       isFavorite: json["is_favorite"],
       isCart: json["is_cart"],
       cartId: json["cart_id"],
-      manufacturingDate: DateTime.tryParse(json["manufacturing_date"] ?? ""),
+      manufacturingDate: json["manufacturing_date"],
       madeIn: json["made_in"],
       shortDescription: json["short_description"],
       specification: json["specification"],
       warranty: json["warranty"],
       useCoinsWithAmount: json["use_coins_with_amount"],
       amountAfterCoinUse: json["amount_after_coin_use"],
+      freeDelivery: json['free_delivery'],
+      returnable: json['returnable'],
     );
   }
 }

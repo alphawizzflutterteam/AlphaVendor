@@ -318,6 +318,10 @@ class ProductManagementViewModel extends ChangeNotifier {
     required String quantity,
     required String description,
     required String purchase_price,
+    required String freeDelivery,
+    required String returnable,
+    required String manufacturing,
+    required String warranty,
   }) async {
     bool status = false;
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
@@ -344,6 +348,10 @@ class ProductManagementViewModel extends ChangeNotifier {
           quantity: quantity,
           description: description,
           purchase_price: purchase_price,
+          freeDelivery: freeDelivery,
+          manufacturing: manufacturing,
+          returnable: returnable,
+          warranty: warranty,
         )
         .then((value) => status = value);
     return status;
