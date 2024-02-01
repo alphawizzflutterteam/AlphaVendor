@@ -6,6 +6,7 @@ import 'package:alpha_work/View/Product/model/categoryModel.dart';
 import 'package:alpha_work/View/Product/model/productDetailModel.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
+import 'package:alpha_work/Widget/DropdownDeco.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -171,6 +172,12 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
     await productProvider.setSubCategory(productProvider.subcategories
         .firstWhere((e) =>
             e.id.toString() == widget.productDetail.subCategoryId.toString()));
+    await productProvider.getsubsubCategory(
+        id: widget.productDetail.subCategoryId.toString());
+    await productProvider.setSubSubCategory(productProvider.subsubcategories
+        .firstWhere((e) =>
+            e.id.toString() ==
+            widget.productDetail.subSubCategoryId.toString()));
     await productProvider.setBrand(productProvider.brandList.firstWhere(
         (e) => e.id.toString() == widget.productDetail.brandId.toString()));
   }
@@ -286,84 +293,144 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                   },
                                 ),
                                 const Divider(color: Colors.transparent),
-                                Consumer<ProductManagementViewModel>(
-                                  builder: (context, val, child) {
-                                    return DropdownButtonFormField2<
-                                        CategoryData>(
-                                      decoration: const InputDecoration()
-                                          .applyDefaults(Theme.of(context)
-                                              .inputDecorationTheme)
-                                          .copyWith(
-                                              contentPadding:
-                                                  EdgeInsets.only(right: 10)),
-                                      hint: Text("Select Category",
-                                          style: TextStyle(
-                                              color: colors.greyText,
-                                              fontWeight: FontWeight.normal)),
-                                      value: productProvider.selectedCat,
-                                      onChanged: (CategoryData? value) =>
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: DropDownDeco(ctx: context),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12),
+                                    child: Consumer<ProductManagementViewModel>(
+                                        builder: (context, val, _) {
+                                      if (productProvider.categories.length ==
+                                          0) {
+                                        productProvider.getCategory(id: '0');
+                                      }
+                                      return DropdownButton<CategoryData>(
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        dropdownColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? colors.darkBG
+                                                : Colors.white,
+                                        value: val.selectedCat,
+                                        onChanged: (value) {
                                           setState(() {
-                                        print(value?.id);
-                                        productProvider.setCategory(value);
+                                            val.setCategory(value!);
 
-                                        // selectedValue = value;
-                                        // print(selectedValue);
-                                        productProvider.subCategoryclear();
-                                        productProvider.getsubCategory(
-                                            id: (value?.id.toString())
-                                                .toString());
-                                      }),
-                                      items: productProvider.categories
-                                          .map((e) => DropdownMenuItem(
-                                                child: Text(
-                                                  e.name.toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                                value: e,
-                                              ))
-                                          .toList(),
-                                    );
-                                  },
+                                            val.getsubCategory(
+                                                id: value.id.toString());
+                                          });
+                                        },
+                                        items: productProvider.categories
+                                            .map((e) => DropdownMenuItem(
+                                                  child: Text(
+                                                    e.name.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  value: e,
+                                                ))
+                                            .toList(),
+                                        hint: Text('Select Category',
+                                            style: TextStyle(
+                                                color: colors.greyText,
+                                                fontWeight: FontWeight.normal)),
+                                      );
+                                    }),
+                                  ),
                                 ),
                                 const Divider(color: Colors.transparent),
-                                Consumer<ProductManagementViewModel>(
-                                    builder: (context, catvalue, child) {
-                                  return DropdownButtonFormField2<CategoryData>(
-                                    decoration: const InputDecoration()
-                                        .applyDefaults(Theme.of(context)
-                                            .inputDecorationTheme)
-                                        .copyWith(
-                                            contentPadding:
-                                                EdgeInsets.only(right: 10)),
-                                    hint: Text("Select Sub Category",
-                                        style: TextStyle(
-                                            color: colors.greyText,
-                                            fontWeight: FontWeight.normal)),
-                                    value: catvalue.selectedSubCat,
-                                    onChanged: (CategoryData? value) =>
-                                        setState(() {
-                                      print(value?.id);
-                                      catvalue.setSubCategory(value);
-                                      // productProvider.getCategory(
-                                      //     id: (value?.id.toString()).toString());
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: DropDownDeco(ctx: context),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12),
+                                    child: Consumer<ProductManagementViewModel>(
+                                        builder: (context, val, _) {
+                                      return DropdownButton<CategoryData>(
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        dropdownColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? colors.darkBG
+                                                : Colors.white,
+                                        value: val.selectedSubCat,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            val.setSubCategory(value);
+
+                                            val.getsubsubCategory(
+                                                id: value!.id.toString());
+                                          });
+                                        },
+                                        items: val.subcategories
+                                            .map((e) => DropdownMenuItem(
+                                                  child: Text(
+                                                    e.name.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  value: e,
+                                                ))
+                                            .toList(),
+                                        hint: Text('Select Sub Category',
+                                            style: TextStyle(
+                                                color: colors.greyText,
+                                                fontWeight: FontWeight.normal)),
+                                      );
                                     }),
-                                    items: productProvider.subcategories
-                                        .map((e) => DropdownMenuItem(
-                                              child: Text(
-                                                e.name.toString(),
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                              value: e,
-                                            ))
-                                        .toList(),
-                                  );
-                                }),
+                                  ),
+                                ),
+                                const Divider(color: Colors.transparent),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: DropDownDeco(ctx: context),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12),
+                                    child: Consumer<ProductManagementViewModel>(
+                                        builder: (context, val, _) {
+                                      return DropdownButton<CategoryData>(
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        dropdownColor:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? colors.darkBG
+                                                : Colors.white,
+                                        value: val.selectedSubSubCat,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            val.setSubSubCategory(value);
+                                          });
+                                        },
+                                        items: val.subsubcategories
+                                            .map((e) => DropdownMenuItem(
+                                                  child: Text(
+                                                    e.name.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  value: e,
+                                                ))
+                                            .toList(),
+                                        hint: Text('Select Sub Sub Category',
+                                            style: TextStyle(
+                                                color: colors.greyText,
+                                                fontWeight: FontWeight.normal)),
+                                      );
+                                    }),
+                                  ),
+                                ),
                                 const Divider(color: Colors.transparent),
                                 DropdownButtonFormField2(
                                   decoration: const InputDecoration()
@@ -1080,6 +1147,9 @@ class _EditProdutScreenState extends State<EditProdutScreen> {
                                       .toString(),
                                   sub_category_id: productProvider
                                       .selectedSubCat!.id
+                                      .toString(),
+                                  sub_sub_category_id: productProvider
+                                      .selectedSubSubCat!.id
                                       .toString(),
                                   product_type: selectedPtype.toString(),
                                   unit: selectedUnit.toString(),

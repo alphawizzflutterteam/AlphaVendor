@@ -36,19 +36,27 @@ class ProductManagementViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  setCategory(var value) {
+  setCategory(CategoryData? value) {
     selectedCat = value;
-    notifyListeners();
-  }
-
-  subCategoryclear() {
-    subcategories.clear();
+    print('country${selectedCat!.name}');
     selectedSubCat = null;
+    subcategories.clear();
+    selectedSubSubCat = null;
+    subsubcategories.clear();
     notifyListeners();
   }
 
-  setSubCategory(var value) {
+  setSubCategory(CategoryData? value) {
     selectedSubCat = value;
+    print(selectedSubCat!.name);
+    selectedSubSubCat = null;
+    subsubcategories.clear();
+    notifyListeners();
+  }
+
+  setSubSubCategory(CategoryData? value) {
+    selectedSubSubCat = value;
+    print(selectedSubSubCat!.name);
     notifyListeners();
   }
 
@@ -129,7 +137,6 @@ class ProductManagementViewModel extends ChangeNotifier {
 //Function to get category with id
   Future<void> getCategory({required String id}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-    subsubcategories.clear();
     await _myRepo
         .categoryListRequest(
             api: AppUrl.categoriesList, bearerToken: token, id: id)
@@ -144,22 +151,18 @@ class ProductManagementViewModel extends ChangeNotifier {
   //Function to get category with id
   Future<void> getsubCategory({required String id}) async {
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
-    subcategories.clear();
-    setLoading(true);
     await _myRepo
         .categoryListRequest(
             api: AppUrl.categoriesList, bearerToken: token, id: id)
         .then((value) {
       subcategories = value.data;
-
+      print(subcategories.length);
       setLoading(false);
     }).onError((error, stackTrace) => setLoading(false));
   }
 
   //Function to get category with id
   Future<void> getsubsubCategory({required String id}) async {
-    subcategories.clear();
-
     await _myRepo
         .categoryListRequest(
             api: AppUrl.categoriesList, bearerToken: AppUrl.apitoken, id: id)
@@ -221,12 +224,14 @@ class ProductManagementViewModel extends ChangeNotifier {
     required String returnable,
     required String manufacturing,
     required String warranty,
+    required String sub_sub_category_id,
   }) async {
     bool status = false;
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
     await _myRepo
         .addProductPostRequest(
           token: token,
+          sub_sub_category_id: sub_sub_category_id,
           api: AppUrl.addProduct,
           name: name,
           category_id: category_id,
@@ -322,6 +327,7 @@ class ProductManagementViewModel extends ChangeNotifier {
     required String returnable,
     required String manufacturing,
     required String warranty,
+    required String sub_sub_category_id,
   }) async {
     bool status = false;
     String token = PreferenceUtils.getString(PrefKeys.jwtToken);
@@ -333,6 +339,7 @@ class ProductManagementViewModel extends ChangeNotifier {
           name: name,
           category_id: category_id,
           sub_category_id: sub_category_id,
+          sub_sub_category_id: sub_sub_category_id,
           product_type: product_type,
           unit: unit,
           thumbnail: thumbnail,

@@ -387,7 +387,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     Divider(color: colors.lightGrey, height: 1),
                     SizedBox(height: height * .02),
-
                     Row(
                       children: [
                         Column(
@@ -535,7 +534,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       style: TextStyle(fontSize: 16, color: colors.greyText),
                     ),
                     HtmlWidget(productP.productDetail.first.details.toString()),
-
                   ],
                 ),
               ),

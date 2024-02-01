@@ -188,6 +188,7 @@ class ProductManagementRepository {
     required String returnable,
     required String manufacturing,
     required String warranty,
+    required String sub_sub_category_id,
   }) async {
     var headers = {'Authorization': 'Bearer $token'};
     print(api);
@@ -197,6 +198,7 @@ class ProductManagementRepository {
       'name[]': name,
       'category_id': category_id,
       'sub_category_id': sub_category_id,
+      'sub_sub_category_id': sub_sub_category_id,
       'product_type': product_type,
       'unit': unit,
       'images[]': '',
@@ -342,6 +344,7 @@ class ProductManagementRepository {
     required String returnable,
     required String manufacturing,
     required String warranty,
+    required String sub_sub_category_id,
   }) async {
     try {
       var headers = {'Authorization': 'Bearer $token'};
@@ -352,6 +355,7 @@ class ProductManagementRepository {
         'name[]': name,
         'category_id': category_id,
         'sub_category_id': sub_category_id,
+        'sub_sub_category_id':sub_sub_category_id,
         'product_type': product_type,
         'unit': unit,
         'images[]': '',
