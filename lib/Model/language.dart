@@ -2,7 +2,6 @@
 //
 //     final languageModel = languageModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 LanguageModel languageModelFromJson(String str) =>

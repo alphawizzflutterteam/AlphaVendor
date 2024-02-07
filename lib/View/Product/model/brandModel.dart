@@ -23,7 +23,7 @@ class BrandModel {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
       };
 }
 

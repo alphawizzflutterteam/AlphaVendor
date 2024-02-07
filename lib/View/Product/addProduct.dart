@@ -8,7 +8,6 @@ import 'package:alpha_work/View/Product/productManagement.dart';
 import 'package:alpha_work/ViewModel/productMgmtViewModel.dart';
 import 'package:alpha_work/Widget/CommonAppbarWidget/commonappbar.dart';
 import 'package:alpha_work/Widget/DropdownDeco.dart';
-import 'package:alpha_work/Widget/fieldFormatter.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -1309,3 +1308,4 @@ class _AddProdutScreenState extends State<AddProdutScreen> {
     );
   }
 }
+
