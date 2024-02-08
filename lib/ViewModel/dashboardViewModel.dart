@@ -1,9 +1,12 @@
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
 import 'package:alpha_work/View/Dashboard/Dashboad.dart';
 import 'package:alpha_work/View/Dashboard/TotalOrder/model/orederReportModel.dart';
 import 'package:alpha_work/View/Dashboard/model/dashboardServiceModel.dart';
 import 'package:alpha_work/View/Dashboard/notification/model/notificationModel.dart';
+import 'package:alpha_work/main.dart';
 import 'package:alpha_work/repository/dashboardRepository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +38,14 @@ class DashboardViewModel with ChangeNotifier {
         .getDashboardDataRequest(
             api: AppUrl.dashboardData + "?type=" + type, token: token)
         .then((value) {
+      if (value.status == 'false') {
+        PreferenceUtils.setString(PrefKeys.jwtToken, '');
+        PreferenceUtils.setString(PrefKeys.isLoggedIn, 'false');
+        NavigationService.navigatorKey.currentState!.pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => LoginPage()),
+            (route) => false);
+        Utils.showTost(msg: "Session token has expired, please login again");
+      }
       print(value.data!.totalSale);
       dashData = value.data!;
       try {

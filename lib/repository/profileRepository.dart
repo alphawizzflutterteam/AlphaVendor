@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:alpha_work/Model/staticPageModel.dart';
 import 'package:alpha_work/Model/vendorProfileModel.dart';
+import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingNreviewModel.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/reviewDetailModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/adListModel.dart';
@@ -11,6 +15,9 @@ import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
 import 'package:alpha_work/View/Profile/support/model/customerSupportModel.dart';
 import 'package:alpha_work/View/Profile/support/model/supportChatModel.dart';
+import 'package:alpha_work/Widget/noInternet.dart';
+import 'package:alpha_work/main.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileRepository {
@@ -28,11 +35,18 @@ class ProfileRepository {
 
       http.StreamedResponse response = await request.send();
       var res = await jsonDecode(await response.stream.bytesToString());
-      print(res);
+      log(res.toString());
       if (response.statusCode == 200) {
         return VendorProfileModel.fromJson(res);
       } else {
-        print(response.reasonPhrase);
+        if (res['status'] == false) {
+          PreferenceUtils.setString(PrefKeys.jwtToken, '');
+          PreferenceUtils.setString(PrefKeys.isLoggedIn, 'false');
+          NavigationService.navigatorKey.currentState!.pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => LoginPage()),
+              (route) => false);
+          Utils.showTost(msg: "Session token has expired, please login again");
+        }
         return VendorProfileModel.fromJson(res);
       }
     } catch (e, stackTrace) {

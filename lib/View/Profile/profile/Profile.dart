@@ -59,7 +59,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Positioned(
                   top: 1,
                   child: SizedBox(
-                    height: 70,
                     width: width,
                     child: AppBar(
                       backgroundColor: Colors.transparent,
@@ -90,8 +89,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     type: PageTransitionType.rightToLeft)),
                             child: Image.asset(
                               Images.edit_button,
-                              height: 20,
-                              width: 20,
+                              height: 22,
+                              width: 22,
                             ),
                           ),
                         ),

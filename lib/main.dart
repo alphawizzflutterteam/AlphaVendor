@@ -26,6 +26,15 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   FCMHelper.shared.listenNotificationInBackground(message);
 }
 
+class NavigationService {
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
+  static Future<dynamic> navigateTo(String routeName) {
+    return navigatorKey.currentState!.pushNamed(routeName);
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -38,6 +47,7 @@ void main() async {
     print(details.exceptionAsString().toString());
     print(details.stack.toString());
     return MaterialApp(
+      navigatorKey: NavigationService.navigatorKey,
       debugShowCheckedModeBanner: false,
       home: Scaffold(body: appLoader()),
     );
