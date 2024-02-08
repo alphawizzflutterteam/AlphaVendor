@@ -1,4 +1,7 @@
 import 'package:alpha_work/Utils/images.dart';
+import 'package:alpha_work/Utils/shared_pref..dart';
+import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
 import 'package:alpha_work/View/Customer/customer.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingReview.dart';
 import 'package:alpha_work/View/Dashboard/TotalDelivery/totalDelivery.dart';
@@ -18,6 +21,7 @@ import 'package:alpha_work/ViewModel/dashboardViewModel.dart';
 import 'package:alpha_work/ViewModel/profileViewModel.dart';
 import 'package:alpha_work/Widget/appLoader.dart';
 import 'package:alpha_work/Widget/errorImage.dart';
+import 'package:alpha_work/main.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
@@ -43,8 +47,17 @@ class _DashboardScreen1State extends State<DashboardScreen1> {
   final ScrollController _controller = ScrollController();
 
   getData() async {
-    await vendorProvider.getvendorProfileData();
-    await dashProvider.getDashboardData("WeekEarn");
+    try {
+      await vendorProvider.getvendorProfileData();
+      await dashProvider.getDashboardData("WeekEarn");
+    } catch (e, stack) {
+      PreferenceUtils.setString(PrefKeys.jwtToken, '');
+      PreferenceUtils.setString(PrefKeys.isLoggedIn, 'false');
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (route) => false);
+      Utils.showTost(msg: "Session token has expired, please login again");
+    }
   }
 
   @override

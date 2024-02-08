@@ -5,6 +5,7 @@ import 'package:alpha_work/Model/vendorProfileModel.dart';
 import 'package:alpha_work/Utils/appUrls.dart';
 import 'package:alpha_work/Utils/shared_pref..dart';
 import 'package:alpha_work/Utils/utils.dart';
+import 'package:alpha_work/View/AUTH/LOGIN/loginpage.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/ratingNreviewModel.dart';
 import 'package:alpha_work/View/Dashboard/RatingnReview/reviewDetailModel.dart';
 import 'package:alpha_work/View/Profile/Advertising/model/adListModel.dart';
@@ -13,6 +14,7 @@ import 'package:alpha_work/View/Profile/referEarn/Model/referralModel.dart';
 import 'package:alpha_work/View/Profile/subscription/model/subscriptionModel.dart';
 import 'package:alpha_work/View/Profile/support/model/customerSupportModel.dart';
 import 'package:alpha_work/View/Profile/support/model/supportChatModel.dart';
+import 'package:alpha_work/main.dart';
 import 'package:alpha_work/repository/profileRepository.dart';
 import 'package:flutter/material.dart';
 
@@ -47,6 +49,7 @@ class ProfileViewModel with ChangeNotifier {
         .vendorProfileGetRequest(
             api: AppUrl.vendorProfile, token: token, phone: phone)
         .then((value) {
+         
       // print(value.data.first.fName);
       vendorData = value.data.first;
       PreferenceUtils.setString(

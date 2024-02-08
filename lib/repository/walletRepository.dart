@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:alpha_work/View/Payment/model/orderTransactions.dart';
 import 'package:alpha_work/View/Wallet/model/transactionModel.dart';
@@ -44,7 +45,7 @@ class WalletRepository {
         'Authorization': 'Bearer $token',
       });
       var ans = jsonDecode(res.body);
-      print(ans);
+      log(ans.toString());
       if (res.statusCode == 200) {
         return TransactionModel.fromJson(ans);
       } else {
@@ -52,7 +53,8 @@ class WalletRepository {
         return TransactionModel(
             status: null, message: null, withdrawalAmount: "", data: []);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print(stackTrace);
       throw Exception(e);
     }
   }
